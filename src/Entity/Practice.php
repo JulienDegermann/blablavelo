@@ -21,9 +21,13 @@ class Practice
     #[ORM\OneToMany(mappedBy: 'practice', targetEntity: Ride::class)]
     private Collection $rides;
 
+    #[ORM\OneToMany(mappedBy: 'practice', targetEntity: User::class)]
+    private Collection $users;
+
     public function __construct()
     {
         $this->rides = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -67,6 +71,36 @@ class Practice
             // set the owning side to null (unless already changed)
             if ($ride->getPractice() === $this) {
                 $ride->setPractice(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getusers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addusers(User $users): static
+    {
+        if (!$this->users->contains($users)) {
+            $this->users->add($users);
+            $users->setPractice($this);
+        }
+
+        return $this;
+    }
+
+    public function removeusers(User $users): static
+    {
+        if ($this->users->removeElement($users)) {
+            // set the owning side to null (unless already changed)
+            if ($users->getPractice() === $this) {
+                $users->setPractice(null);
             }
         }
 

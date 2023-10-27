@@ -2,13 +2,14 @@
 
 namespace App\Entity;
 
-use App\Repository\UserRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use App\Entity\Ride;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use App\Repository\UserRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
@@ -57,6 +58,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     // link ManyToMany 
     #[ORM\ManyToMany(mappedBy: 'user_participant', targetEntity: Ride::class)]
     private Collection $rides_participated;
+
+    #[ORM\ManyToOne(inversedBy: 'users')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Practice $practice = null;
+
+    #[ORM\ManyToOne(inversedBy: 'users')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Model $bike = null;
 
 
 
@@ -263,6 +272,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $ridesPartipated->setUserCreator(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getPractice(): ?Practice
+    {
+        return $this->practice;
+    }
+
+    public function setPractice(?Practice $practice): static
+    {
+        $this->practice = $practice;
+
+        return $this;
+    }
+
+    public function getBike(): ?Model
+    {
+        return $this->bike;
+    }
+
+    public function setBike(?Model $bike): static
+    {
+        $this->bike = $bike;
 
         return $this;
     }
