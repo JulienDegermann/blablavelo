@@ -67,6 +67,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\JoinColumn(nullable: false)]
     private ?Model $bike = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $email = null;
+
 
 
     public function __construct()
@@ -300,5 +303,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): static
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->user_name;
+    }
 
 }
