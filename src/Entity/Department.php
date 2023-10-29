@@ -18,8 +18,8 @@ class Department
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\Column]
-    private ?int $code = null;
+    #[ORM\Column(length: 3)]
+    private ?string $code = null;
 
     #[ORM\OneToMany(mappedBy: 'department', targetEntity: City::class)]
     private Collection $cities;
@@ -46,12 +46,12 @@ class Department
         return $this;
     }
 
-    public function getCode(): ?int
+    public function getCode(): ?string
     {
         return $this->code;
     }
 
-    public function setCode(int $code): static
+    public function setCode(string $code): static
     {
         $this->code = $code;
 
