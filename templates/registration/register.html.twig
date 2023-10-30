@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+  Inscription - Ty'Ride
+{% endblock %}
+
+{% block body %}
+  <div class="form-signin w-100 d-flex justify-content-center align-items-center h-100">
+    {{ form_start(registrationForm) }}
+    <h1 class="text-center">Inscription</h1>
+    {{ form_errors(registrationForm) }}
+    <fieldset>
+      <legend>Informations personnelles</legend>
+      {{ form_row(registrationForm.first_name) }}
+      {{ form_row(registrationForm.last_name) }}
+      {{ form_row(registrationForm.birth_date) }}
+      {{ form_row(registrationForm.email) }}
+      {{ form_row(registrationForm.plainPassword, { label: 'Password' }) }}
+      {{ form_row(registrationForm.city) }}
+    </fieldset>
+    <fieldset>
+      <legend>Informations sportives</legend>
+      {{ form_row(registrationForm.user_name) }}
+      {{ form_row(registrationForm.practice) }}
+      {{ form_row(registrationForm.mind) }}
+    </fieldset>
+    {{ form_row(registrationForm.RGPDConscents) }}
+
+    <button type="submit" class="btn btn-secondary text-primary px-5 mt-2">M'inscrire</button>
+    {{ form_end(registrationForm) }}
+  </div>
+{% endblock %}

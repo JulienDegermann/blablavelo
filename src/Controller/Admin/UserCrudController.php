@@ -3,11 +3,10 @@
 namespace App\Controller\Admin;
 
 use App\Entity\User;
-use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 
 class UserCrudController extends AbstractCrudController
 {
@@ -21,11 +20,17 @@ class UserCrudController extends AbstractCrudController
         return [
             yield from parent::configureFields($pageName),
             yield AssociationField::new('city'),
-            // yield AssociationField::new('rides_created'),
-            // yield AssociationField::new('rides_participated'),
             yield AssociationField::new('mind'),
             yield AssociationField::new('practice'),
             yield AssociationField::new('bike'),
+            yield AssociationField::new('bike'),
+            yield ChoiceField::new('roles')
+                ->setChoices([
+                    'user' => 'ROLE_USER',
+                    'moderator' => 'ROLE_MODERATOR',
+                    'admin' => 'ROLE_ADMIN',
+                ])
+                ->allowMultipleChoices()
         ];
     }
 }
