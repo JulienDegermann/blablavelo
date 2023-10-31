@@ -1,1 +1,62 @@
 @import "~bootstrap/scss/bootstrap";
+
+// ------------------------------------------------------------------- all pages
+* {
+  box-sizing: border-box;
+  line-height: 1.5 !important;
+}
+
+
+header {
+  height: 100px;
+
+  div {
+    height: 100%;
+  }
+
+  .button-container {
+    height: auto;
+  }
+
+  a {
+    display: inline-block;
+    height: 100%;
+
+    &.btn {
+      height: auto;
+    }
+
+    img {
+      height: 100%;
+    }
+  }
+}
+
+footer {
+  img {
+    max-width: 50px;
+  }
+
+  .copyrights {
+    font-size: 12px;
+  }
+}
+
+
+
+// ---------------------------------------------------------------- home + rides
+.border-multiple {
+  border-width: 1px 2px 3px 4px;
+  border-style: solid;
+  border-color: $secondary;
+
+  &.border-grey {
+    border-color: $primary;
+  }
+}
+
+.ride-card,
+.ride-card * {
+  text-decoration: none;
+  cursor: pointer;
+}

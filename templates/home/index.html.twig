@@ -4,37 +4,58 @@
   Hello HomeController!
 {% endblock %}
 
-{% block body %}
-  <style>
-    .example-wrapper {
-      margin: 1em auto;
-      max-width: 800px;
-      width: 95%;
-      font: 18px/1.5 sans-serif;
-    }
-    .example-wrapper code {
-      background: #f5f5f5;
-      padding: 2px 6px;
-    }
-  </style>
+{% block content %}
+  <section class="my-5">
+    <img src="" alt="photo VTT en groupe" />
+    <div class="container">
+      <div class="row">
+        <div>
+          <h1>ROULER, C'EST BIEN, À PLUSIEURS, C'EST MIEUX !</h1>
+          <a class="btn px-3 border-primary mx-2 btn-secondary text-primary" href="/inscription">INSCRIS-TOI !</a>
+        </div>
+      </div>
+    </div>
+  </section>
 
-  <div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+  <section class="my-5 px-5">
+    <div class="container">
+      <div class="row">
+        <div>
+          <h2 class="text-center">Ty'Ride : c'est quoi ?</h2>
+          <p class="col-md-8 offset-md-2">
+            TY’RIDE veut <strong>rassembler</strong>les sportifs ayant des <strong>attentes les plus proches possibles</strong>. Les membres proposent alors des sorties avec quelques précisions : type de pratique, distance, dénivelé, allure …
+          </p>
+        </div>
 
-    <div>
-      {% if app.user is not empty %}
-        <a class="btn px-5 py-2 fw-bold btn-primary" href="/logout">Se déconnecter</a>
-      {% else %}
-        <a class="btn px-5 py-2 fw-bold btn-primary" href="/connexion">Se connecter</a>
-        <a class="btn px-5 py-2 fw-bold btn-secondary text-primary" href="/inscription">S'inscrire</a>
-      {% endif %}
-    </div>This friendly message is coming from:<ul>
-      <li>
-        Your controller at <code><a href="{{ '/Users/julien/Documents/WebDeveloper/ty_ride/src/Controller/HomeController.php'|file_link(0) }}">src/Controller/HomeController.php</a></code>
-      </li>
-      <li>
-        Your template at <code><a href="{{ '/Users/julien/Documents/WebDeveloper/ty_ride/templates/home/index.html.twig'|file_link(0) }}">templates/home/index.html.twig</a></code>
-      </li>
-    </ul>
-  </div>
+        <div class="text-center border-multiple w-auto my-5 mx-auto p-5">
+          + de <strong class="text-secondary">CONVIVIALITÉ</strong> et de <strong class="text-secondary">MOTIVATION</strong> <br />
+          - de <strong class="text-secondary">SURPRISE</strong>, pas de <strong class="text-secondary">PRESSION</strong> (🍺 ou avec modération !)
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="my-5 px-5">
+    <div class="row d-flex justify-content-between">
+      {# here : get last 5 rides in database and loop for…in #}
+      {% for i in 0..4 %}
+        <a class="col-md-2 rounded-3 p-3 border-multiple ride-card" href="#">
+          {# <div class="col-md-2 rounded-3 p-3 border-multiple ride-card"> #}
+            <h3 class="text-center">Card Title</h3>
+            <img class="w-100 border-multiple border-grey" src="" alt="map" />
+            <p>
+              🚴 : VTT <br />
+              📍 : Vannes <br />
+              🕗 : demain 8h30 <br />
+              👤 : 3/8 <br />
+              🗣️ : pipelette <br />
+              🎯 : Compétition <br />
+              Dist : 30km <br />
+              D+ : 300m
+            </p>
+          {# </div> #}
+        </a>
+      {% endfor %}
+    </div>
+  </section>
 {% endblock %}
