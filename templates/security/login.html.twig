@@ -4,31 +4,36 @@
   Log in!
 {% endblock %}
 
-{% block body %}
-  <div class="text-center form-signin w-100 d-flex justify-content-center align-items-center h-100">
-    <form method="post">
-      <h1 class="h3 mb-3 font-weight-normal">Connexion</h1>
-      {% if error %}
-        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-      {% endif %}
-
-      {% if app.user %}
-        <div class="mb-3">
-          You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
-        </div>
-      {% endif %}
-      <div class="form-floating m-3">
-        <input type="text" value="{{ last_username }}" name="user_name" id="inputUser_name" class="form-control" autocomplete="username" placeholder required autofocus />
-        <label for="inputUser_name">Nom d'utilisateur</label>
-      </div>
-      <div class="form-floating m-3">
-        <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" placeholder required />
-        <label for="inputPassword">Mot de passe</label>
-      </div>
-
-      <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}" />
-
-      <button class="btn btn-lg btn-secondary text-primary px-5 mt-2" type="submit">Se connecter</button>
-    </form>
-  </div>
+{% block main %}
+  <section class="text-center form-signin h-100">
+    <div class="container h-100">
+      <div class="row h-100 align-items-center d-flex-col">
+        <form method="post" class="d-flex-col col-md-6 m-auto justify-content-center align-items-center ">
+          <img src="{{ asset('assets/images/ty_ride_192.png') }}" alt="logo Ty'Ride">
+          <h1 class="h3 mb-3 font-weight-normal">Connexion</h1>
+          {% if error %}
+            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+          {% endif %}
+          {% if app.user %}
+            <div class="mb-3">
+              You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
+            </div>
+          {% endif %}
+          <div class="form-floating m-3">
+            <input type="text" value="{{ last_username }}" name="user_name" id="inputUser_name" class="form-control" autocomplete="username" placeholder required autofocus />
+            <label for="inputUser_name">Nom d'utilisateur</label>
+          </div>
+          <div class="form-floating m-3">
+            <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" placeholder required />
+            <label for="inputPassword">Mot de passe</label>
+          </div>
+    
+          <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}" />
+    
+          <button class="btn btn-lg btn-secondary text-primary px-5 mt-2" type="submit">Se connecter</button>
+        </form>
+      </div> 
+    </div>
+    
+      </section>
 {% endblock %}

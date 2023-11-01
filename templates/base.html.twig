@@ -7,7 +7,12 @@
         Ty'Ride
       {% endblock %}
     </title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>" />
+    <meta name="description" content="Vététiste, routard ou gravel-man : trouve les sportifs qui ont les mêmes objectifs que toi pour t'accompagner lors de tes sorties !
+    Partage tes itinéraires préférés et découvre en de nouveaux">
+    <meta name="keywords" content="cyclisme, VTT, route, gravel" >
+    <meta name="author" content="Julien Degermann" >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" >
+    <link rel="icon" href="{{ asset('assets/images/favicon.ico') }}" />
     {% block stylesheets %}
       {{ encore_entry_link_tags('app') }}
     {% endblock %}
@@ -23,10 +28,14 @@
           <div class="container position-relative">
             <div class="row d-flex justify-content-between align-items-center">
               <div class="col-md-1 mb-2 mb-md-0">
-                <a href="/" class="d-inline-flex link-body-emphasis text-decoration-none"><img src="{{ asset('assets/images/ty_ride_road_sign.png') }}" alt="Logo ty'Ride" /></a>
+                <a href="/" class="d-inline-flex link-body-emphasis text-decoration-none"><img src="{{ asset('assets/images/ty_ride_192.png') }}" alt="Logo ty'Ride" /></a>
               </div>
 
-              {% include "/partials/nav_partial.html.twig" %}
+
+              {% if app.request.attributes.get('_route') is not same as('app_login') and app.request.attributes.get('_route') is not same as('app_inscription') %}
+                {% include "/partials/nav_partial.html.twig" %}
+
+              {% endif %}
 
               <div class="col-md-3 text-center button-container position-relative row align-items-center">
                   {% if app.user is not empty %}
@@ -37,8 +46,10 @@
                       <img class="rounded-circle border border-2 border-secondary" src="{{ asset('assets/images/ty_ride_road_sign.png') }}" alt="photo de profil" />
                     </div>
                   {% else %}
-                    <a class="btn px-3 mx-2 h-auto col btn-primary border-secondary text-white" href="/connexion">CONNEXION</a>
-                    <a class="btn px-3 mx-2 h-auto col btn-secondary text-primary border-primary" href="/inscription">INSCRIPTION</a>
+                    {% if app.request.attributes.get('_route') is not same as('app_login') and app.request.attributes.get('_route') is not same as('app_inscription') %}
+                      <a class="btn px-3 mx-2 h-auto col btn-primary border-secondary text-white" href="/connexion">CONNEXION</a>
+                      <a class="btn px-3 mx-2 h-auto col btn-secondary text-primary" href="/inscription">INSCRIPTION</a>
+                    {% endif %}
                   {% endif %}
  
               </div>
@@ -70,7 +81,7 @@
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-5">
               <div class="col mb-3 text-center">
                 <div class="mb-2">
-                  <a href="/" class="d-inline-flex text-center w-auto link-body-emphasis text-decoration-none"><img src="{{ asset('assets/images/ty_ride_road_sign.png') }}" alt="Logo ty'Ride" /></a>
+                  <a href="/" class="d-inline-flex text-center w-auto link-body-emphasis text-decoration-none"><img src="{{ asset('assets/images/ty_ride_192.png') }}" alt="Logo ty'Ride" /></a>
                   <p class="text-white fs-6">
                     © 2023 - Ty'Ride <br />
                     <span class="copyrights">
@@ -85,20 +96,22 @@
 
               <div class="col mb-3">
                 {# <h5>Section</h5> #}
-                {% include "/partials/nav_partial.html.twig" %}
+                {% if app.request.attributes.get('_route') is not same as('app_login') and app.request.attributes.get('_route') is not same as('app_inscription') %}
+                  {% include "/partials/nav_partial.html.twig" %}
+                {% endif %}
               </div>
 
               <div class="col mb-3">
                 {# <h5>Section</h5> #}
                 <ul class="nav flex-column">
                   <li>
-                    <a href="" class="nav-link mx-1 py-1 px-4 text-white {% if app.request.attributes.get('_route') == '' %}{% endif %}">Mentions légales</a>
+                    <a href="" class="nav-link mx-1 py-1 px-4 text-white ">Mentions légales</a>
                   </li>
                   <li>
-                    <a href="#" class="nav-link mx-1 py-1 px-4 text-white {% if app.request.attributes.get('_route') == '/rides' %}{% endif %}">Politique de confidentialité</a>
+                    <a href="#" class="nav-link mx-1 py-1 px-4 text-white"> Politique de confidentialité</a>
                   </li>
                   <li>
-                    <a href="#" class="nav-link mx-1 py-1 px-4 text-white {% if app.request.attributes.get('_route') == '/contact' %}{% endif %}">Signaler un bug</a>
+                    <a href="#" class="nav-link mx-1 py-1 px-4 text-white ">Signaler un bug</a>
                   </li>
                 </ul>
               </div>

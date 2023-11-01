@@ -8,6 +8,18 @@
   list-style: none;
 }
 
+
+body {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+
+  main {
+    flex: 1;
+  }
+}
+
+
 li:hover a,
 .copyrights:hover a {
   color: $secondary !important;

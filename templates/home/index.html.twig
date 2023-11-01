@@ -5,13 +5,14 @@
 {% endblock %}
 
 {% block main %}
+  
   <section class="my-5">
     <img src="" alt="photo VTT en groupe" />
     <div class="container">
       <div class="row">
         <div>
           <h1>ROULER, C'EST BIEN, À PLUSIEURS, C'EST MIEUX !</h1>
-          <a class="btn px-3 border-primary mx-2 btn-secondary text-primary" href="/inscription">INSCRIS-TOI !</a>
+          <a class="btn px-3 mx-2 btn-secondary text-primary" href="/inscription">INSCRIS-TOI !</a>
         </div>
       </div>
     </div>
@@ -21,7 +22,6 @@
     <div class="container">
       <div class="row">
         <div>
-          {{ user_name }}
           <h2 class="text-center">Ty'Ride : c'est quoi ?</h2>
           <p class="col-md-8 offset-md-2">
             TY’RIDE veut <strong>rassembler</strong>les sportifs ayant des <strong>attentes les plus proches possibles</strong>. Les membres proposent alors des sorties avec quelques précisions : type de pratique, distance, dénivelé, allure …
@@ -40,14 +40,9 @@
     <div class="row d-flex justify-content-between">
       {# here : get last 5 rides in database and loop for…in #}
       {% for i in 0..4 %}
-
-
         {% include '/partials/card_partial.html.twig' %}
-
-
-        
-
       {% endfor %}
     </div>
   </section>
+
 {% endblock %}

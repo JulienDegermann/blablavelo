@@ -11983,6 +11983,15 @@ textarea.form-control-lg {
   list-style: none;
 }
 
+body {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+body main {
+  flex: 1;
+}
+
 li:hover a,
 .copyrights:hover a {
   color: #FFB800 !important;
