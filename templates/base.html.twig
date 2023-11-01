@@ -32,9 +32,8 @@
               </div>
 
 
-              {% if app.request.attributes.get('_route') is not same as('app_login') and app.request.attributes.get('_route') is not same as('app_inscription') %}
+              {% if app.request.attributes.get('_route') is not same as('app_login') and app.request.attributes.get('_route') is not same as('app_register') %}
                 {% include "/partials/nav_partial.html.twig" %}
-
               {% endif %}
 
               <div class="col-md-3 text-center button-container position-relative row align-items-center">
@@ -46,7 +45,7 @@
                       <img class="rounded-circle border border-2 border-secondary" src="{{ asset('assets/images/ty_ride_road_sign.png') }}" alt="photo de profil" />
                     </div>
                   {% else %}
-                    {% if app.request.attributes.get('_route') is not same as('app_login') and app.request.attributes.get('_route') is not same as('app_inscription') %}
+                    {% if app.request.attributes.get('_route') is not same as('app_login') and app.request.attributes.get('_route') is not same as('app_register') %}
                       <a class="btn px-3 mx-2 h-auto col btn-primary border-secondary text-white" href="/connexion">CONNEXION</a>
                       <a class="btn px-3 mx-2 h-auto col btn-secondary text-primary" href="/inscription">INSCRIPTION</a>
                     {% endif %}
@@ -96,7 +95,7 @@
 
               <div class="col mb-3">
                 {# <h5>Section</h5> #}
-                {% if app.request.attributes.get('_route') is not same as('app_login') and app.request.attributes.get('_route') is not same as('app_inscription') %}
+                {% if app.request.attributes.get('_route') is not same as('app_login') and app.request.attributes.get('_route') is not same as('app_register') %}
                   {% include "/partials/nav_partial.html.twig" %}
                 {% endif %}
               </div>

@@ -28,19 +28,19 @@ class RegistrationFormType extends AbstractType
         $builder
             ->add('user_name', TextType::class, [
                 'attr' => [
-                    'class' => 'form-control'
+                    'class' => 'form-control my-2'
                 ],
                 'label' => 'Nom d\'utilisateur'
             ])
             ->add('first_name', TextType::class, [
                 'attr' => [
-                    'class' => 'form-control'
+                    'class' => 'form-control my-2'
                 ],
                 'label' => 'Prénom'
             ])
             ->add('last_name', TextType::class, [
                 'attr' => [
-                    'class' => 'form-control'
+                    'class' => 'form-control my-2'
                 ],
                 'label' => 'Nom'
             ])
@@ -53,7 +53,7 @@ class RegistrationFormType extends AbstractType
             ])
             ->add('email', EmailType::class, [
                 'attr' => [
-                    'class' => 'form-control'
+                    'class' => 'form-control my-2'
                 ],
                 'label' => 'E-mail'
 
@@ -61,30 +61,33 @@ class RegistrationFormType extends AbstractType
             ->add('mind', EntityType::class, [
                 'class' => Mind::class,
                 'attr' => [
-                    'class' => 'form-control'
+                    'class' => 'form-control my-2'
                 ],
                 'label' => 'Objectif'
             ])
             ->add('birth_date', BirthdayType::class, [
                 'input' => 'datetime_immutable',
                 'attr' => [
-                    'class' => 'form-control'
+                    'class' => 'form-control my-2'
                 ],
                 'label' => 'Date de naissance'
             ])
             ->add('practice', EntityType::class, [
                 'class' => Practice::class,
                 'attr' => [
-                    'class' => 'form-control'
+                    'class' => 'form-control my-2'
                 ],
                 'label' => 'Pratique'
             ])
             ->add('RGPDConscents', CheckboxType::class, [
                 'mapped' => false,
+                'attr' => [
+                    'class' => 'w-auto m-2 '
+                ],
                 'label' => 'J\'accepte que les données renseignées soient utilisées sur par le site',
                 'constraints' => [
                     new IsTrue([
-                        'message' => 'You should agree to our terms.',
+                        'message' => 'Vous devez accepterles conditions',
                     ]),
                 ],
             ])
@@ -94,7 +97,7 @@ class RegistrationFormType extends AbstractType
                 'mapped' => false,
                 'attr' => [
                     'autocomplete' => 'new-password',
-                    'class' => 'form-control'
+                    'class' => 'form-control my-2'
                 ],
                 'constraints' => [
                     new NotBlank([
