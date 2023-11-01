@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+  Ty'Ride - Rides
+{% endblock %}
+
+{% block main %}
+  <section class="my-5">
+    <img src="" alt="photo VTT en groupe" />
+    <div class="container">
+      <div class="row">
+        <div>
+          <h1>Les derniers rides proposés</h1>
+          {# <a class="btn px-3 border-primary mx-2 btn-secondary text-primary" href="/inscription">PROPOSE TA SORTIE</a> #}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="my-5 px-5">
+    <div class="container">
+      <h2 class="col-12 text-center">Les sorties par chez toi !</h2>
+      {# <div class="grid-container"> #}
+      <div class="row">
+        {% for i in 0..11 %}
+          {% include '/partials/card_partial.html.twig' %}
+          {# <a class="grid-item rounded-3 p-3 border-multiple ride-card" href="#">
+            <h3 class="text-center">Card Title</h3>
+            <img class="w-100 border-multiple border-grey my-3" src="" alt="map" />
+            <div class="row">
+            <div class="col-6">
+              🚴 : VTT <br />
+              🎯 : Compétition <br />
+              Dist : 30km <br />
+              D+ : 300m
+            </div>
+            <div class="col-6">
+              📍 : Vannes <br />
+              🕗 : demain 8h30 <br />
+              👤 : 3/8 <br />
+              🗣️ : pipelette
+            </div>
+          </div>
+          </a> #}
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+{% endblock %}

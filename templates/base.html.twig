@@ -4,61 +4,68 @@
     <meta charset="UTF-8" />
     <title>
       {% block title %}
-        Welcome!
+        Ty'Ride
       {% endblock %}
     </title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>" />
     {% block stylesheets %}
       {{ encore_entry_link_tags('app') }}
     {% endblock %}
-
     {% block javascripts %}
       {{ encore_entry_script_tags('app') }}
     {% endblock %}
   </head>
+  
   <body>
     {% block body %}
       {% block header %}
         <header class="bg-primary text-white align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
-          <div class="container">
+          <div class="container position-relative">
             <div class="row d-flex justify-content-between align-items-center">
               <div class="col-md-1 mb-2 mb-md-0">
                 <a href="/" class="d-inline-flex link-body-emphasis text-decoration-none"><img src="{{ asset('assets/images/ty_ride_road_sign.png') }}" alt="Logo ty'Ride" /></a>
               </div>
-              <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-                <li>
-                  <a href="/" class="nav-link mx-1 py-2 px-4 {% if app.request.attributes.get('_route') == 'app_home' %} text-secondary {% else %} text-white {% endif %}">ACCUEIL</a>
-                </li>
-                <li>
-                  <a href="/rides" class="nav-link mx-1 py-2 px-4 {% if app.request.attributes.get('_route') == 'app_rides' %} text-secondary {% else %} text-white {% endif %}">RIDES</a>
-                </li>
-                <li>
-                  <a href="/contact" class="nav-link mx-1 py-2 px-4 {% if app.request.attributes.get('_route') == 'app_contact' %} text-secondary {% else %} text-white {% endif %}">CONTACT</a>
-                </li>
-                <li>
-                  <a href="/a-propos" class="nav-link mx-1 py-2 px-4 {% if app.request.attributes.get('_route') == 'app_about' %} text-secondary {% else %} text-white {% endif %}">À PROPOS</a>
-                </li>
-              </ul>
 
-              <div class="col-md-auto text-end button-container">
-                {% if app.user is not empty %}
-                  <a class="btn btn-primary border-secondary text-white" href="/logout">DÉCONNEXION</a>
-                {% else %}
-                  <a class="btn px-3 mx-2 btn-primary border-secondary text-white" href="/connexion">CONNEXION</a>
-                  <a class="btn px-3 mx-2 btn-secondary text-primary border-primary" href="/inscription">INSCRIPTION</a>
-                {% endif %}
+              {% include "/partials/nav_partial.html.twig" %}
+
+              <div class="col-md-3 text-center button-container position-relative row align-items-center">
+                  {% if app.user is not empty %}
+                    <div class="col-6 text-end">
+                      <a class="rounded-circle text-center border border-2 border-secondary d-inline-block fs-3" href="#" title="ajouter une sortie">+</a>
+                    </div>
+                    <div class="profile col-6 text-start">
+                      <img class="rounded-circle border border-2 border-secondary" src="{{ asset('assets/images/ty_ride_road_sign.png') }}" alt="photo de profil" />
+                    </div>
+                  {% else %}
+                    <a class="btn px-3 mx-2 h-auto col btn-primary border-secondary text-white" href="/connexion">CONNEXION</a>
+                    <a class="btn px-3 mx-2 h-auto col btn-secondary text-primary border-primary" href="/inscription">INSCRIPTION</a>
+                  {% endif %}
+ 
               </div>
             </div>
-          </div>
+            {% if app.user is not empty %}
+              <div class="position-absolute top-100 end-0 pt-3 h-auto col-md-3 profile">
+              <div class="bg-white text-primary p-3 col-6 offset-6 border border-top-0 border-primary text-start
+              profile-menu ">
+                <p class="fw-bold border-bottom border-primary p-0 mb-1 text-center text-primary">{{ user_name }}</p>
+                <a class="my-0 text-primary" href="/profil">Mon profl</a> <br>
+                <a class="my-0 text-primary" href="/logout">Me déconnecter</a>
+              </div>
+              </div>
+              {% endif %}
+            </div>
+          
         </header>
+        <main>
       {% endblock %}
 
-      {% block content %}
-       {# here is the content of page #}
+      {% block main %}
+        {# here is the content of page #}
       {% endblock %}
 
       {% block footer %}
-        <footer class="py-5 mt-5 border-top bg-primary text-white">
+        </main>
+        <footer class="py-3 mt-5 border-top bg-primary text-white">
           <div class="container">
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-5">
               <div class="col mb-3 text-center">
@@ -66,8 +73,10 @@
                   <a href="/" class="d-inline-flex text-center w-auto link-body-emphasis text-decoration-none"><img src="{{ asset('assets/images/ty_ride_road_sign.png') }}" alt="Logo ty'Ride" /></a>
                   <p class="text-white fs-6">
                     © 2023 - Ty'Ride <br />
-                    <span class="copyrights">Designed & developed by <br> 
-                    <a class="text-white" href="#">Julien DEGERMANN</a></span>
+                    <span class="copyrights">
+                      Designed & developed by <br />
+                      <a class="text-white" href="#">Julien DEGERMANN</a>
+                    </span>
                   </p>
                 </div>
               </div>
@@ -76,20 +85,7 @@
 
               <div class="col mb-3">
                 {# <h5>Section</h5> #}
-                <ul class="nav flex-column">
-                    <li>
-                    <a href="/" class="nav-link mx-1 py-2 px-4 {% if app.request.attributes.get('_route') == 'app_home' %} text-secondary {% else %} text-white {% endif %}">Accueil</a>
-                  </li>
-                  <li>
-                    <a href="/rides" class="nav-link mx-1 py-2 px-4 {% if app.request.attributes.get('_route') == 'app_rides' %} text-secondary {% else %} text-white {% endif %}">Rides</a>
-                  </li>
-                  <li>
-                    <a href="/contact" class="nav-link mx-1 py-2 px-4 {% if app.request.attributes.get('_route') == 'app_contact' %} text-secondary {% else %} text-white {% endif %}">Contact</a>
-                  </li>
-                  <li>
-                    <a href="/a-propos" class="nav-link mx-1 py-2 px-4 {% if app.request.attributes.get('_route') == 'app_about' %} text-secondary {% else %} text-white {% endif %}">À propos</a>
-                  </li>
-                </ul>
+                {% include "/partials/nav_partial.html.twig" %}
               </div>
 
               <div class="col mb-3">
@@ -109,25 +105,36 @@
 
               <div class="col mb-3">
                 {# <h5>Section</h5> #}
-                <ul class="nav flex-column">
-                  <li>
-                    <a href="" class="nav-link mx-1 py-1 px-4 text-white {% if app.request.attributes.get('_route') == '' %}{% endif %}">Facebook</a>
+                <nav>
+                  <ul class="nav flex-column social">
+                    <li>
+                    <a href="#" class="nav-link my-0 p-0 text-white">{% include 'partials/strava_svg_partial.html.twig' %}</a>
                   </li>
                   <li>
-                    <a href="#" class="nav-link mx-1 py-1 px-4 text-white {% if app.request.attributes.get('_route') == '/rides' %}{% endif %}">Strava</a>
+                    <a href="#" class="nav-link my-0 p-0 text-white">{% include 'partials/linkedin_svg_partial.html.twig' %}</a>
                   </li>
                   <li>
-                    <a href="#" class="nav-link mx-1 py-1 px-4 text-white {% if app.request.attributes.get('_route') == '/contact' %}{% endif %}">Linkedin</a>
+                    <a href="#" class="nav-link my-0 p-0 text-white"> 
+                      {% include 'partials/facebook_svg_partial.html.twig' %}
+                    </a>
                   </li>
                   <li>
-                    <a href="#" class="nav-link mx-1 py-1 px-4 text-white {% if app.request.attributes.get('_route') == '/contact' %}{% endif %}">Portfolio</a>
+                    <a href="#" class="nav-link my-0 p-0 text-white"> 
+                      {% include 'partials/github_svg_partial.html.twig' %}
+                    </a>
                   </li>
-                </ul>
+                  {# <li>
+                    <a href="#" class="nav-link mx-1 py-2 px-4 text-white">teste PROPOS</a>
+                  </li> #}
+                  </ul>
+                </nav>
               </div>
             </div>
           </div>
         </footer>
       {% endblock %}
+
+
     {% endblock %}
-  </body>
+    </body>
 </html>

@@ -7,4 +7,16 @@
 
 // any CSS you import will output into a single css file (app.css in this case)
 import './styles/app.scss';
-console.log('coucou');
+import $ from 'jquery';
+
+
+
+// ---------------------------------------------------------------- Desktop menu
+$('.profile-menu').hide();
+$('.profile, .profile-menu').on('mouseenter', function () {
+  $('.profile-menu').show();
+});
+
+$('.profile, .profile-menu').on('mouseleave', function () {
+  $('.profile-menu').hide();
+});

@@ -1,0 +1,20 @@
+<nav class="nav col-12 col-md-8 mb-2 fw-bold">
+  <ul class="d-flex justify-content-center m-auto">
+    <li>
+      <a href="/" class="nav-link mx-1 py-2 px-4 
+    {% if app.request.attributes.get('_route') == 'app_home' %} text-secondary {% else %} text-white {% endif %}">ACCUEIL</a>
+    </li>
+    <li>
+      <a href="/rides" class="nav-link mx-1 py-2 px-4 
+    {% if app.request.attributes.get('_route') == 'app_rides' %} text-secondary {% else %} text-white {% endif %}">RIDES</a>
+    </li>
+    <li>
+      <a href="/contact" class="nav-link mx-1 py-2 px-4 
+    {% if app.request.attributes.get('_route') == 'app_contact' %} text-secondary {% else %} text-white {% endif %}">CONTACT</a>
+    </li>
+    <li>
+      <a href="/a-propos" class="nav-link mx-1 py-2 px-4 
+    {% if app.request.attributes.get('_route') == 'app_about' %} text-secondary {% else %} text-white {% endif %}">À PROPOS</a>
+    </li>
+  </ul>
+</nav>

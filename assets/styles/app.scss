@@ -4,8 +4,14 @@
 * {
   box-sizing: border-box;
   line-height: 1.5 !important;
+  text-decoration: none !important;
+  list-style: none;
 }
 
+li:hover a,
+.copyrights:hover a {
+  color: $secondary !important;
+}
 
 header {
   height: 100px;
@@ -15,7 +21,16 @@ header {
   }
 
   .button-container {
-    height: auto;
+    height: 100%;
+
+    .col-6 a,
+    .col-6 img {
+      display: inline-block;
+      height: 50px;
+      width: 50px;
+      color: $secondary;
+      text-decoration: none;
+    }
   }
 
   a {
@@ -37,9 +52,68 @@ footer {
     max-width: 50px;
   }
 
+  svg {
+    cursor: pointer;
+    width: 30px;
+
+    path {
+      fill: $primary;
+      transition: all .5s ease;
+    }
+
+    path:last-child {
+      fill: white;
+    }
+
+    path:first-child {
+      fill: $secondary;
+    }
+
+    &:hover {
+      path {
+        fill: $primary;
+        transition: all .5s ease;
+      }
+
+      path:last-child {
+        fill: $secondary;
+      }
+
+      path:first-child {
+        fill: $white;
+      }
+    }
+  }
+
   .copyrights {
     font-size: 12px;
+
+    a {
+      text-decoration: none;
+    }
   }
+
+  nav {
+    width: 100% !important;
+
+    .social img {
+      width: 30px;
+    }
+
+    ul {
+      flex-direction: column;
+    }
+  }
+}
+
+.profile {
+  a {
+    text-decoration: none;
+  }
+}
+
+.profile-menu a:hover {
+  color: $secondary!important;
 }
 
 
@@ -57,6 +131,18 @@ footer {
 
 .ride-card,
 .ride-card * {
-  text-decoration: none;
   cursor: pointer;
+}
+
+
+.grid-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-auto-rows: minmax(100px, auto);
+
+  gap: 1em;
+
+  .grid-item {
+    display: block;
+  }
 }

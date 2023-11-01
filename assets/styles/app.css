@@ -11979,6 +11979,13 @@ textarea.form-control-lg {
 * {
   box-sizing: border-box;
   line-height: 1.5 !important;
+  text-decoration: none !important;
+  list-style: none;
+}
+
+li:hover a,
+.copyrights:hover a {
+  color: #FFB800 !important;
 }
 
 header {
@@ -11988,7 +11995,15 @@ header div {
   height: 100%;
 }
 header .button-container {
-  height: auto;
+  height: 100%;
+}
+header .button-container .col-6 a,
+header .button-container .col-6 img {
+  display: inline-block;
+  height: 50px;
+  width: 50px;
+  color: #FFB800;
+  text-decoration: none;
 }
 header a {
   display: inline-block;
@@ -12004,8 +12019,52 @@ header a img {
 footer img {
   max-width: 50px;
 }
+footer svg {
+  cursor: pointer;
+  width: 30px;
+}
+footer svg path {
+  fill: #4F4F4F;
+  transition: all 0.5s ease;
+}
+footer svg path:last-child {
+  fill: white;
+}
+footer svg path:first-child {
+  fill: #FFB800;
+}
+footer svg:hover path {
+  fill: #4F4F4F;
+  transition: all 0.5s ease;
+}
+footer svg:hover path:last-child {
+  fill: #FFB800;
+}
+footer svg:hover path:first-child {
+  fill: #fff;
+}
 footer .copyrights {
   font-size: 12px;
+}
+footer .copyrights a {
+  text-decoration: none;
+}
+footer nav {
+  width: 100% !important;
+}
+footer nav .social img {
+  width: 30px;
+}
+footer nav ul {
+  flex-direction: column;
+}
+
+.profile a {
+  text-decoration: none;
+}
+
+.profile-menu a:hover {
+  color: #FFB800 !important;
 }
 
 .border-multiple {
@@ -12019,6 +12078,15 @@ footer .copyrights {
 
 .ride-card,
 .ride-card * {
-  text-decoration: none;
   cursor: pointer;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-auto-rows: minmax(100px, auto);
+  gap: 1em;
+}
+.grid-container .grid-item {
+  display: block;
 }/*# sourceMappingURL=app.css.map */

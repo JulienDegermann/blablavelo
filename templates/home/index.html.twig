@@ -1,10 +1,10 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-  Hello HomeController!
+  Ty'Ride - Accueil
 {% endblock %}
 
-{% block content %}
+{% block main %}
   <section class="my-5">
     <img src="" alt="photo VTT en groupe" />
     <div class="container">
@@ -21,6 +21,7 @@
     <div class="container">
       <div class="row">
         <div>
+          {{ user_name }}
           <h2 class="text-center">Ty'Ride : c'est quoi ?</h2>
           <p class="col-md-8 offset-md-2">
             TY’RIDE veut <strong>rassembler</strong>les sportifs ayant des <strong>attentes les plus proches possibles</strong>. Les membres proposent alors des sorties avec quelques précisions : type de pratique, distance, dénivelé, allure …
@@ -39,22 +40,13 @@
     <div class="row d-flex justify-content-between">
       {# here : get last 5 rides in database and loop for…in #}
       {% for i in 0..4 %}
-        <a class="col-md-2 rounded-3 p-3 border-multiple ride-card" href="#">
-          {# <div class="col-md-2 rounded-3 p-3 border-multiple ride-card"> #}
-            <h3 class="text-center">Card Title</h3>
-            <img class="w-100 border-multiple border-grey" src="" alt="map" />
-            <p>
-              🚴 : VTT <br />
-              📍 : Vannes <br />
-              🕗 : demain 8h30 <br />
-              👤 : 3/8 <br />
-              🗣️ : pipelette <br />
-              🎯 : Compétition <br />
-              Dist : 30km <br />
-              D+ : 300m
-            </p>
-          {# </div> #}
-        </a>
+
+
+        {% include '/partials/card_partial.html.twig' %}
+
+
+        
+
       {% endfor %}
     </div>
   </section>
