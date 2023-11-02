@@ -24,6 +24,10 @@ body {
 li:hover a,
 .copyrights:hover a {
   color: $secondary !important;
+  transition: all .5s ease;
+}
+.copyrights a {
+  transition: all .5s ease;
 }
 
 header {
@@ -107,15 +111,24 @@ footer {
   }
 
   nav {
-    width: 100% !important;
-
-    .social img {
-      width: 30px;
-    }
+    width: 100%!important;
 
     ul {
       flex-direction: column;
     }
+  }
+
+  .social {
+
+    flex-direction: row!important;
+
+
+    img {
+      width: 30px;
+    }
+
+
+
   }
 }
 
@@ -126,7 +139,7 @@ footer {
 }
 
 .profile-menu a:hover {
-  color: $secondary!important;
+  color: $secondary !important;
 }
 
 

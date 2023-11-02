@@ -31,12 +31,11 @@
                 <a href="/" class="d-inline-flex link-body-emphasis text-decoration-none"><img src="{{ asset('assets/images/ty_ride_192.png') }}" alt="Logo ty'Ride" /></a>
               </div>
 
-
               {% if app.request.attributes.get('_route') is not same as('app_login') and app.request.attributes.get('_route') is not same as('app_register') %}
                 {% include "/partials/nav_partial.html.twig" %}
               {% endif %}
 
-              <div class="col-md-3 text-center button-container position-relative row align-items-center">
+              <div class="col-md-4 text-center button-container position-relative d-flex align-items-center">
                   {% if app.user is not empty %}
                     <div class="col-6 text-end">
                       <a class="rounded-circle text-center border border-2 border-secondary d-inline-block fs-3" href="#" title="ajouter une sortie">+</a>
@@ -83,7 +82,7 @@
                   <a href="/" class="d-inline-flex text-center w-auto link-body-emphasis text-decoration-none"><img src="{{ asset('assets/images/ty_ride_192.png') }}" alt="Logo ty'Ride" /></a>
                   <p class="text-white fs-6">
                     © 2023 - Ty'Ride <br />
-                    <span class="copyrights">
+                    <span class="copyrights text-white">
                       Designed & developed by <br />
                       <a class="text-white" href="#">Julien DEGERMANN</a>
                     </span>
@@ -104,10 +103,10 @@
                 {# <h5>Section</h5> #}
                 <ul class="nav flex-column">
                   <li>
-                    <a href="" class="nav-link mx-1 py-1 px-4 text-white ">Mentions légales</a>
+                    <a href="/mentions-legales" class="nav-link mx-1 py-1 px-4 text-white ">Mentions légales</a>
                   </li>
                   <li>
-                    <a href="#" class="nav-link mx-1 py-1 px-4 text-white"> Politique de confidentialité</a>
+                    <a href="/politique-de-confidentialite" class="nav-link mx-1 py-1 px-4 text-white"> Politique de confidentialité</a>
                   </li>
                   <li>
                     <a href="#" class="nav-link mx-1 py-1 px-4 text-white ">Signaler un bug</a>
@@ -118,26 +117,23 @@
               <div class="col mb-3">
                 {# <h5>Section</h5> #}
                 <nav>
-                  <ul class="nav flex-column social">
-                    <li>
-                    <a href="#" class="nav-link my-0 p-0 text-white">{% include 'partials/strava_svg_partial.html.twig' %}</a>
-                  </li>
-                  <li>
-                    <a href="#" class="nav-link my-0 p-0 text-white">{% include 'partials/linkedin_svg_partial.html.twig' %}</a>
-                  </li>
-                  <li>
-                    <a href="#" class="nav-link my-0 p-0 text-white"> 
-                      {% include 'partials/facebook_svg_partial.html.twig' %}
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" class="nav-link my-0 p-0 text-white"> 
-                      {% include 'partials/github_svg_partial.html.twig' %}
-                    </a>
-                  </li>
-                  {# <li>
-                    <a href="#" class="nav-link mx-1 py-2 px-4 text-white">teste PROPOS</a>
-                  </li> #}
+                  <ul class="row social ps-0 d-flex">
+                    <li class="col-3 text-center">
+                      <a href="#" class="my-0 p-0 text-white">{% include 'partials/strava_svg_partial.html.twig' %}</a>
+                    </li>
+                    <li class="col-3 text-center">
+                      <a href="#" class="my-0 p-0 text-white">{% include 'partials/linkedin_svg_partial.html.twig' %}</a>
+                    </li>
+                    <li class="col-3 text-center">
+                      <a href="#" class="my-0 p-0 text-white"> 
+                        {% include 'partials/facebook_svg_partial.html.twig' %}
+                      </a>
+                    </li>
+                    <li class="col-3 text-center">
+                      <a href="#" class="nav-link my-0 p-0 text-white"> 
+                        {% include 'partials/github_svg_partial.html.twig' %}
+                      </a>
+                    </li>
                   </ul>
                 </nav>
               </div>
