@@ -20,9 +20,8 @@ class Message
     #[ORM\Column(type: Types::TEXT)]
     private ?string $content = null;
 
-    #[ORM\ManyToOne(inversedBy: 'messages')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $user = null;
+    #[ORM\Column(length: 255)]
+    private ?string $email = null;
 
     public function getId(): ?int
     {
@@ -53,14 +52,14 @@ class Message
         return $this;
     }
 
-    public function getUser(): ?User
+    public function getEmail(): ?string
     {
-        return $this->user;
+        return $this->email;
     }
 
-    public function setUser(?User $user): static
+    public function setEmail(string $email): static
     {
-        $this->user = $user;
+        $this->email = $email;
 
         return $this;
     }

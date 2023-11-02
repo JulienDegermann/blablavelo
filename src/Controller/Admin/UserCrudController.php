@@ -19,12 +19,12 @@ class UserCrudController extends AbstractCrudController
     {
         return [
             yield from parent::configureFields($pageName),
-            yield AssociationField::new('city'),
-            yield AssociationField::new('mind'),
-            yield AssociationField::new('practice'),
-            yield AssociationField::new('bike'),
-            yield AssociationField::new('bike'),
-            yield ChoiceField::new('roles')
+            AssociationField::new('city'),
+            AssociationField::new('mind'),
+            AssociationField::new('practice'),
+            AssociationField::new('bike'),
+            AssociationField::new('bike'),
+            ChoiceField::new('roles')
                 ->setChoices([
                     'user' => 'ROLE_USER',
                     'moderator' => 'ROLE_MODERATOR',

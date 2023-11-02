@@ -9,6 +9,7 @@ use App\Entity\Ride;
 use App\Entity\User;
 use App\Entity\Brand;
 use App\Entity\Model;
+use App\Entity\Message;
 use App\Entity\Practice;
 use App\Entity\Department;
 use Symfony\Component\HttpFoundation\Response;
@@ -52,14 +53,15 @@ class DashboardController extends AbstractDashboardController
 
     public function configureMenuItems(): iterable
     {
-        yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
-        yield MenuItem::linkToCrud('Marques', 'fas fa-list', Brand::class);
-        yield MenuItem::linkToCrud('Départements', 'fas fa-list', Department::class);
-        yield MenuItem::linkToCrud('Villes', 'fas fa-list', City::class);
-        yield MenuItem::linkToCrud('Objectifs', 'fas fa-list', Mind::class);
-        yield MenuItem::linkToCrud('Pratiques', 'fas fa-list', Practice::class);
-        yield MenuItem::linkToCrud('Modèles', 'fas fa-list', Model::class);
-        yield MenuItem::linkToCrud('Rides', 'fas fa-list', Ride::class);
-        yield MenuItem::linkToCrud('Membres', 'fas fa-list', User::class);
+        yield MenuItem::linkToDashboard('Dashboard', 'fa-solid fa-house');
+        yield MenuItem::linkToCrud('Membres', 'fa-solid fa-users', User::class);
+        yield MenuItem::linkToCrud('Rides', 'fa-solid fa-route', Ride::class);
+        yield MenuItem::linkToCrud('Départements', 'fa-solid fa-map', Department::class);
+        yield MenuItem::linkToCrud('Villes', 'fa-solid fa-city', City::class);
+        yield MenuItem::linkToCrud('Marques', 'fa-solid fa-copyright', Brand::class);
+        yield MenuItem::linkToCrud('Modèles', 'fa-solid fa-bicycle', Model::class);
+        yield MenuItem::linkToCrud('Objectifs', 'fa-solid fa-bullseye', Mind::class);
+        yield MenuItem::linkToCrud('Pratiques', 'fa-solid fa-person-biking', Practice::class);
+        yield MenuItem::linkToCrud('Messages', 'fa-solid fa-envelope', Message::class);
     }
 }

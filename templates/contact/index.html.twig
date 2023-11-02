@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+  Ty'Ride - Contact
+{% endblock %}
+
+{% block main %}
+  <section class="h-100">
+    <div class="container h-100">
+      <div class="row h-100">
+        <h1 class="text-center">Contacte-nous !</h1>
+        <div class="col-6 m-auto h-100">
+            {{ form_start(messageForm) }}
+                {{ form_row(messageForm.title) }}
+                {{ form_row(messageForm.content) }}
+                {{ form_row(messageForm.email, {value : user_email ? user_email : ''}) }}
+                <input class="w-auto px-3 py-2 m-2 form-control btn btn-secondary text-primary" type="submit" name="send_message" value="Envoyer le message">
+            {{ form_end(messageForm) }}
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}
