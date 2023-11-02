@@ -18,10 +18,13 @@ class ContactController extends AbstractController
     public function contact(Request $request, EntityManagerInterface $entityManager): Response
     {
 
-        $current_user = new User();
-        $current_user = $this->getUser();
-        $user_name = $current_user ? $current_user->getUserName() : '' ;
-        $user_mail = $current_user ? $current_user->getEmail() : '' ; 
+        $user = new User();
+        if ($this->getUser()) {
+            /** @var User $user */
+            $user = $this->getUser();
+        }
+        $user_name = $user->getUserName();
+        $user_mail = $user->getEmail();
         
         $message = new Message();
         $form = $this->createForm(MessageType::class, $message, ['attr' => ['class' => 'form-signin, row']]);
@@ -29,11 +32,6 @@ class ContactController extends AbstractController
         
         if ($form->isSubmitted() && $form->isValid()) {
             $message = $form->getData();
-            // $user = new User();
-            // $user->setEmail($form->get('user')->getData());
-            // $user->setFirstName('Test');
-            // $user->setLastName('Test');
-            // $message->setUser($user);
             $entityManager->persist($message);
             $entityManager->flush();
 
