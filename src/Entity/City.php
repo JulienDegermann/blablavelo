@@ -28,9 +28,13 @@ class City
     #[ORM\OneToMany(mappedBy: 'city', targetEntity: User::class)]
     private Collection $users;
 
+    #[ORM\OneToMany(mappedBy: 'city', targetEntity: Ride::class)]
+    private Collection $rides;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
+        $this->rides = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -107,5 +111,35 @@ class City
     public function __toString()
     {
         return $this->name;
+    }
+
+    /**
+     * @return Collection<int, Ride>
+     */
+    public function getRides(): Collection
+    {
+        return $this->rides;
+    }
+
+    public function addRide(Ride $ride): static
+    {
+        if (!$this->rides->contains($ride)) {
+            $this->rides->add($ride);
+            $ride->setCity($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRide(Ride $ride): static
+    {
+        if ($this->rides->removeElement($ride)) {
+            // set the owning side to null (unless already changed)
+            if ($ride->getCity() === $this) {
+                $ride->setCity(null);
+            }
+        }
+
+        return $this;
     }
 }

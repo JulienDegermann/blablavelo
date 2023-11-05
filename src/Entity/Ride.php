@@ -2,10 +2,14 @@
 
 namespace App\Entity;
 
+use DateTime;
+use DateTimeImmutable;
 use App\Entity\Practice;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\RideRepository;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\VarDumper\Cloner\Data;
 use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity(repositoryClass: RideRepository::class)]
@@ -32,10 +36,7 @@ class Ride
     private ?int $average_speed = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $date = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $place = null;
+    private ?\DateTime $date = null;
 
     #[ORM\ManyToOne(inversedBy: 'rides')]
     #[ORM\JoinColumn(nullable: false)]
@@ -53,9 +54,23 @@ class Ride
     #[ORM\JoinColumn(nullable: false)]
     private Collection $user_participant;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $description = null;
+
+    #[ORM\ManyToOne(inversedBy: 'users')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?City $city = null;
+
+    #[ORM\Column]
+    private ?\DateTimeImmutable $createdAt = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTime $updatedAt = null;
+
     public function __construct()
     {
         $this->user_participant = new ArrayCollection();
+        $this->setCreatedAt(new DateTimeImmutable());
     }
 
     public function getId(): ?int
@@ -123,26 +138,14 @@ class Ride
         return $this;
     }
 
-    public function getDate(): ?\DateTimeImmutable
+    public function getDate(): ?\DateTime
     {
         return $this->date;
     }
 
-    public function setDate(\DateTimeImmutable $date): static
+    public function setDate(\DateTime $date): static
     {
         $this->date = $date;
-
-        return $this;
-    }
-
-    public function getPlace(): ?string
-    {
-        return $this->place;
-    }
-
-    public function setPlace(string $place): static
-    {
-        $this->place = $place;
 
         return $this;
     }
@@ -183,6 +186,18 @@ class Ride
         return $this;
     }
 
+    public function getCity(): ?City
+    {
+        return $this->city;
+    }
+
+    public function setCity(?City $city): static
+    {
+        $this->city = $city;
+
+        return $this;
+    }
+
     /**
      * @return Collection<int, User>
      */
@@ -210,5 +225,41 @@ class Ride
     public function __toString()
     {
         return $this->id;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): static
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTime
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(?\DateTime $updatedAt): static
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
     }
 }

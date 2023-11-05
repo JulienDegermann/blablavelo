@@ -39,7 +39,8 @@
   <section class="my-5 px-5">
     <div class="row d-flex justify-content-between">
       {# here : get last 5 rides in database and loop for…in #}
-      {% for i in 0..4 %}
+      {{ dump(all_rides) }}
+      {% for ride in all_rides %}
         {% include '/partials/card_partial.html.twig' %}
       {% endfor %}
     </div>

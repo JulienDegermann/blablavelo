@@ -1,18 +1,19 @@
 <a class="col-md-2 rounded-3 m-2 p-3 border-multiple ride-card d-block" href="#">
 {# <div class="col-md-2 rounded-3 p-3 border-multiple ride-card"> #}
-  <h3 class="text-center">Card Title</h3>
+  <h3 class="text-center">{{ ride.getTitle }}</h3>
   <img class="w-100 border-multiple border-grey my-3" src="" alt="map" />
   <div class="row">
     <ul class="col-5">
-      <li>🚴 : VTT</li>
-      <li>🎯 : Compét'</li>
-      <li>Dist : 30km</li>
-      <li>D+ : 300m</li>
+      <li>🚴 : {{ ride.getPractice }}</li>
+      <li>🎯 : {{ ride.getMind }}</li>
+      <li>🎯 : {{ ride.getUserCreator }}</li>
+      <li>Dist : {{ ride.getDistance }} kms</li>
+      <li>D+ : {{ ride.getAscent }} m</li>
     </ul>
     <ul class="col-7">
-      <li>📍 : Vannes</li>
-      <li>🕗 : demain 8h30</li>
-      <li>👤 : 3/8</li>
+      <li>📍 : {{ ride.getCity }}</li>
+      {# <li>🕗 : {{ ride.getDate('d/m/Y H:i:s') }}</li> #}
+      <li>👤 :  {{ ride.getUserParticipant|length }} / {{ ride.getMaxRider }}</li>
       <li>🗣️ : pipelette</li>
     </ul>
   </div>

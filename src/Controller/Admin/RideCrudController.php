@@ -3,9 +3,8 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Ride;
-use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
+
+use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 
@@ -18,12 +17,13 @@ class RideCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
-        return [
-            yield from parent::configureFields($pageName),
-            yield AssociationField::new('user_creator'),
-            yield AssociationField::new('user_participant'),
-            yield AssociationField::new('practice'),
-            yield AssociationField::new('mind'),
-        ];
+
+        yield from parent::configureFields($pageName);
+        yield DateTimeField::new('createdAt')->setFormTypeOption('disabled', true);
+        yield AssociationField::new('city');
+        yield AssociationField::new('practice');
+        yield AssociationField::new('mind');
+        yield AssociationField::new('user_creator');
+        yield AssociationField::new('user_participant');
     }
 }
