@@ -20,6 +20,12 @@ class RideRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Ride::class);
     }
+    
+    public function save(Ride $ride) {
+        $this->_em->persist($ride);
+        $this->_em->flush();
+
+    }
 
 //    /**
 //     * @return Ride[] Returns an array of Ride objects

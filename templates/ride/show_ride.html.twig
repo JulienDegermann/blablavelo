@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+  Ty'Ride - Rides
+{% endblock %}
+
+{% block main %}
+  <section class="my-5 px-5">
+    <div class="container">
+      <div class="row">
+        <a class="text-primary mb-5" href="{{ app.request.headers.get('referer') }}">Retour</a>
+        <div class="row">
+          <div class="col-6">
+            <img src="" alt="coucou" />
+          </div>
+          <div class="col-6">
+            <h2 class="">{{ ride.getTitle }}</h2>
+            <p class="fst-italic text-primary text-end">posté par : {{ ride.getUserCreator }}</p>
+            <p>
+              🚴 : {{ ride.getPractice }} <br />
+              🎯 : {{ ride.getMind }} <br />
+              Dist : {{ ride.getDistance }} kms <br />
+              D+ : {{ ride.getAscent }} m 📍 : {{ ride.getCity }} <br />
+              🕗 : ride.getDate <br />
+              👤 : {{ ride.getUserParticipant|length }} / {{ ride.getMaxRider }} <br />
+              🗣️ : {{ ride.getPractice }}
+            </p>
+            <p>{{ ride.getDescription }}</p>
+            {% if ride.getMaxRider > (ride.getUserParticipant|length) %}
+              {% if user in ride.getUserParticipant %}
+                <a href="/ride/{{ ride.getId }}/remove" class="btn btn-secondary text-primary px-5 py-2">Ne plus participer</a>
+              {% else %}
+                <a href="/ride/{{ ride.getId }}/add" class="btn btn-secondary text-primary px-5 py-2">J'EN SUIS !</a>
+              {% endif %}
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}
