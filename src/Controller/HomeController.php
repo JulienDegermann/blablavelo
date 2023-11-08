@@ -15,7 +15,7 @@ class HomeController extends AbstractController
         RideRepository $rideRepository
         ): Response
     {
-        $rides = $rideRepository->findAll();
+        $rides = $rideRepository->findBy([], ['id' => 'DESC'], 5);
         // dd($rides);
 
         $user = new User();

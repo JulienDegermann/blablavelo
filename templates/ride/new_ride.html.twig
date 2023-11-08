@@ -1,0 +1,66 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+  Ty'Ride - Rides
+{% endblock %}
+
+{% block main %}
+  <section class="my-5">
+    <div class="container">
+      <div class="row">
+        <h1 class="text-center">Ma sortie</h1>
+
+        {{ form_start(form) }}
+        <div class="row">
+          <fieldset class="col-md-6">
+            <legend>Informations générales</legend>
+            {{ form_row(form.title) }}
+            {{ form_row(form.description) }}
+          </fieldset>
+          <fieldset class="col-md-6">
+            <div class="row">
+              <legend>Informations sportives</legend>
+              <div class="col-6">
+                {{ form_label(form.city) }}
+                {{ form_widget(form.city) }}
+              </div>
+              <div class="col-6">
+                {{ form_label(form.date) }}
+                {{ form_widget(form.date) }}
+              </div>
+              <div class="col-6">
+                {{ form_label(form.practice) }}
+                {{ form_widget(form.practice) }}
+              </div>
+              <div class="col-6">
+                {{ form_label(form.mind) }}
+                {{ form_widget(form.mind) }}
+              </div>
+              <div class="col-6">
+                {{ form_label(form.ascent) }}
+                {{ form_widget(form.ascent) }}
+              </div>
+              <div class="col-6">
+                {{ form_label(form.distance) }}
+                {{ form_widget(form.distance) }}
+              </div>
+              <div class="col-6">
+                {{ form_label(form.average_speed) }}
+                {{ form_widget(form.average_speed) }}
+              </div>
+              <div class="col-6">
+                {{ form_label(form.max_rider) }}
+                {{ form_widget(form.max_rider) }}
+              </div>
+
+            </div>              
+
+          </fieldset>
+        </div>
+
+        <input class="btn btn-secondary m-2 text-primary px-3 py-2" type="submit" name="add_ride" id="add_ride" value="Enregistrer la sortie" />
+        {{ form_end(form) }}
+      </div>
+    </div>
+  </section>
+{% endblock %}

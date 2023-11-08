@@ -6,6 +6,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Entity\Message;
 use App\Form\MessageType;
+use App\Repository\MessageRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,8 +16,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class ContactController extends AbstractController
 {
     #[Route('/contact', name: 'app_contact')]
-    public function contact(Request $request, EntityManagerInterface $entityManager): Response
-    {
+    public function contact(
+        Request $request,
+        MessageRepository $repo
+    ): Response {
 
         $user = new User();
         if ($this->getUser()) {
@@ -25,16 +28,15 @@ class ContactController extends AbstractController
         }
         $user_name = $user->getUserName();
         $user_mail = $user->getEmail();
-        
+
         $message = new Message();
         $form = $this->createForm(MessageType::class, $message, ['attr' => ['class' => 'form-signin, row']]);
         $form->handleRequest($request);
-        
+
         if ($form->isSubmitted() && $form->isValid()) {
             $message = $form->getData();
-            $entityManager->persist($message);
-            $entityManager->flush();
-
+            $repo->save($message);
+            
             return $this->redirectToRoute('app_contact');
         }
         return $this->render('contact/index.html.twig', [
