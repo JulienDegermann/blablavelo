@@ -1,20 +1,37 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello UserController!{% endblock %}
+{% block title %}
+  Hello UserController!
+{% endblock %}
 
-{% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+{% block main %}
+  <section>
+    <div class="container">
+      <div class="row">
+        <h1 class="text-center">Mon profil</h1>
+        {{ form_start(form) }}
+        <div class="row">
+            <fieldset class="col-md-6">
+                {{ form_row(form.first_name) }}
+                {{ form_row(form.last_name) }}
+                {# {{ form_row(form.birth_date) }} #}
+                {{ form_row(form.email) }}
+                {{ form_row(form.file) }}
+                {{ form_row(form.city) }}
+                {{ form_row(form.mind) }}
+                {{ form_row(form.practice) }}
+                {{ form_row(form.bike) }}
+            </fieldset>
+            <fieldset class="col-md-6">
+                {{ form_row(form.user_name) }}
+                {# {{ form_row(form.password) }} #}
+            </fieldset>
+        </div>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ '/Users/julien/Documents/WebDeveloper/ty_ride/src/Controller/UserController.php'|file_link(0) }}">src/Controller/UserController.php</a></code></li>
-        <li>Your template at <code><a href="{{ '/Users/julien/Documents/WebDeveloper/ty_ride/templates/user/index.html.twig'|file_link(0) }}">templates/user/index.html.twig</a></code></li>
-    </ul>
-</div>
+        <input type="submit" class="btn btn-secondary text-primary px-3 py-2 m-2" value="Modifier mon profil" />
+        <a href="#" class="text-primary fs-6" >Supprimer mon compte</a>
+        {{ form_end(form) }}
+      </div>
+    </div>
+  </section>
 {% endblock %}

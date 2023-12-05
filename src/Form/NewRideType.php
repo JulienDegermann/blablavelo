@@ -29,8 +29,7 @@ class NewRideType extends AbstractType
                 'label' => 'Titre de la sortie',
                 'required' => true,
                 'attr' => [
-                    'class' => 'form-control m-2'
-                ]
+                    'class' => 'form-control m-2'                ]
             ])
             ->add('distance', IntegerType::class, [
                 'label' => 'Distance estimée (kms)',

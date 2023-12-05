@@ -28,8 +28,10 @@
           <div class="container position-relative">
             <div class="row d-flex justify-content-between align-items-center">
               <div class="col-md-1 mb-2 mb-md-0">
-                <a href=" {{ path('app_home') }}" class="d-inline-flex link-body-emphasis text-decoration-none"><img src="{{ asset('assets/images/ty_ride_192.png') }}" alt="Logo ty'Ride" /></a>
-              </div>
+                <a href=" {{ path('app_home') }}" class="d-inline-flex link-body-emphasis text-decoration-none">
+
+                    <img src="{{ asset('assets/images/ty_ride_192.png') }}" alt="Logo ty'Ride" /></a>
+                    </div>
 
               {% if app.request.attributes.get('_route') is not same as('app_login') and app.request.attributes.get('_route') is not same as('app_register') %}
                 {% include "/partials/nav_partial.html.twig" %}
@@ -41,7 +43,12 @@
                       <a class="rounded-circle text-center border border-2 border-secondary d-inline-block fs-3" href=" {{ path('app_new_ride') }}" title="ajouter une sortie">+</a>
                     </div>
                     <div class="profile col-6 text-start">
+                      {% if user %}
+                        <img class="rounded-circle border border-2 border-secondary" src="{{ asset('uploads/images/users/' ~ user.getFileName) }}" alt="photo de profil">                    
+                      {% else %}
                       <img class="rounded-circle border border-2 border-secondary" src="{{ asset('assets/images/ty_ride_road_sign.png') }}" alt="photo de profil" />
+                    {% endif %}
+
                     </div>
                   {% else %}
                     {% if app.request.attributes.get('_route') is not same as('app_login') and app.request.attributes.get('_route') is not same as('app_register') %}
@@ -56,7 +63,7 @@
               <div class="position-absolute top-100 end-0 pt-3 h-auto col-md-3 profile">
               <div class="bg-white text-primary p-3 col-6 offset-6 border border-top-0 border-primary text-start
               profile-menu ">
-                <p class="fw-bold border-bottom border-primary p-0 mb-1 text-center text-primary">{{ user_name }}</p>
+                <p class="fw-bold border-bottom border-primary p-0 mb-1 text-center text-primary">{{ user.getUserName }}</p>
                 <a class="my-0 text-primary" href="{{ path('app_profile') }}">Mon profl</a> <br>
                 <a class="my-0 text-primary" href="{{ path('app_logout') }}">Me déconnecter</a>
               </div>

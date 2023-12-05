@@ -2,21 +2,24 @@
 
 namespace App\Entity;
 
-use DateTime;
-use DateTimeImmutable;
 use App\Entity\Ride;
+use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\HttpFoundation\File\File;
 use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Serializable;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
+#[Vich\Uploadable]
 #[ORM\Table(name: '`user`')]
-#[UniqueEntity(fields: ['user_name'], message: 'There is already an account with this user_name')]
+#[UniqueEntity(fields: ['user_name'], message: 'Un compte existe déjà avec ce nom d\'utilisateur')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -45,9 +48,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
     private ?\DateTimeImmutable $birth_date = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $file_name = null;
-
     #[ORM\ManyToOne(inversedBy: 'users')]
     #[ORM\JoinColumn(nullable: false)]
     private ?City $city = null;
@@ -58,7 +58,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\OneToMany(mappedBy: 'user_creator', targetEntity: Ride::class)]
     private Collection $rides_created;
-    
+
     // link ManyToMany 
     #[ORM\ManyToMany(mappedBy: 'user_participant', targetEntity: Ride::class)]
     private Collection $rides_participated;
@@ -78,13 +78,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(nullable: true)]
-    private ?\DateTime $updatedAt = null;
+    private ?\DateTimeImmutable $updatedAt = null;
+
+    #[Vich\UploadableField(mapping: 'user_image', fileNameProperty: 'file_name', size: 'fileSize')]
+    private ?File $file = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?string $file_name = null;
+
+    private ?int $fileSize = null;
 
     public function __construct()
     {
         $this->rides_created = new ArrayCollection();
         $this->setCreatedAt(new DateTimeImmutable());
         // $this->messages = new ArrayCollection();
+
     }
 
     public function getId(): ?int
@@ -198,12 +207,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->file_name;
     }
 
-    public function setFileName(?string $file_name): static
+    public function setFileName(?string $file_name): void
     {
         $this->file_name = $file_name;
-
-        return $this;
     }
+
+    public function getFile(): ?File
+    {
+        return $this->file;
+    }
+
+    public function setFile(?File $file = null): void
+    {
+        $this->file = $file;
+
+        if (null !== $file) {
+            $this->updatedAt = new \DateTimeImmutable();
+        }
+    }
+
+    public function setFileSize(?int $fileSize): void
+    {
+        $this->fileSize = $fileSize;
+    }
+
+    public function getFileSize(): ?int
+    {
+        return $this->fileSize;
+    }
+// ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     public function getCity(): ?City
     {
@@ -342,15 +374,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTime
+    public function getUpdatedAt(): ?\DateTimeImmutable
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(?\DateTime $updatedAt): static
+    public function setUpdatedAt(?\DateTimeImmutable $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
 
         return $this;
-    }
+    }    
 }

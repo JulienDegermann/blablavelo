@@ -11,6 +11,7 @@ use App\Entity\Brand;
 use App\Entity\Model;
 use App\Entity\Message;
 use App\Entity\Practice;
+use App\Entity\Image;;
 use App\Entity\Department;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
