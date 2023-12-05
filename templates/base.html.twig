@@ -4,14 +4,27 @@
     <meta charset="UTF-8" />
     <title>
       {% block title %}
-        Ty'Ride
+        Blabla Bike
       {% endblock %}
     </title>
-    <meta name="description" content="Vététiste, routard ou gravel-man : trouve les sportifs qui ont les mêmes objectifs que toi pour t'accompagner lors de tes sorties !
-    Partage tes itinéraires préférés et découvre en de nouveaux">
-    <meta name="keywords" content="cyclisme, VTT, route, gravel" >
-    <meta name="author" content="Julien Degermann" >
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" >
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0" />
+
+    <meta name="title" content="Blabla Bike">
+    <meta name="description" content="Tu cherches des partenaires pour rouler ? des personnes qui ont une pratique et un niveau similaires au tien ? NE CHERCHE PLUS ! 
+    Blabla Bike propose aux sportifs de proposer des sorties en précisant allure et pratique !">
+    <meta name="author" content="Julien Degermann">
+    <meta name="keywords" content="VTT, cyclisme, route, gravel, groupe, passion, partage">
+    
+    <meta property="og:title" content="Blabla Bike">
+    <meta property="og:author" content="Julien DEGERMANN">
+    <meta property="og:description" content="Tu cherches des partenaires pour rouler ? des personnes qui ont une pratique et un niveau similaires au tien ? NE CHERCHE PLUS ! 
+    Blabla Bike propose aux sportifs de proposer des sorties en précisant allure et pratique ! De quoi partager la passion du vélo ">
+    <meta property="og:keywords" content="VTT, cyclisme, route, gravel, groupe, passion, partage">
+    <meta property="og:image" content="{{ asset('assets/images/blablabike.webp') }}">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blablabike.julien-degermann.fr">    
+    
     <link rel="icon" href="{{ asset('assets/images/favicon.ico') }}" />
     {% block stylesheets %}
       {{ encore_entry_link_tags('app') }}
@@ -29,8 +42,8 @@
             <div class="row d-flex justify-content-between align-items-center">
               <div class="col-md-1 mb-2 mb-md-0">
                 <a href=" {{ path('app_home') }}" class="d-inline-flex link-body-emphasis text-decoration-none">
-
-                    <img src="{{ asset('assets/images/ty_ride_192.png') }}" alt="Logo ty'Ride" /></a>
+                    <img src="{{ asset('assets/images/blablabike.webp') }}" alt="Logo Blabla Bike" />
+                </a>
                     </div>
 
               {% if app.request.attributes.get('_route') is not same as('app_login') and app.request.attributes.get('_route') is not same as('app_register') %}
@@ -43,10 +56,12 @@
                       <a class="rounded-circle text-center border border-2 border-secondary d-inline-block fs-3" href=" {{ path('app_new_ride') }}" title="ajouter une sortie">+</a>
                     </div>
                     <div class="profile col-6 text-start">
-                      {% if user %}
+                      {% if user.getFileName %}
                         <img class="rounded-circle border border-2 border-secondary" src="{{ asset('uploads/images/users/' ~ user.getFileName) }}" alt="photo de profil">                    
                       {% else %}
-                      <img class="rounded-circle border border-2 border-secondary" src="{{ asset('assets/images/ty_ride_road_sign.png') }}" alt="photo de profil" />
+                        <div class="account rounded-circle border border-2 border-secondary d-flex justify-content-center align-item-center">
+                          {% include 'partials/avatar_partial.html.twig' %}
+                        </div>
                     {% endif %}
 
                     </div>
@@ -86,9 +101,9 @@
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-5">
               <div class="col mb-3 text-center">
                 <div class="mb-2">
-                  <a href="{{ path('app_home') }}" class="d-inline-flex text-center w-auto link-body-emphasis text-decoration-none"><img src="{{ asset('assets/images/ty_ride_192.png') }}" alt="Logo ty'Ride" /></a>
+                  <a href="{{ path('app_home') }}" class="d-inline-flex text-center w-auto link-body-emphasis text-decoration-none"><img src="{{ asset('assets/images/blablabike.webp') }}" alt="Logo ty'Ride" /></a>
                   <p class="text-white fs-6">
-                    © 2023 - Ty'Ride <br />
+                    © 2023 - Blabla Bike <br />
                     <span class="copyrights text-white">
                       Designed et developed by <br />
                       <a class="text-white" href="https://www.linkedin.com/in/julien-degermann/">Julien DEGERMANN</a>
