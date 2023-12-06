@@ -71,7 +71,6 @@
                       <a class="btn px-3 mx-2 h-auto col btn-secondary text-primary" href="{{ path('app_register') }}">INSCRIPTION</a>
                     {% endif %}
                   {% endif %}
- 
               </div>
             </div>
             {% if app.user is not empty %}
@@ -87,9 +86,26 @@
             </div>
           
         </header>
-        <main>
+        <main class="position-relative">
+          <div class="position-absolute top-0 left-0 w-100">
+            {% for success in app.flashes('success') %}
+              <div class="alert alert-success">
+                {{ success }}
+              </div>
+            {% endfor %}
+            {% for warning in app.flashes('warning') %}
+              <div class="alert alert-warning">
+                {{ warning }}
+              </div>
+            {% endfor %}
+            {% for error in app.flashes('danger') %}
+              <div class="alert alert-danger">
+                {{ error }}
+              </div>
+            {% endfor %}
+          </div>              
       {% endblock %}
-
+      
       {% block main %}
         {# here is the content of page #}
       {% endblock %}

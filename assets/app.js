@@ -12,6 +12,8 @@ import $ from 'jquery';
 
 
 // ---------------------------------------------------------------- Desktop menu
+
+
 $('.profile-menu').hide();
 $('.profile, .profile-menu').on('mouseenter', function () {
   $('.profile-menu').show();
@@ -20,3 +22,6 @@ $('.profile, .profile-menu').on('mouseenter', function () {
 $('.profile, .profile-menu').on('mouseleave', function () {
   $('.profile-menu').hide();
 });
+
+
+
