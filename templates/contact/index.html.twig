@@ -14,7 +14,7 @@
           {{ form_start(messageForm) }}
           {{ form_row(messageForm.title) }}
           {{ form_row(messageForm.content) }}
-          {{ form_row(messageForm.email, { value: user.getEmail ? user.getEmail : '' }) }}
+          {{ form_row(messageForm.email, { value: user ? user.getEmail : '' }) }}
           <input class="w-auto px-3 py-2 m-2 mt-4 form-control btn btn-secondary text-primary" type="submit" name="send_message" value="Envoyer le message" />
           {{ form_end(messageForm) }}
         </div>

@@ -21,20 +21,6 @@ class ProfileType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('user_name', TextType::class, [
-                'label' => 'Pseudo',
-                'required' => true,
-                'attr' => [
-                    'class' => 'form-control mb-3'                
-                ]
-            ])
-            // ->add('password', PasswordType::class, [
-            //     'label' => 'Mot de passe',
-            //     'required' => true,
-            //     'attr' => [
-            //         'class' => 'form-control m-2',
-            //     ]
-            // ])
             ->add('first_name', TextType::class, [
                 'label' => 'Prénom',
                 'required' => true,
@@ -63,7 +49,6 @@ class ProfileType extends AbstractType
                 'image_uri' => true,
                 'delete_label' => 'Supprimer',
                 'download_uri' => false,
-                // 'imagine_pattern' => 'squared_thumbnail_small',
                 'attr' => [
                     'class' => 'form-control mb-3'                
                 ]
@@ -99,14 +84,6 @@ class ProfileType extends AbstractType
                     'class' => 'form-control mb-3'                
                 ]
             ])
-            // ->add('rides_participated', ::class, [
-            //     'label' => 'label name',
-            //     'required' => true,
-            //     'attr' => [
-            //         'class' => 'form-control m-2',
-            //         'value' => $user->getCity()
-            //     ]
-            // ])
             ->add('practice', EntityType::class, [
                 'label' => 'Pratique',
                 'class' => Practice::class,
@@ -115,14 +92,14 @@ class ProfileType extends AbstractType
                     'class' => 'form-control mb-3'
                 ]
             ])
-            ->add('bike', EntityType::class, [
-                'label' => 'Vélo',
-                'class' => Model::class,
-                'required' => true,
-                'attr' => [
-                    'class' => 'form-control mb-3'                
-                ]
-            ])
+            // ->add('bike', EntityType::class, [
+            //     'label' => 'Vélo',
+            //     'class' => Model::class,
+            //     'required' => true,
+            //     'attr' => [
+            //         'class' => 'form-control mb-3'                
+            //     ]
+            // ])
         ;
     }
 

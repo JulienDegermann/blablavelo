@@ -14,7 +14,8 @@ class InfoController extends AbstractController
     #[Route('/comment-ca-marche', name: 'app_info')]
     public function index(): Response
     {
-        $user = new User();
+        
+        $user = null;
         if ($this->getUser()) {
             /** @var User $user */
             $user = $this->getUser();

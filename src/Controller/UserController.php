@@ -17,8 +17,8 @@ class UserController extends AbstractController
         UserRepository $repo,
         Request $request
     ): Response {
-
-        $user = new User();
+        
+        $user = null;
         if ($this->getUser()) {
             /** @var User $user */
             $user = $this->getUser();

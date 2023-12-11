@@ -247,3 +247,11 @@ h1 {
   width: 30px!important;
   height: 30px!important;
 }
+
+.vich-image img {
+  width: 50%;
+  height: 50%;
+  max-width: 100px;
+  max-height: 100px;
+  object-fit: cover;
+}

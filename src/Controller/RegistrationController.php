@@ -4,13 +4,16 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\RegistrationFormType;
+use App\Repository\RideRepository;
+use App\Repository\UserRepository;
 use App\Security\UserAuthAuthenticator;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 
 
@@ -48,5 +51,34 @@ class RegistrationController extends AbstractController
             'registrationForm' => $form->createView(),
             'user' => $user
         ]);
+    }
+
+    #[Route('/supprimer-mon-compte', name: 'app_delete')]
+    public function unregister(
+        UserRepository $repo,
+        RideRepository $rideRepository        
+        ): Response
+    {
+        if(!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        }
+        $user = $this->getUser();
+        /** @var User $user */
+        
+        // disconnect $user and destroy session
+        $session = new Session();
+        $session->invalidate();
+        $this->redirectToRoute('app_logout');
+
+        $repo->remove($user);
+
+        if ($repo->findBy(['email' => $user->getEmail()])) {
+            $this->addFlash('error', 'Une erreur est survenue, veuillez réessayer ultérieurement');
+            return $this->redirectToRoute('app_profile');
+        }
+        
+        $rides = $rideRepository->findBy([], ['id' => 'DESC'], 5);
+
+        return $this->redirectToRoute('app_home');
     }
 }

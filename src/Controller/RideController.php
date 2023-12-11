@@ -6,7 +6,6 @@ use App\Entity\Ride;
 use App\Entity\User;
 use App\Form\NewRideType;
 use App\Repository\RideRepository;
-use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -19,8 +18,8 @@ class RideController extends AbstractController
         RideRepository $rideRepository
     ): Response {
         $rides = $rideRepository->findAll();
-
-        $user = new User();
+        
+        $user = null;
         if ($this->getUser()) {
             /** @var User $user */
             $user = $this->getUser();
@@ -41,8 +40,7 @@ class RideController extends AbstractController
         $rides = $rideRepository->findBy(['id' => $id]);
         $ride = $rides[0];
 
-
-        $user = new User();
+        $user = null;
         if ($this->getUser()) {
             /** @var User $user */
             $user = $this->getUser();
@@ -59,6 +57,13 @@ class RideController extends AbstractController
         RideRepository $rideRepository,
         Request $request
     ): Response {
+
+        $user = null;
+        if ($this->getUser()) {
+            /** @var User $user */
+            $user = $this->getUser();
+        }
+
         $id = $request->attributes->get('id');
         $rides = $rideRepository->findBy(['id' => $id]);
         $ride = $rides[0];
@@ -66,19 +71,7 @@ class RideController extends AbstractController
         $ride->addUserParticipant($user);
         $rideRepository->save($ride);
 
-        // return $this->redirectToRoute('app_rides');
-
-        $user = new User();
-        if ($this->getUser()) {
-            /** @var User $user */
-            $user = $this->getUser();
-        }
-        $user_name = $user->getUserName();
-
-        // return $this->redirectToRoute('app_ride_remove');
-
         return $this->render('ride/show_ride.html.twig', [
-            'user_name' => $user_name,
             'user' => $user,
             'ride' => $ride
         ]);
@@ -91,6 +84,12 @@ class RideController extends AbstractController
         RideRepository $rideRepository,
         Request $request
     ): Response {
+
+        if ($this->getUser()) {
+            /** @var User $user */
+            $user = $this->getUser();
+        }
+
         $id = $request->attributes->get('id');
         $rides = $rideRepository->findBy(['id' => $id]);
         $ride = $rides[0];
@@ -98,17 +97,7 @@ class RideController extends AbstractController
         $ride->removeUserParticipant($user);
         $rideRepository->save($ride);
 
-        $user = new User();
-        if ($this->getUser()) {
-            /** @var User $user */
-            $user = $this->getUser();
-        }
-        $user_name = $user->getUserName();
-
-        // return $this->redirectToRoute('app_ride_remove');
-
         return $this->render('ride/show_ride.html.twig', [
-            'user_name' => $user_name,
             'user' => $user,
             'ride' => $ride
         ]);
@@ -120,12 +109,12 @@ class RideController extends AbstractController
         RideRepository $repo,
         Request $request
     ): Response {
-        $user = new User();
+        
+        $user = null;
         if ($this->getUser()) {
             /** @var User $user */
             $user = $this->getUser();
         }
-        $user_name = $user->getUserName();
 
         $ride = new Ride();
         $ride->setUserCreator($this->getUser());
@@ -142,7 +131,6 @@ class RideController extends AbstractController
 
         return $this->render('ride/new_ride.html.twig', [
             'form' => $form->createView(),
-            'user_name' => $user_name,
             'user' => $user
         ]);
     }

@@ -12,14 +12,15 @@ class LegalNoticeController extends AbstractController
     #[Route('/mentions-legales', name: 'app_legal_notice')]
     public function index(): Response
     {
-        $user = new User();
+
+        $user = null;
         if ($this->getUser()) {
             /** @var User $user */
             $user = $this->getUser();
         }
-        $user_name = $user->getUserName();
+
         return $this->render('legal_notice/index.html.twig', [
-            'user_name' => $user_name
+            'user' => $user
         ]);
     }
 }

@@ -47,7 +47,7 @@ class Ride
     private ?Practice $practice = null;
 
     #[ORM\ManyToOne(inversedBy: 'rides_created')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, referencedColumnName: 'id', onDelete: 'CASCADE')]
     private ?User $user_creator = null;
 
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'rides_participated')]

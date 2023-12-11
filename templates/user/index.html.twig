@@ -7,26 +7,20 @@
         <h1 class="text-center">Mon profil</h1>
         {{ form_start(form) }}
         <div class="row">
-            <fieldset class="col-md-6">
+            <fieldset>
                 {{ form_row(form.first_name) }}
                 {{ form_row(form.last_name) }}
-                {# {{ form_row(form.birth_date) }} #}
                 {{ form_row(form.email) }}
                 {{ form_row(form.file) }}
                 {{ form_row(form.city) }}
                 {{ form_row(form.mind) }}
                 {{ form_row(form.practice) }}
-                {{ form_row(form.bike) }}
-            </fieldset>
-            <fieldset class="col-md-6">
-                {{ form_row(form.user_name) }}
-                {# {{ form_row(form.password) }} #}
             </fieldset>
         </div>
 
         <input type="submit" class="btn btn-secondary text-primary px-3 py-2 m-2" value="Enregistrer les modifications" />
-        <a href="{{ path('app_pwd_forgot') }}" class="btn btn-primary text-white m-2 px-3" >Modifier le mot de passe</a>
-        <a href="#" class="text-primary fs-6" >Supprimer mon compte</a>
+        <a href="{{ path('app_pwd_forgot') }}" class="btn btn-primary text-white m-2 py-2 px-3" >Modifier le mot de passe</a> <br>
+        <a href="{{ path('app_delete') }}" class="text-primary m-2 px-3 fs-6" >Supprimer mon compte</a>
         {{ form_end(form) }}
       </div>
     </div>

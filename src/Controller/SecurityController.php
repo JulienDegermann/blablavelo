@@ -23,6 +23,7 @@ class SecurityController extends AbstractController
     #[Route(path: '/connexion', name: 'app_login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
+        $user = null;
         if ($this->getUser()) {
             if ($this->getUser()->getRoles() === 'ROLE_USER') {
                 return $this->redirectToRoute('app_home');
@@ -35,7 +36,7 @@ class SecurityController extends AbstractController
         $error = $authenticationUtils->getLastAuthenticationError();
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
-
+        $this->addFlash('error', $error);
         return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
     }
 
@@ -52,7 +53,8 @@ class SecurityController extends AbstractController
         TokenGeneratorInterface $tokenGeneratorInterface,
         MailerInterface $mail,
     ): Response {
-
+        
+        $user = null;
         if($this->getUser()) {
             /** @var User $user */
             $user = $this->getUser();
@@ -69,7 +71,7 @@ class SecurityController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $user = $repo->findOneBy(['email' => $form->getData()->getEmail()]);
-
+            
             if ($user) {
                 $token = $tokenGeneratorInterface->generateToken();
                 $user->setToken($token);
@@ -105,6 +107,7 @@ class SecurityController extends AbstractController
         UserRepository $repo,
         UserPasswordHasherInterface $pwdhash
     ): Response {
+
         $user = $repo->findOneBy(['token' => $token]);
         if (!$user) {
             $this->addFlash('error', 'Oups ! Ce lien n\'est plus valide.');

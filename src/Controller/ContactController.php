@@ -18,8 +18,8 @@ class ContactController extends AbstractController
         Request $request,
         MessageRepository $repo
     ): Response {
-
-        $user = new User();
+        
+        $user = null;
         if ($this->getUser()) {
             /** @var User $user */
             $user = $this->getUser();
