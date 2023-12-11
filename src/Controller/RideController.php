@@ -25,10 +25,9 @@ class RideController extends AbstractController
             /** @var User $user */
             $user = $this->getUser();
         }
-        $user_name = $user->getUserName();
 
         return $this->render('ride/index.html.twig', [
-            'user_name' => $user_name,
+            'user' => $user,
             'all_rides' => $rides,
         ]);
     }
@@ -48,10 +47,7 @@ class RideController extends AbstractController
             /** @var User $user */
             $user = $this->getUser();
         }
-        $user_name = $user->getUserName();
-        // dd($ride);
         return $this->render('ride/show_ride.html.twig', [
-            'user_name' => $user_name,
             'user' => $user,
             'ride' => $ride
         ]);

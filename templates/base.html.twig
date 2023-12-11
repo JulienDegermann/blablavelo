@@ -37,55 +37,56 @@
   <body>
     {% block body %}
       {% block header %}
-        <header class="bg-primary text-white align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
-          <div class="container position-relative">
-            <div class="row d-flex justify-content-between align-items-center">
-              <div class="col-md-1 mb-2 mb-md-0">
-                <a href=" {{ path('app_home') }}" class="d-inline-flex link-body-emphasis text-decoration-none">
-                    <img src="{{ asset('assets/images/blablabike.webp') }}" alt="Logo Blabla Bike" />
-                </a>
-                    </div>
+        <header class="navbar navbar-expand-lg navbar-dark bg-primary py-0 position-relative z-1">
+          <div class="container p-0 p-md-auto position-relative">       
+            <a href=" {{ path('app_home') }}" class="d-none d-md-inline-flex link-body-emphasis text-decoration-none p-3">
+              <img src="{{ asset('assets/images/blablabike.webp') }}" alt="Logo Blabla Bike" />
+            </a>
+            
+            <button class="navbar-toggler outline-none border-none d-md-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+              <img src="{{ asset('assets/images/blablabike.webp') }}" alt="Logo Blabla Bike" />
+            </button>
+              
 
-              {% if app.request.attributes.get('_route') is not same as('app_login') and app.request.attributes.get('_route') is not same as('app_register') %}
-                {% include "/partials/nav_partial.html.twig" %}
-              {% endif %}
+            {% if app.request.attributes.get('_route') is not same as('app_login') and app.request.attributes.get('_route') is not same as('app_register') %}
+              {% include "/partials/nav_partial.html.twig" %}
+            {% endif %}
 
-              <div class="col-md-4 text-center button-container position-relative d-flex align-items-center">
-                  {% if app.user is not empty %}
-                    <div class="col-6 text-end">
-                      <a class="rounded-circle text-center border border-2 border-secondary d-inline-block fs-3" href=" {{ path('app_new_ride') }}" title="ajouter une sortie">+</a>
-                    </div>
-                    <div class="profile col-6 text-start">
-                      {% if user.getFileName %}
-                        <img class="rounded-circle border border-2 border-secondary" src="{{ asset('uploads/images/users/' ~ user.getFileName) }}" alt="photo de profil">                    
-                      {% else %}
-                        <div class="account rounded-circle border border-2 border-secondary d-flex justify-content-center align-item-center">
-                          {% include 'partials/avatar_partial.html.twig' %}
-                        </div>
-                    {% endif %}
-
-                    </div>
+            <div class="w-auto text-center connected px-3">
+              {% if app.user is not empty %}
+                <div class="profile">
+                  <a class="rounded-circle text-center border border-2 border-secondary d-inline-block fs-3" href=" {{ path('app_new_ride') }}" title="ajouter une sortie">+</a>
+                </div>
+                <div class="profile text-start">
+                  {% if user.getFileName %}
+                    <img class="rounded-circle mx-2 border border-2 border-secondary" src="{{ asset('uploads/images/users/' ~ user.getFileName) }}" alt="photo de profil">                    
                   {% else %}
-                    {% if app.request.attributes.get('_route') is not same as('app_login') and app.request.attributes.get('_route') is not same as('app_register') %}
-                      <a class="btn px-3 mx-2 h-auto col btn-primary border-secondary text-white" href="{{ path('app_login') }}">CONNEXION</a>
-                      <a class="btn px-3 mx-2 h-auto col btn-secondary text-primary" href="{{ path('app_register') }}">INSCRIPTION</a>
-                    {% endif %}
+                    <div class="mx-2 account rounded-circle border border-2 border-secondary d-flex justify-content-center align-item-center">
+                      {% include 'partials/avatar_partial.html.twig' %}
+                    </div>
                   {% endif %}
-              </div>
-            </div>
-            {% if app.user is not empty %}
-              <div class="position-absolute top-100 end-0 pt-3 h-auto col-md-3 profile">
-              <div class="bg-white text-primary p-3 col-6 offset-6 border border-top-0 border-primary text-start
-              profile-menu ">
-                <p class="fw-bold border-bottom border-primary p-0 mb-1 text-center text-primary">{{ user.getUserName }}</p>
-                <a class="my-0 text-primary" href="{{ path('app_profile') }}">Mon profl</a> <br>
-                <a class="my-0 text-primary" href="{{ path('app_logout') }}">Me déconnecter</a>
-              </div>
-              </div>
+                </div>
+                <div class="profile-menu w-auto">
+                  <div class="bg-white w-auto p-2 text-primary text-start">
+                    <p class="fw-bold border-bottom border-primary mt-1 mb-3 text-center text-primary">{{ user.getUserName }}</p>
+                    <a class="my-0 fw-normal text-primary" href="{{ path('app_profile') }}">Mon profil</a> <br>
+                    <a class="my-0 fw-normal text-primary" href="{{ path('app_logout') }}">Déconnexion</a>
+                  </div>
+                </div>
+              {% else %}
+                {% if app.request.attributes.get('_route') is not same as('app_login') and app.request.attributes.get('_route') is not same as('app_register') %}
+                  <a class="btn px-1  px-md-3 mx-2 h-auto fs-6 fs-md-4 col btn-primary border-secondary text-white" href="{{ path('app_login') }}">CONNEXION</a>
+                  <a class="btn px-1  px-md-3 mx-2 h-auto fs-6 fs-md-4 col btn-secondary text-primary" href="{{ path('app_register') }}">INSCRIPTION</a>
+                {% endif %}
               {% endif %}
             </div>
-          
-        </header>
+            </div>
+            </div>
+           
+         
+          </div>    
+        </header>       
+        
         <main class="position-relative">
           <div class="position-absolute top-0 left-0 w-100">
             {% for success in app.flashes('success') %}
@@ -117,7 +118,7 @@
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-5">
               <div class="col mb-3 text-center">
                 <div class="mb-2">
-                  <a href="{{ path('app_home') }}" class="d-inline-flex text-center w-auto link-body-emphasis text-decoration-none"><img src="{{ asset('assets/images/blablabike.webp') }}" alt="Logo ty'Ride" /></a>
+                  <a href="{{ path('app_home') }}" class="d-inline-flex text-center w-auto link-body-emphasis text-decoration-none"><img src="{{ asset('assets/images/blablabike.webp') }}" alt="Logo Blabla Bike" /></a>
                   <p class="text-white fs-6">
                     © 2023 - Blabla Bike <br />
                     <span class="copyrights text-white">
@@ -139,6 +140,9 @@
               <div class="col mb-3">
                 <ul class="nav flex-column">
                   <li>
+                    <a href="{{ path('app_info') }}" class="nav-link mx-1 py-1 px-4 text-white ">Comment ça marche ?</a>
+                  </li>
+                  <li>
                     <a href="{{ path('app_legal_notice') }}" class="nav-link mx-1 py-1 px-4 text-white ">Mentions légales</a>
                   </li>
                   <li>
@@ -147,6 +151,7 @@
                   <li>
                     <a href="{{ path('app_contact') }}" class="nav-link mx-1 py-1 px-4 text-white ">Signaler un bug</a>
                   </li>
+
                 </ul>
               </div>
 

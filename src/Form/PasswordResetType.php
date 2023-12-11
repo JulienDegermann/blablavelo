@@ -22,7 +22,7 @@ class PasswordResetType extends AbstractType
                 'required' => true,
                 'options' => [
                     'attr' => [
-                        'class' => 'form-control m-2',
+                        'class' => 'form-control mb-3'
                     ],
                 ],
                 'first_options' => [

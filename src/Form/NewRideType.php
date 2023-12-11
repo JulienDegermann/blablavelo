@@ -29,48 +29,48 @@ class NewRideType extends AbstractType
                 'label' => 'Titre de la sortie',
                 'required' => true,
                 'attr' => [
-                    'class' => 'form-control m-2'                ]
-            ])
+                    'class' => 'form-control mb-3',
+            ]])
             ->add('distance', IntegerType::class, [
                 'label' => 'Distance estimée (kms)',
                 'required' => true,
                 'attr' => [
-                    'class' => 'form-control m-2'
+                    'class' => 'form-control mb-3'
                 ]
             ])
             ->add('ascent', IntegerType::class, [
                 'label' => 'Dénivelé positif estimé',
                 'required' => true,
                 'attr' => [
-                    'class' => 'form-control m-2'
+                    'class' => 'form-control mb-3',
                 ]
             ])
             ->add('max_rider', IntegerType::class, [
                 'label' => 'Nombre maximum de participants',
                 'required' => true,
                 'attr' => [
-                    'class' => 'form-control m-2'
+                    'class' => 'form-control mb-3'
                 ]
             ])
             ->add('average_speed', IntegerType::class, [
                 'label' => 'Vitesse moyenne de la sortie',
                 'required' => true,
                 'attr' => [
-                    'class' => 'form-control m-2'
+                    'class' => 'form-control mb-3'
                 ]
             ])
             ->add('date', DateTimeType::class, [
                 'label' => 'Date et heure de départ',
                 'required' => true,
                 'attr' => [
-                    'class' => 'form-control m-2 d-flex'
+                    'class' => 'form-control mb-3 d-flex'
                 ]
             ])
             ->add('description', TextareaType::class, [
                 'label' => 'Description et informations complémentaires',
                 'required' => true,
                 'attr' => [
-                    'class' => 'form-control m-2',
+                    'class' => 'form-control mb-3',
                     'rows' => '10'
                 ]
             ])
@@ -85,7 +85,7 @@ class NewRideType extends AbstractType
                 'label' => 'Objectif de la sortie',
                 'required' => true,
                 'attr' => [
-                    'class' => 'form-control m-2'
+                    'class' => 'form-control mb-3'
                 ],
                 'class' => Mind::class
             ])
@@ -93,7 +93,7 @@ class NewRideType extends AbstractType
                 'label' => 'Pratique',
                 'required' => true,
                 'attr' => [
-                    'class' => 'form-control m-2'
+                    'class' => 'form-control mb-3'
                 ],
                 'class' => Practice::class
 
@@ -102,11 +102,10 @@ class NewRideType extends AbstractType
                 'label' => 'Ville de départ',
                 'required' => true,
                 'attr' => [
-                    'class' => 'form-control m-2'
+                    'class' => 'form-control mb-3'
                 ],
                 'class' => City::class
-            ])
-        ;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

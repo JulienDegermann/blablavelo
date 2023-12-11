@@ -3997,9 +3997,11 @@ textarea.form-control-lg {
   padding: var(--bs-navbar-toggler-padding-y) var(--bs-navbar-toggler-padding-x);
   font-size: var(--bs-navbar-toggler-font-size);
   line-height: 1;
-  color: var(--bs-navbar-color);
+  color: none;
   background-color: transparent;
   border: var(--bs-border-width) solid var(--bs-navbar-toggler-border-color);
+  border: none;
+  outline: none;
   border-radius: var(--bs-navbar-toggler-border-radius);
   transition: var(--bs-navbar-toggler-transition);
 }
@@ -4013,8 +4015,9 @@ textarea.form-control-lg {
 }
 .navbar-toggler:focus {
   text-decoration: none;
-  outline: 0;
+  outline: none;
   box-shadow: 0 0 0 var(--bs-navbar-toggler-focus-width);
+  box-shadow: none;
 }
 
 .navbar-toggler-icon {
@@ -11991,6 +11994,7 @@ body {
 }
 body main {
   flex: 1;
+  position: relative;
 }
 
 li:hover a,
@@ -12009,16 +12013,8 @@ header {
 header div {
   height: 100%;
 }
-header .button-container {
-  height: 100%;
-}
-header .button-container .col-6 a,
-header .button-container .col-6 img {
-  display: inline-block;
-  height: 50px;
-  width: 50px;
-  color: #FFB800;
-  text-decoration: none;
+header button img {
+  width: 75px;
 }
 header a {
   display: inline-block;
@@ -12085,12 +12081,50 @@ footer .social img {
   width: 30px;
 }
 
-.profile a {
-  text-decoration: none;
+.connected {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+}
+.connected:hover .profile-menu {
+  visibility: visible;
 }
 
+.profile-menu {
+  height: auto;
+  width: 100%;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  visibility: hidden;
+  border-radius: 0 0 5px 5px;
+  box-shadow: 0 5px 5px #4F4F4F;
+}
 .profile-menu a:hover {
   color: #FFB800 !important;
+}
+
+.profile {
+  width: -moz-max-content;
+  width: max-content;
+  height: auto;
+}
+.profile .rounded-circle {
+  width: 50px;
+  height: 50px;
+  display: inline-flex !important;
+  justify-content: center;
+  align-items: center;
+  color: #FFB800;
+}
+.profile img,
+.profile svg {
+  -o-object-fit: cover;
+     object-fit: cover;
+  width: 100%;
 }
 
 .border-multiple {
@@ -12115,4 +12149,44 @@ footer .social img {
 }
 .grid-container .grid-item {
   display: block;
+}
+
+@media screen and (min-width: 768px) {
+  .banner {
+    height: 400px;
+  }
+}
+@media screen and (max-width: 767px) {
+  .banner {
+    height: 200px;
+  }
+}
+.banner div img {
+  -o-object-position: 25% 50%;
+     object-position: 25% 50%;
+}
+
+h1, .h1 {
+  text-shadow: 0 0 5px #4F4F4F;
+}
+
+.info-list li {
+  list-style-type: disclosure-closed;
+  padding-inline-start: 0.5em;
+  margin-left: 1em;
+  text-align: left;
+  color: #FFB800;
+}
+.info-list li span {
+  color: #4F4F4F;
+}
+
+.participant {
+  bottom: 1em;
+  right: 1em;
+}
+
+.participant .rounded-circle {
+  width: 30px !important;
+  height: 30px !important;
 }/*# sourceMappingURL=app.css.map */

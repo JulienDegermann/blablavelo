@@ -23,7 +23,6 @@ class UserController extends AbstractController
             /** @var User $user */
             $user = $this->getUser();
         }
-        $user_name = $user->getUserName();
 
         $form = $this->createForm(ProfileType::class, $user);
         $form->handleRequest($request);
@@ -37,7 +36,6 @@ class UserController extends AbstractController
 
         return $this->render('user/index.html.twig', [
             'user' => $user,
-            'user_name' => $user_name,
             'form' => $form->createView(),
 
         ]);

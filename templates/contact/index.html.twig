@@ -1,21 +1,22 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}
-  Ty'Ride - Contact
-{% endblock %}
-
 {% block main %}
-  <section class="h-100">
-    <div class="container h-100">
-      <div class="row h-100">
-        <h1 class="text-center">Contacte-nous !</h1>
-        <div class="col-6 m-auto h-100">
-            {{ form_start(messageForm) }}
-                {{ form_row(messageForm.title) }}
-                {{ form_row(messageForm.content) }}
-                {{ form_row(messageForm.email, {value : user_email ? user_email : ''}) }}
-                <input class="w-auto px-3 py-2 m-2 form-control btn btn-secondary text-primary" type="submit" name="send_message" value="Envoyer le message">
-            {{ form_end(messageForm) }}
+  <section class="banner position-relative" style="height: 200px!important;">
+    <img class="w-100 h-100 object-fit-cover" src="{{ asset('assets/images/route.webp') }}" alt="cycliste au téléphone" />
+    <h1 class="text-center position-absolute top-50 start-50 translate-middle text-white">Contacte-nous !</h1>
+  </section>
+
+  <section class="my-3 my-md-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-12 col-md-6 m-md-auto h-100">
+          <h2>Formulaire de contact</h2>
+          {{ form_start(messageForm) }}
+          {{ form_row(messageForm.title) }}
+          {{ form_row(messageForm.content) }}
+          {{ form_row(messageForm.email, { value: user.getEmail ? user.getEmail : '' }) }}
+          <input class="w-auto px-3 py-2 m-2 mt-4 form-control btn btn-secondary text-primary" type="submit" name="send_message" value="Envoyer le message" />
+          {{ form_end(messageForm) }}
         </div>
       </div>
     </div>

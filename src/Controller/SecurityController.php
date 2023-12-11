@@ -62,12 +62,14 @@ class SecurityController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $user = $repo->findOneBy(['email' => $form->getData()->getEmail()]);
 
+
+
             if ($user) {
                 $token = $tokenGeneratorInterface->generateToken();
                 $user->setToken($token);
                 $repo->save($user);
 
-                if ($repo) {
+                if ($user->getToken()) {
                     $url = $this->generateUrl('app_pwd_reset', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
                     $email = (new Email())
                         ->from('no-reply.blablabike@julien-degermann.fr')

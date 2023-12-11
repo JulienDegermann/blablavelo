@@ -1,26 +1,28 @@
 {% extends 'base.html.twig' %}
 
 {% block main %}
-  <section class="my-5 px-5">
+  <section class="my-md-5 px-md-5">
     <div class="container">
       <div class="row">
         <a class="text-primary mb-5" href="{{ app.request.headers.get('referer') }}">Retour</a>
         <div class="row">
-          <div class="col-6">
-            <img src="" alt="coucou" />
+          <div class="col-12 col-md-6">
+            {% include "/partials/img_partial.html.twig" %}
           </div>
-          <div class="col-6">
+          <div class="col-12 col-md-6">
             <h2 class="">{{ ride.getTitle }}</h2>
             <p class="fst-italic text-primary text-end">posté par : {{ ride.getUserCreator }}</p>
+            <h3 class="fs-6">Informations générales</h3>
             <p>
               🚴 : {{ ride.getPractice }} <br />
               🎯 : {{ ride.getMind }} <br />
               Dist : {{ ride.getDistance }} kms <br />
               D+ : {{ ride.getAscent }} m 📍 : {{ ride.getCity }} <br />
-              🕗 : ride.getDate <br />
+              🕗 : {{ ride.getDate|date('d/m/Y à h:m') }}<br />
               👤 : {{ ride.getUserParticipant|length }} / {{ ride.getMaxRider }} <br />
               🗣️ : {{ ride.getPractice }}
             </p>
+            <h3 class="fs-6">Détails</h3>
             <p>{{ ride.getDescription }}</p>
             {% if ride.getMaxRider > (ride.getUserParticipant|length) %}
               {% if user in ride.getUserParticipant %}

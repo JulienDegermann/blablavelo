@@ -25,7 +25,7 @@ class ProfileType extends AbstractType
                 'label' => 'Pseudo',
                 'required' => true,
                 'attr' => [
-                    'class' => 'form-control m-2',
+                    'class' => 'form-control mb-3'                
                 ]
             ])
             // ->add('password', PasswordType::class, [
@@ -39,14 +39,14 @@ class ProfileType extends AbstractType
                 'label' => 'Prénom',
                 'required' => true,
                 'attr' => [
-                    'class' => 'form-control m-2',
+                    'class' => 'form-control mb-3'                
                 ]
             ])
             ->add('last_name', TextType::class, [
                 'label' => 'Nom',
                 'required' => true,
                 'attr' => [
-                    'class' => 'form-control m-2',
+                    'class' => 'form-control mb-3'                
                 ]
             ])
             // ->add('birth_date', DateType::class, [
@@ -65,14 +65,14 @@ class ProfileType extends AbstractType
                 'download_uri' => false,
                 // 'imagine_pattern' => 'squared_thumbnail_small',
                 'attr' => [
-                    'class' => 'form-control m-2',
+                    'class' => 'form-control mb-3'                
                 ]
             ])
             ->add('email', TextType::class, [
                 'label' => 'E-mail',
                 'required' => true,
                 'attr' => [
-                    'class' => 'form-control m-2',
+                    'class' => 'form-control mb-3'                
                 ]
             ])
             // ->add('department', EntityType::class, [
@@ -88,7 +88,7 @@ class ProfileType extends AbstractType
                 'class' => City::class,
                 'required' => true,
                 'attr' => [
-                    'class' => 'form-control m-2',
+                    'class' => 'form-control mb-3'                
                 ]
             ])
             ->add('mind', EntityType::class, [
@@ -96,7 +96,7 @@ class ProfileType extends AbstractType
                 'class' => Mind::class,
                 'required' => true,
                 'attr' => [
-                    'class' => 'form-control m-2',
+                    'class' => 'form-control mb-3'                
                 ]
             ])
             // ->add('rides_participated', ::class, [
@@ -112,7 +112,7 @@ class ProfileType extends AbstractType
                 'class' => Practice::class,
                 'required' => true,
                 'attr' => [
-                    'class' => 'form-control m-2',
+                    'class' => 'form-control mb-3'
                 ]
             ])
             ->add('bike', EntityType::class, [
@@ -120,7 +120,7 @@ class ProfileType extends AbstractType
                 'class' => Model::class,
                 'required' => true,
                 'attr' => [
-                    'class' => 'form-control m-2',
+                    'class' => 'form-control mb-3'                
                 ]
             ])
         ;

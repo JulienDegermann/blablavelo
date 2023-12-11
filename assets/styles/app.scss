@@ -17,6 +17,7 @@ body {
 
   main {
     flex: 1;
+    position: relative;
   }
 }
 
@@ -38,17 +39,8 @@ header {
     height: 100%;
   }
 
-  .button-container {
-    height: 100%;
-
-    .col-6 a,
-    .col-6 img {
-      display: inline-block;
-      height: 50px;
-      width: 50px;
-      color: $secondary;
-      text-decoration: none;
-    }
+  button img {
+    width: 75px;
   }
 
   a {
@@ -71,7 +63,7 @@ header {
 
   svg {
     fill: white;
-    stroke-width:3;
+    stroke-width: 3;
   }
 }
 
@@ -130,29 +122,62 @@ footer {
   }
 
   .social {
-
     flex-direction: row !important;
-
 
     img {
       width: 30px;
     }
+  }
+}
 
 
+.connected {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
 
+  &:hover .profile-menu {
+    visibility: visible;
+  }
+}
+
+.profile-menu {
+  height: auto;
+  width: 100%;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  visibility: hidden;
+  border-radius: 0 0 5px 5px;
+  box-shadow: 0 5px 5px $primary;
+
+  a:hover {
+    color: $secondary !important;
   }
 }
 
 .profile {
-  a {
-    text-decoration: none;
+  width: max-content;
+  height: auto;
+
+  .rounded-circle {
+    width: 50px;
+    height: 50px;
+    display: inline-flex!important;
+    justify-content: center;
+    align-items: center;
+    color: $secondary;
+  }
+
+  img,
+  svg {
+    object-fit: cover;
+    width: 100%;
   }
 }
-
-.profile-menu a:hover {
-  color: $secondary !important;
-}
-
 
 
 // ---------------------------------------------------------------- home + rides
@@ -171,7 +196,6 @@ footer {
   cursor: pointer;
 }
 
-
 .grid-container {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
@@ -182,4 +206,44 @@ footer {
   .grid-item {
     display: block;
   }
+}
+
+.banner {
+
+  @media screen and (min-width: 768px) {
+    height: 400px;
+  }
+  @media screen and (max-width: 767px) {
+    height: 200px;
+  }
+
+  div img {
+    object-position: 25% 50% ;
+  }
+}
+
+h1 {
+  text-shadow: 0 0 5px $primary;
+}
+
+.info-list li {
+  list-style-type: disclosure-closed;
+  padding-inline-start: .5em;
+  margin-left: 1em;
+  text-align: left;
+  color: $secondary;
+
+  span {
+    color: $primary;
+  }
+}
+
+.participant {
+  bottom: 1em;
+  right: 1em;
+}
+
+.participant .rounded-circle {
+  width: 30px!important;
+  height: 30px!important;
 }

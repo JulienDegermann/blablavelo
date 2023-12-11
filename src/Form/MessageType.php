@@ -21,7 +21,7 @@ class MessageType extends AbstractType
                 'label' => 'Objet',
                 'required' => true,
                 'attr' => [
-                    'class' => 'form-control m-2'
+                    'class' => 'form-control mb-3'
                 ],
                 'choices' => [
                     'Signaler un bug' => 'bug',
@@ -32,14 +32,14 @@ class MessageType extends AbstractType
                 'label' => 'Contenu du message',
                 'required' => true,
                 'attr' => [
-                    'class' => 'form-control m-2',
+                    'class' => 'form-control mb-3',
                     'rows' => "10"
                 ],
             ])
             ->add('email', EmailType::class, [
                 'label' => 'E-mail',
                 'required' => true,
-                'attr' => ['class' => 'form-control m-2'],
+                'attr' => ['class' => 'form-control mb-3'],
             ]);
     }
 

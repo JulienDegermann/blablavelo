@@ -41,8 +41,7 @@ class ContactController extends AbstractController
         }
         return $this->render('contact/index.html.twig', [
             'messageForm' => $form->createView(),
-            'user_name' => $user_name,
-            'user_email' => $user_mail
+            'user' => $user,
         ]);
     }
 }
