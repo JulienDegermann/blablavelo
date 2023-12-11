@@ -3,14 +3,11 @@
 namespace App\Controller;
 
 
+use App\Entity\User;
 use App\Form\PasswordResetType;
-use Doctrine\ORM\EntityManager;
 use App\Form\PasswordForgotType;
-use Doctrine\Common\Lexer\Token;
-use Doctrine\ORM\Mapping\Entity;
 use Symfony\Component\Mime\Email;
 use App\Repository\UserRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,7 +17,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
-
 
 class SecurityController extends AbstractController
 {
@@ -56,13 +52,23 @@ class SecurityController extends AbstractController
         TokenGeneratorInterface $tokenGeneratorInterface,
         MailerInterface $mail,
     ): Response {
+
+        if($this->getUser()) {
+            /** @var User $user */
+            $user = $this->getUser();
+            $token = $tokenGeneratorInterface->generateToken();
+            $user->setToken($token);
+            
+            $repo->save($user);
+            
+            return $this->redirectToRoute('app_pwd_reset', ['token' => $token]);
+        }
+
         $form = $this->createForm(PasswordForgotType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $user = $repo->findOneBy(['email' => $form->getData()->getEmail()]);
-
-
 
             if ($user) {
                 $token = $tokenGeneratorInterface->generateToken();
@@ -104,7 +110,7 @@ class SecurityController extends AbstractController
             $this->addFlash('error', 'Oups ! Ce lien n\'est plus valide.');
             return $this->redirectToRoute('app_login');
         }
-
+        
         $form = $this->createForm(PasswordResetType::class, $user);
         $form->handleRequest($request);
 
@@ -123,21 +129,16 @@ class SecurityController extends AbstractController
                 $this->addFlash('error', 'Une erreur est survenue.');
                 return $this->render('security/pwd_reset.html.twig', [
                     'token' => $token,
-                    'form' => $form->createView()
+                    'form' => $form->createView(),
+                    'user' => $user
                 ]);
             }
         }
-        if ($request->isMethod('POST')) {
-            // $user->setToken(null);
-            // $user->setPassword($passwordEncoder->encodePassword($user, $request->request->get('password')));
-            // $repo->save($user);
-            // $this->addFlash('success', 'Mot de passe mis à jour');
-            return $this->redirectToRoute('app_login');
-        } else {
-            return $this->render('security/pwd_reset.html.twig', [
-                'token' => $token,
-                'form' => $form->createView()
-            ]);
-        }
+
+        return $this->render('security/pwd_reset.html.twig', [
+            'token' => $token,
+            'form' => $form->createView(),
+            'user' => $user
+        ]);
     }
 }

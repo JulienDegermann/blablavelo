@@ -2,12 +2,10 @@
 
 namespace App\Controller;
 
-
 use App\Entity\User;
 use App\Entity\Message;
 use App\Form\MessageType;
 use App\Repository\MessageRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -26,8 +24,6 @@ class ContactController extends AbstractController
             /** @var User $user */
             $user = $this->getUser();
         }
-        $user_name = $user->getUserName();
-        $user_mail = $user->getEmail();
 
         $message = new Message();
         $form = $this->createForm(MessageType::class, $message, ['attr' => ['class' => 'form-signin, row']]);
