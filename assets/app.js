@@ -10,6 +10,16 @@ import 'bootstrap/dist/js/bootstrap.bundle';
 import './styles/app.scss';
 
 
+// fetch for add participant
 
-// ---------------------------------------------------------------- Desktop menu
+
+const main = document.querySelector('main');
+const url = '/ride/{id}/add';
+const fetchParticipant = fetch(url, { method: 'GET', body: JSON.stringify() })
+  .then(response => response.json())
+  .then(data => {
+    main.innerHTML = '';
+    
+  })
+
 

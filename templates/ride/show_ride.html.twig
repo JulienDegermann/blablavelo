@@ -3,25 +3,29 @@
 {% block main %}
   <section class="my-md-5 px-md-5">
     <div class="container">
-      <div class="row">
+      <div class="row position-relative">
+        
+    </div>
         <a class="text-primary mb-5" href="{{ app.request.headers.get('referer') }}">Retour</a>
         <div class="row">
           <div class="col-12 col-md-6">
             {% include "/partials/img_partial.html.twig" %}
           </div>
-          <div class="col-12 col-md-6">
+          <div class="col-12 col-md-6 position-relative">
             <h2 class="">{{ ride.getTitle }}</h2>
             <p class="fst-italic text-primary text-end">posté par : {{ ride.getUserCreator }}</p>
             <h3 class="fs-6">Informations générales</h3>
             <p>
               🚴 : {{ ride.getPractice }} <br />
               🎯 : {{ ride.getMind }} <br />
-              Dist : {{ ride.getDistance }} kms <br />
-              D+ : {{ ride.getAscent }} m 📍 : {{ ride.getCity }} <br />
-              🕗 : {{ ride.getDate|date('d/m/Y à h:m') }}<br />
-              👤 : {{ ride.getUserParticipant|length }} / {{ ride.getMaxRider }} <br />
-              🗣️ : {{ ride.getPractice }}
+              🏁 : {{ ride.getDistance }} kms <br />
+              
+              📈 : {{ ride.getAscent }} m <br>
+              📍 : {{ ride.getCity }} <br />
+              📆 : {{ ride.getDate|date('d/m/Y à h:m') }}<br />
+              👤 : {{ ride.getUserParticipant|length }} / {{ ride.getMaxRider }}             
             </p>
+            
             <h3 class="fs-6">Détails</h3>
             <p>{{ ride.getDescription }}</p>
             {% if ride.getMaxRider > (ride.getUserParticipant|length) %}
@@ -31,7 +35,25 @@
                 <a href="/ride/{{ ride.getId }}/add" class="btn btn-secondary text-primary px-5 py-2">J'EN SUIS !</a>
               {% endif %}
             {% endif %}
-          </div>
+            
+            
+            <div class="profile position-absolute participant d-flex flex-row-reverse">
+              {% for user in ride.getUserParticipant %}
+                {% if user.getFileName is not null %}
+                  <img 
+                    class="rounded-circle border border-1 border-primary" 
+                    src="{{ asset('uploads/images/users/' ~ user.getFileName) }}" 
+                    alt="photo de profil de {{ user.getUsername }}" 
+                    title="{{ user.getUsername }}" >                    
+                {% else %}
+                <div class="account rounded-circle border border-1 border-primary d-flex justify-content-center align-item-center" title="{{ user.GetUserName }}">
+                    {% include 'partials/avatar_partial.html.twig' %}
+                </div>
+                {% endif %}
+              {% endfor %}
+            </div>
+
+
         </div>
       </div>
     </div>

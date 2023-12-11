@@ -1,47 +1,77 @@
 {% extends 'base.html.twig' %}
 
 {% block main %}
-    <section class="banner position-relative" style="height: 200px!important;">
-        <img class="w-100 h-100 object-fit-cover" src="{{ asset('assets/images/route.webp') }}" alt="cycliste au téléphone" />
-        <h1 class="text-center position-absolute top-50 start-50 translate-middle text-white">Blabla Bike : comment ça marche ?</h1>
-      </section>
+  <section class="banner position-relative" style="height: 200px!important;">
+    <img class="w-100 h-100 object-fit-cover" src="{{ asset('assets/images/route.webp') }}" alt="cycliste au téléphone" />
+    <h1 class="text-center position-absolute top-50 start-50 translate-middle text-white">Blabla Bike : comment ça marche ?</h1>
+  </section>
 
-      <section>
+  <section class="my-3">
+    <div class="container">
+      <div class="row" style="text-align: justify;">
+        <h2>Principe</h2>
+        <p>
+          Blabla Bike est une plateforme de mise en relation pour les cyclistes. <br />
+          Le but est de favoriser la rencontre de sportifs ayant des attentes et niveaux similaires. <br />
+          Elle permet de trouver des partenaires pour rouler, que ce soit pour une sortie ponctuelle ou pour une pratique régulière.
+        </p>
+        <div class="px-2">
+            <p class="alert alert-danger">
+                <strong class="fw-bold" style="color: inherit;">!! ATTENTION !!</strong><br>
+                L'application est disponible en accès anticipé. <br>
+                Des bugs peuvent donc être présents : si tel est le cas, vous pouvez les signaler via le <a title="lien vers le formulaire de contact" class=" fst-italic text-decoration-underline" href="{{ path('app_contact') }}">formulaire de contact</a>. <br>
+                Aussi, il est fortement conseillé de vérifier régulièrement que les sorties sont toujours maintenues.
+            </p>
+        </div>
+    </section>
+    <section class="my-3">
         <div class="container">
-            <div class="row" style="text-align: justify;">
-                <h2>Principe</h2>
-                <p>
-                    Blabla Bike est une plateforme de mise en relation entre cyclistes. <br>
-                    Le but est de favoriser la rencontre de sportifs ayant des attentes et niveaux similaires. <br>
-                    Elle permet de trouver des partenaires pour rouler, que ce soit pour une sortie ponctuelle ou pour une pratique régulière.
-                </p>
+            <div class="row">
                 <h2>Fonctionnement</h2>
                 <p>
-                    Une fois inscrit, chaque utilisateur peut proposer ou s'inscrire à des sorties, en respectant la limite de participants fixée par l'annonceur.
+                    Pour utiliser l'application, il faut s'inscrire <a class="text-secondary text-decoration-underline" href="{{ path('app_register' )}}">ici</a>.<br />
+                    Lors de l'insription, l'utilisateur renseigne quelques informations (exemples : pseudo, pratique, niveau, attente, …).
                 </p>
-                <h2>Et c'est gratuit ?</h2>
+                {# video showing how the app works #}
                 <p>
-                    L'application est développée bénévolement par un développeur (moi-même) : elle est donc <strong>entièrement gratuite</strong>. <br>
-                    Je tiens cependant à préciser que, pour garder une expérience de qualité, l'accès à l'application est limité aux 10000 premiers inscrits. <br>
-                    Une fois ce nombre atteint, vous pourrez notifier votre intérêt pour l'application via le <a class="text-secondary text-decoration-underline" href="{{ path('app_contact') }}">formulaire de contact</a> .<br>
-
-                     Selon la demande et les retours des utilisateurs, divers solutions pourront être envisagées pour financer le développement, la maintenance et l'hébergement de l'application : <br>
-                     <ul class="info-list">
-                        <li>
-                            <span>Comptes payants : de nouvelles fonctionnalités pourront être réservées à des comptes premiums.</span>
-                        </li>
-                        <li>
-                            <span>Publicités : des publicités pourront être affichées sur le site.</span>
-                        </li>
-                       <li>
-                            <span>Dons : les utilisateurs pourront faire des dons pour soutenir le projet.</span>
-                        </li>
-                        <li>
-                            <span>Autres : de nouvelles solutions pourront être étudiées.</span>
-                        </li>
-                     </ul>
+                    Une fois inscrit, chaque membre peut :
                 </p>
+                <ul class="info-list">
+                  <li><span>Proposer des sorties : <br> Il précise alors quelques informations (exemples : distance, nombre de participants maximum, vitesse moyenne, ville de départ, …). Des informations complémentaires peuvent être ajoutées dans la description de la sortie.</span></li>
+                  <li><span>S'inscrire à des sorties : <br> Il peut visionner l'ensemble des sorties proposées depuis la liste des annonces. En cliquant sur une sortie, le détail s'affiche avec la description.</span></li>
+                </ul>
+                
+                proposer ou s'inscrire à des sorties, en respectant la limite de participants fixée par l'annonceur.
             </div>
         </div>
-      </section>
+    </section>
+    <section class="my-3">
+        <div class="container">
+            <div class="row">
+                <h2>Et c'est gratuit ?</h2>
+                <p>
+                  L'application est développée bénévolement par un développeur (<a class="text-secondary text-decoration-underline" href="https://julien-degermann.fr/" title="site du développeur (Julien Degermann)" target="_blank">moi-même</a>) : elle est donc <strong>entièrement gratuite</strong>. <br />
+                  Je tiens cependant à préciser que, pour garder une expérience de qualité, l'accès à l'application est limité aux 10000 premiers inscrits. <br />
+                  Une fois ce nombre atteint, vous pourrez notifier votre intérêt pour l'application via le <a title="lien vers le formulaire de contact" class="text-secondary text-decoration-underline" href="{{ path('app_contact') }}">formulaire de contact</a> .<br />
+        
+                  Selon la demande et les retours des utilisateurs, divers solutions pourront être envisagées pour financer le développement, la maintenance et l'hébergement de l'application : <br />
+                  <ul class="info-list">
+                    <li>
+                      <span>Comptes payants : de nouvelles fonctionnalités pourront être réservées à des comptes premiums.</span>
+                    </li>
+                    <li>
+                      <span>Publicités : des publicités pourront être affichées sur le site.</span>
+                    </li>
+                    <li>
+                      <span>Dons : les utilisateurs pourront faire des dons pour soutenir le projet.</span>
+                    </li>
+                    <li>
+                      <span>Autres : de nouvelles solutions pourront être étudiées.</span>
+                    </li>
+                  </ul>
+                </p>
+              </div>
+            </div>
+        </div>
+  </section>
 {% endblock %}
