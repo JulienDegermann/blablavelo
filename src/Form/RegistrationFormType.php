@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\City;
+use App\Entity\Department;
 use App\Entity\Mind;
 use App\Entity\User;
 use App\Entity\Practice;
@@ -30,25 +31,32 @@ class RegistrationFormType extends AbstractType
                 ],
                 'label' => 'Nom d\'utilisateur'
             ])
-            ->add('first_name', TextType::class, [
-                'attr' => [
-                    'class' => 'form-control mb-3'
-                ],
-                'label' => 'Prénom'
-            ])
-            ->add('last_name', TextType::class, [
-                'attr' => [
-                    'class' => 'form-control mb-3'
-                ],
-                'label' => 'Nom'
-            ])
-            ->add('city', EntityType::class, [
-                'class' => City::class,
-                'attr' => [
-                    'class' => 'form-control mb-3'
-                ],
-                'label' => 'Ville'
-            ])
+            // ->add('first_name', TextType::class, [
+            //     'attr' => [
+            //         'class' => 'form-control mb-3'
+            //     ],
+            //     'label' => 'Prénom'
+            // ])
+            // ->add('last_name', TextType::class, [
+            //     'attr' => [
+            //         'class' => 'form-control mb-3'
+            //     ],
+            //     'label' => 'Nom'
+            // ])
+            // ->add('city', EntityType::class, [
+            //     'class' => City::class,
+            //     'attr' => [
+            //         'class' => 'form-control mb-3'
+            //     ],
+            //     'label' => 'Ville'
+            // ])
+            // ->add('department', EntityType::class, [
+            //     'class' => Department::class,
+            //     'attr' => [
+            //         'class' => 'form-control mb-3'
+            //     ],
+            //     'label' => 'Département'
+            // ])
             ->add('email', EmailType::class, [
                 'attr' => [
                     'class' => 'form-control mb-3'
@@ -56,33 +64,33 @@ class RegistrationFormType extends AbstractType
                 'label' => 'E-mail'
 
             ])
-            ->add('mind', EntityType::class, [
-                'class' => Mind::class,
-                'attr' => [
-                    'class' => 'form-control mb-3'
-                ],
-                'label' => 'Objectif'
-            ])
-            ->add('birth_date', BirthdayType::class, [
-                'input' => 'datetime_immutable',
-                'attr' => [
-                    'class' => 'form-control mb-3'
-                ],
-                'label' => 'Date de naissance'
-            ])
-            ->add('practice', EntityType::class, [
-                'class' => Practice::class,
-                'attr' => [
-                    'class' => 'form-control mb-3'
-                ],
-                'label' => 'Pratique'
-            ])
+            // ->add('mind', EntityType::class, [
+            //     'class' => Mind::class,
+            //     'attr' => [
+            //         'class' => 'form-control mb-3'
+            //     ],
+            //     'label' => 'Objectif'
+            // ])
+            // ->add('birth_date', BirthdayType::class, [
+            //     'input' => 'datetime_immutable',
+            //     'attr' => [
+            //         'class' => 'form-control mb-3'
+            //     ],
+            //     'label' => 'Date de naissance'
+            // ])
+            // ->add('practice', EntityType::class, [
+            //     'class' => Practice::class,
+            //     'attr' => [
+            //         'class' => 'form-control mb-3'
+            //     ],
+            //     'label' => 'Pratique'
+            // ])
             ->add('RGPDConscents', CheckboxType::class, [
                 'mapped' => false,
                 'attr' => [
                     'class' => 'w-auto mb-3 '
                 ],
-                'label' => 'J\'accepte que les données renseignées soient utilisées sur par le site',
+                'label' => 'J\'accepte que ces données soient utilisées sur ce site',
                 'constraints' => [
                     new IsTrue([
                         'message' => 'Vous devez accepterles conditions',
@@ -97,6 +105,7 @@ class RegistrationFormType extends AbstractType
                     'autocomplete' => 'new-password',
                     'class' => 'form-control mb-3'
                 ],
+                'label' => 'Mot de passe',
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Merci d\'entrer un mot de passe',
@@ -107,8 +116,7 @@ class RegistrationFormType extends AbstractType
                         // max length allowed by Symfony for security reasons
                         'max' => 4096,
                     ]),
-                ],
-                'label' => 'Mot de passe',
+                ]
             ]);
     }
 

@@ -30,9 +30,9 @@
             <p>{{ ride.getDescription }}</p>
             {% if ride.getMaxRider > (ride.getUserParticipant|length) %}
               {% if user in ride.getUserParticipant %}
-                <a href="/ride/{{ ride.getId }}/remove" class="btn btn-secondary text-primary px-5 py-2">Ne plus participer</a>
+                <a href="{{ path('app_ride_remove', {'id': ride.getId()}) }}" class="btn btn-secondary text-primary px-5 py-2">Ne plus participer</a>
               {% else %}
-                <a href="/ride/{{ ride.getId }}/add" class="btn btn-secondary text-primary px-5 py-2">J'EN SUIS !</a>
+                <a href="{{ path('app_ride_connect', {'id': ride.getId()}) }}" class="btn btn-secondary text-primary px-5 py-2">J'EN SUIS !</a>
               {% endif %}
             {% endif %}
             
