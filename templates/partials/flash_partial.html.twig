@@ -1,12 +1,14 @@
 <div class="position-absolute z-1 top-0 left-0 w-100">
+
 {% for label, messages in app.flashes %}
   {% for message in messages %}
     <div class="alert alert-{{ label }} m-1">
       <button type="button" class="btn m-0 close position-absolute top-50 end-0 translate-middle-y" data-bs-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">&times;</span>
       </button>
-      {{ message }}
+      {{ message | raw }}
     </div>
   {% endfor %}
 {% endfor %}
+
 </div>

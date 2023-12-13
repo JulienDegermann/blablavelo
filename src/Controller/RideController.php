@@ -13,7 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class RideController extends AbstractController
 {
-    #[Route('/rides', name: 'app_rides')]
+    #[Route('/sorties', name: 'app_rides')]
     public function index(
         RideRepository $rideRepository
     ): Response {
@@ -31,7 +31,7 @@ class RideController extends AbstractController
         ]);
     }
 
-    #[Route('/ride/{id}', name: 'app_ride', methods: ['GET', 'POST'])]
+    #[Route('/sortie/{id}', name: 'app_ride', methods: ['GET', 'POST'])]
     public function showRide(
         RideRepository $rideRepository,
         Request $request
@@ -42,14 +42,16 @@ class RideController extends AbstractController
         $ride = $rides[0];
 
         if (!$this->getUser()) {
-            $this->addFlash('warning', 'Vous devez être connecté pour voir les annonces');
+            $this->addFlash('warning', 'Vous devez être connecté pour utiliser l\'application.');
             return $this->redirectToRoute('app_login');
         }
 
         /** @var User $user */
         $user = $this->getUser();
         if($user->getIsVerified() == false) {
-            $this->addFlash('danger', 'Veuillez vérifier votre e-mail pour profiter de l\'application.');
+            $this->addFlash('warning', 'Veuillez vérifier votre e-mail pour profiter de l\'application. 
+            Pas de mail ? <a class="px-2 text-primary fw-bold" title="demander un nouveau lien de validation" href=" '. $this->generateUrl("app_new_token") . '">Générer un lien</a>');
+            return $this->redirectToRoute('app_rides');
         }
         return $this->render('ride/show_ride.html.twig', [
             'user' => $user,
@@ -58,7 +60,7 @@ class RideController extends AbstractController
     }
 
 
-    #[Route('/ride/{id}/add', name: 'app_ride_connect', methods: ['GET', 'POST'])]
+    #[Route('/sortie/{id}/participer', name: 'app_ride_connect', methods: ['GET', 'POST'])]
     public function addToRide(
         RideRepository $rideRepository,
         Request $request
@@ -85,15 +87,23 @@ class RideController extends AbstractController
 
 
 
-    #[Route('/ride/{id}/remove', name: 'app_ride_remove', methods: ['GET', 'POST'])]
+    #[Route('/sortie/{id}/ne-plus-particioer', name: 'app_ride_remove', methods: ['GET', 'POST'])]
     public function removeToRide(
         RideRepository $rideRepository,
         Request $request
     ): Response {
 
-        if ($this->getUser()) {
-            /** @var User $user */
-            $user = $this->getUser();
+        if(!$this->getUser()) {
+            $this->addFlash('warning', 'Vous devez être connecté pour voir les annonces');
+            return $this->redirectToRoute('app_login');
+        }
+
+        /** @var User $user */
+        $user = $this->getUser();
+
+        if ($user->getIsVerified() == false) {
+            $this->addFlash('warning', 'Veuillez vérifier votre e-mail pour profiter de l\'application.');
+            return $this->redirectToRoute('app_home');
         }
 
         $id = $request->attributes->get('id');
@@ -110,18 +120,25 @@ class RideController extends AbstractController
     }
 
 
-    #[Route('/ajouter-un-ride', name: 'app_new_ride', methods: ['GET', 'POST'])]
+    #[Route('/nouvelle-sortie', name: 'app_new_ride', methods: ['GET', 'POST'])]
     public function newRide(
         RideRepository $repo,
         Request $request
     ): Response {
         
-        $user = null;
-        if ($this->getUser()) {
-            /** @var User $user */
-            $user = $this->getUser();
+        if (!$this->getUser()) {
+            $this->addFlash('danger', 'Vous devez être connecté utiliser l\'application.');
+            return $this->redirectToRoute('app_login');
         }
 
+        /** @var User $user */
+        $user = $this->getUser();
+
+        if ($user->getIsVerified() == false) {
+            $this->addFlash('warning', 'Veuillez vérifier votre e-mail pour profiter de l\'application.');
+            return $this->redirectToRoute('app_home');
+        }
+        
         $ride = new Ride();
         $ride->setUserCreator($this->getUser());
         $ride->addUserParticipant($this->getUser());
@@ -132,7 +149,8 @@ class RideController extends AbstractController
             $ride = $form->getData();
             $repo->save($ride);
 
-            return $this->redirectToRoute('app_home');
+            $this->addFlash('success', 'Votre sortie a bien été créée.');
+            return $this->redirectToRoute('app_rides');
         }
 
         return $this->render('ride/new_ride.html.twig', [

@@ -29,12 +29,16 @@ class RegistrationController extends AbstractController
         UserPasswordHasherInterface $userPasswordHasher, 
         UserAuthenticatorInterface $userAuthenticator, 
         UserAuthAuthenticator $authenticator, 
-        EntityManagerInterface $entityManager, 
         TokenGeneratorInterface $tokenGenerator,
         MailerInterface $mail,
         UserRepository $userRepo
         ): Response
     {
+
+        if ($this->getUser()) {
+            return $this->redirectToRoute('app_home');
+        }
+
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user, ['attr' => ['class' => 'form-signin, row']]);
         $form->handleRequest($request);
@@ -44,7 +48,6 @@ class RegistrationController extends AbstractController
             $plain_user_name = $form->get('user_name')->getData();
 
             if($userRepo->findBy(['email' => $plain_email]) || $userRepo->findBy(['user_name' => $plain_user_name])) {
-                // dd('coucou');
                 $this->addFlash('danger', 'Impossible de créer le compte avec les informations fournies. Veuillez recommencer.');
                 return $this->redirectToRoute('app_register');
             };
@@ -60,8 +63,7 @@ class RegistrationController extends AbstractController
                 ->setRoles(['ROLE_USER'])
                 ->setToken($token);            
 
-            $entityManager->persist($user);
-            $entityManager->flush();
+            $userRepo->save($user);
 
             // mail sending
             if ($user->getToken()) {
@@ -96,8 +98,9 @@ class RegistrationController extends AbstractController
         if(!$this->getUser()) {
             return $this->redirectToRoute('app_login');
         }
-        $user = $this->getUser();
+
         /** @var User $user */
+        $user = $this->getUser();
         
         // disconnect $user and destroy session
         $session = new Session();
@@ -107,10 +110,47 @@ class RegistrationController extends AbstractController
         $repo->remove($user);
 
         if ($repo->findBy(['email' => $user->getEmail()])) {
-            $this->addFlash('error', 'Une erreur est survenue, veuillez réessayer ultérieurement');
+            $this->addFlash('danger', 'Une erreur est survenue, veuillez réessayer ultérieurement');
             return $this->redirectToRoute('app_profile');
         }
+        
+        $this->addFlash('success', 'Votre compte a été supprimé avec succès.');
+        return $this->redirectToRoute('app_home');
+    }
 
+
+
+    #[Route('/nouveau-code', name: 'app_new_token')]
+    public function newCode(
+        UserRepository $repo,
+        TokenGeneratorInterface $tokenGenerator,
+        MailerInterface $mail,
+    ) {
+
+        if(!$this->getUser()) {
+            $this->addFlash('danger', 'Vous devez être connecté pour utiliser l\'application.');
+            return $this->redirectToRoute('app_login');
+        }
+        
+        /** @var User $user */
+        $user = $this->getUser();
+        $token = $tokenGenerator->generateToken();
+        $user->setToken($token);
+
+        $repo->save($user);
+        if ($user->getToken()) {
+            $url = $this->generateUrl('app_email_verify', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
+            $email = (new Email())
+                ->from('no-reply.blablabike@julien-degermann.fr')
+                // ->to($user->getEmail()) -> replace when all is ok
+                ->to('degermann.julien@gmail.com')
+                ->subject('Confirmation de votre e-mail')
+                ->html('<p>Vous pouvez confirmer votre e-mail en cliquant sur le lien suivant :</p> <a href="'.$url.'">cliquez ici</a>');
+            $mail->send($email);
+            
+        }
+
+        $this->addFlash('success', 'Un nouveau code de vérification vous a été envoyé par e-mail.');
         return $this->redirectToRoute('app_home');
     }
 
@@ -122,10 +162,11 @@ class RegistrationController extends AbstractController
         $user = $repo->findOneBy(['token' => $token]);
         
         if (!$user) {
-            $this->addFlash('error', 'Oups ! Ce lien n\'est plus valide.');
-            return $this->redirectToRoute('app_login');
+            $this->addFlash('danger', 'Oups ! Ce lien n\'est plus valide.');
+            return $this->redirectToRoute('app_home');
         }
-        $user->setIsVeridied(true)
+
+        $user->setIsVerified(true)
             ->setToken(null);
         $repo->save($user);
 

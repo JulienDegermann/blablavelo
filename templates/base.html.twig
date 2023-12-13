@@ -59,7 +59,7 @@
                   <a class="rounded-circle text-center border border-2 border-secondary d-inline-block fs-3" href=" {{ path('app_new_ride') }}" title="ajouter une sortie">+</a>
                 </div>
                 <div class="profile text-start">
-                  {% if user.getFileName %}
+                  {% if user.getFileName is not null %}
                     <img class="rounded-circle mx-2 border border-2 border-secondary" src="{{ asset('uploads/images/users/' ~ user.getFileName) }}" alt="photo de profil">                    
                   {% else %}
                     <div class="mx-2 account rounded-circle border border-2 border-secondary d-flex justify-content-center align-item-center">
@@ -132,7 +132,7 @@
                     <a href="{{ path('app_pricacy_policy') }}" class="nav-link mx-1 py-1 px-4 text-white"> Politique de confidentialité</a>
                   </li>
                   <li>
-                    <a href="{{ path('app_contact') }}" class="nav-link mx-1 py-1 px-4 text-white ">Signaler un bug</a>
+                    <a href="{{ path('app_contact') }}" class="nav-link mx-1 py-1 px-4 text-white ">Un bug ? <br> Une suggestion ?</a>
                   </li>
 
                 </ul>

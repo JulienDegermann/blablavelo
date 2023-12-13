@@ -18,12 +18,14 @@ class UserController extends AbstractController
         Request $request
     ): Response {
         
-        $user = null;
-        if ($this->getUser()) {
-            /** @var User $user */
-            $user = $this->getUser();
+        if (!$this->getUser()) {
+            $this->addFlash('warning', 'Vous devez être connecté pour utiliser l\'application');
+            return $this->redirectToRoute('app_login');
         }
 
+        /** @var User $user */
+        $user = $this->getUser();
+    
         $form = $this->createForm(ProfileType::class, $user);
         $form->handleRequest($request);
 

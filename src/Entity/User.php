@@ -97,7 +97,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->rides_created = new ArrayCollection();
         $this->setCreatedAt(new DateTimeImmutable());
-        $this->setIsVeridied(false);
+        $this->setIsVerified(false);
         // $this->messages = new ArrayCollection();
 
     }
@@ -404,12 +404,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getIsVeridied(): ?bool
+    public function getIsVerified(): ?bool
     {
         return $this->is_verified;
     }
 
-    public function setIsVeridied(bool $is_verified): static
+    public function setIsVerified(bool $is_verified): static
     {
         $this->is_verified = $is_verified;
 

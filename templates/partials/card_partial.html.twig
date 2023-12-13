@@ -1,5 +1,5 @@
-<a class="col-md-6 col-lg-4 rounded-3 ride-card d-block" href="/ride/{{ ride.getId }}">
-<div class="rounded-3 m-2 p-3 border-multiple ride-card position-relative"> 
+<a class="col-md-6 col-lg-4 rounded-3 ride-card d-block" href="{{ path('app_ride', {'id': ride.getId}) }}">
+<div class="rounded-3 m-2 p-3 border-multiple ride-card position@-relative"> 
   <h3 class="text-center fs-4">{{ ride.getTitle }}</h3>
   {% include "/partials/img_partial.html.twig" %}
   <div class="row">
