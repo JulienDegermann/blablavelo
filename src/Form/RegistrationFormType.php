@@ -6,7 +6,6 @@ use App\Entity\City;
 use App\Entity\Mind;
 use App\Entity\User;
 use App\Entity\Practice;
-use Doctrine\ORM\Mapping\Entity;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;

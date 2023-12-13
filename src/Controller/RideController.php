@@ -36,14 +36,20 @@ class RideController extends AbstractController
         RideRepository $rideRepository,
         Request $request
     ): Response {
+
         $id = $request->attributes->get('id');
         $rides = $rideRepository->findBy(['id' => $id]);
         $ride = $rides[0];
 
-        $user = null;
-        if ($this->getUser()) {
-            /** @var User $user */
-            $user = $this->getUser();
+        if (!$this->getUser()) {
+            $this->addFlash('warning', 'Vous devez être connecté pour voir les annonces');
+            return $this->redirectToRoute('app_login');
+        }
+
+        /** @var User $user */
+        $user = $this->getUser();
+        if($user->getIsVerified() == false) {
+            $this->addFlash('danger', 'Veuillez vérifier votre e-mail pour profiter de l\'application.');
         }
         return $this->render('ride/show_ride.html.twig', [
             'user' => $user,

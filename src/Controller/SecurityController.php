@@ -2,11 +2,9 @@
 
 namespace App\Controller;
 
-
 use App\Entity\User;
 use App\Form\PasswordResetType;
 use App\Form\PasswordForgotType;
-use Symfony\Component\Mime\Email;
 use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\MailerInterface;
@@ -17,6 +15,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
+use Symfony\Component\Mime\Email;
+use Symfony\Component\Mime\Address;
+
 
 class SecurityController extends AbstractController
 {
@@ -36,7 +37,7 @@ class SecurityController extends AbstractController
         $error = $authenticationUtils->getLastAuthenticationError();
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
-        $this->addFlash('error', $error);
+        // $this->addFlash('error', $error);
         return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
     }
 
@@ -50,7 +51,7 @@ class SecurityController extends AbstractController
     public function pwdForgot(
         UserRepository $repo,
         Request $request,
-        TokenGeneratorInterface $tokenGeneratorInterface,
+        TokenGeneratorInterface $tokenGenerator,
         MailerInterface $mail,
     ): Response {
         
@@ -58,7 +59,8 @@ class SecurityController extends AbstractController
         if($this->getUser()) {
             /** @var User $user */
             $user = $this->getUser();
-            $token = $tokenGeneratorInterface->generateToken();
+
+            $token = $tokenGenerator->generateToken();
             $user->setToken($token);
             
             $repo->save($user);
@@ -73,18 +75,18 @@ class SecurityController extends AbstractController
             $user = $repo->findOneBy(['email' => $form->getData()->getEmail()]);
             
             if ($user) {
-                $token = $tokenGeneratorInterface->generateToken();
+                $token = $tokenGenerator->generateToken();
                 $user->setToken($token);
                 $repo->save($user);
 
                 if ($user->getToken()) {
                     $url = $this->generateUrl('app_pwd_reset', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
-                    $email = (new Email())
-                        ->from('no-reply.blablabike@julien-degermann.fr')
+                    $email = new Email();
+                    $email->from('no-reply.blablabike@julien-degermann.fr')
                         // ->to($user->getEmail()) -> replace when all is ok
                         ->to('degermann.julien@gmail.com')
                         ->subject('Réinitialisation de votre mot de passe Blabla Bike')
-                        ->html('<p>Lien de réinitialisation de votre mot de passe : </p> <a href=>' . $url);
+                        ->html('<p>Lien de réinitialisation de votre mot de passe : </p> <a href="'.$url.'">cliquez ici</a>');
                     $mail->send($email);
                 }
             }
