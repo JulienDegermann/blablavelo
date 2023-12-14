@@ -138,7 +138,7 @@ class RideController extends AbstractController
         $ride = new Ride();
         $ride->setUserCreator($this->getUser());
         $ride->addUserParticipant($this->getUser());
-        $form = $this->createForm(NewRideType::class, $ride);
+        $form = $this->createForm(NewRideType::class, $ride, ['user' => $user]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

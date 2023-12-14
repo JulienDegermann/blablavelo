@@ -19,11 +19,17 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 class NewRideType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+
+        $user = $options['user'];
+
         $builder
             ->add('title', TextType::class, [
                 'label' => 'Titre de la sortie',
@@ -50,7 +56,16 @@ class NewRideType extends AbstractType
                 'required' => true,
                 'attr' => [
                     'class' => 'form-control mb-3'
-                ]
+                ],
+                'constraints' => [
+                    new Assert\Range([
+                        'min' => 1,
+                        'max' => 10,
+                        'minMessage' => 'Le nombre de participants doit être compris entre 1 et 10.',
+                        'maxMessage' => 'Le nombre de participants doit être compris entre 1 et 10.',
+                    ])
+                    ],
+                    'invalid_message' => 'Le nombre de participants doit être compris entre 1 et 10.'
             ])
             ->add('average_speed', IntegerType::class, [
                 'label' => 'Vitesse moyenne de la sortie',
@@ -65,6 +80,7 @@ class NewRideType extends AbstractType
                 'attr' => [
                     'class' => 'form-control mb-3 d-flex'
                 ]
+                
             ])
             ->add('description', TextareaType::class, [
                 'label' => 'Description et informations complémentaires',
@@ -87,7 +103,8 @@ class NewRideType extends AbstractType
                 'attr' => [
                     'class' => 'form-control mb-3'
                 ],
-                'class' => Mind::class
+                'class' => Mind::class,
+                'data' => $user->getMind()
             ])
             ->add('practice', EntityType::class, [
                 'label' => 'Pratique',
@@ -95,8 +112,8 @@ class NewRideType extends AbstractType
                 'attr' => [
                     'class' => 'form-control mb-3'
                 ],
-                'class' => Practice::class
-
+                'class' => Practice::class,
+                'data' => $user->getPractice()
             ])
             ->add('city', EntityType::class, [
                 'label' => 'Ville de départ',
@@ -112,6 +129,7 @@ class NewRideType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Ride::class,
+            'user' => UserInterface::class
         ]);
     }
 }
