@@ -79,10 +79,8 @@ class RideController extends AbstractController
         $ride->addUserParticipant($user);
         $rideRepository->save($ride);
 
-        return $this->render('ride/show_ride.html.twig', [
-            'user' => $user,
-            'ride' => $ride
-        ]);
+        $this->addFlash('success', 'Vous êtes inscrit à la sortie.');
+        return $this->redirectToRoute('app_rides');
     }
 
 
@@ -113,10 +111,8 @@ class RideController extends AbstractController
         $ride->removeUserParticipant($user);
         $rideRepository->save($ride);
 
-        return $this->render('ride/show_ride.html.twig', [
-            'user' => $user,
-            'ride' => $ride
-        ]);
+        $this->addFlash('success', 'Vous êtes désinscrit de la sortie.');
+        return $this->redirectToRoute('app_rides');
     }
 
 
@@ -142,7 +138,7 @@ class RideController extends AbstractController
         $ride = new Ride();
         $ride->setUserCreator($this->getUser());
         $ride->addUserParticipant($this->getUser());
-        $form = $this->createForm(NewRideType::class, $ride);
+        $form = $this->createForm(NewRideType::class, $ride, ['user' => $user]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

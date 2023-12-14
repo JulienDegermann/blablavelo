@@ -4,31 +4,23 @@
   <section class="form-signin h-100">
     <div class="container h-100">
       <div class="row h-100">
-        <img class="w-auto m-auto" src="{{ asset('assets/images/ty_ride_192.png') }}" alt="logo Ty'Ride">
-        <h1 class="text-center">Inscription</h1>
-        {{ form_start(registrationForm) }}
-        {{ form_errors(registrationForm) }}
-        <fieldset class="col-md-6">
-          <legend>Informations personnelles</legend>
-          {{ form_row(registrationForm.first_name) }}
-          {{ form_row(registrationForm.last_name) }}
-          {{ form_row(registrationForm.birth_date) }}
-          {{ form_row(registrationForm.email) }}
-          {{ form_row(registrationForm.plainPassword, { label: 'Password' }) }}
-          {{ form_row(registrationForm.city) }}
-        </fieldset>
-        <fieldset class="col-md-6">
-          <legend>Informations sportives</legend>
-          {{ form_row(registrationForm.user_name) }}
-          {{ form_row(registrationForm.practice) }}
-          {{ form_row(registrationForm.mind) }}
-        </fieldset>
-        <div class="d-inline-flex my-2">
-          {{ form_widget(registrationForm.RGPDConscents) }}
-          {{ form_label(registrationForm.RGPDConscents) }}
+        <div class="col-12 col-lg-6 m-md-auto">
+
+          <img class="translate-middle-x" src="{{ asset('assets/images/ty_ride_192.png') }}" alt="logo Blabla Bike">
+          <h1 class="text-center">Inscription</h1>
+          {{ form_start(registrationForm) }}
+          {{ form_errors(registrationForm) }}
+            {{ form_row(registrationForm.user_name) }}
+            {{ form_row(registrationForm.email) }}
+            {{ form_row(registrationForm.plainPassword, { label: 'Password' }) }}
+          <div class="d-inline-flex my-2">
+            {{ form_widget(registrationForm.RGPDConscents) }}
+            {{ form_label(registrationForm.RGPDConscents) }}
+          </div>
+          <button type="submit" class="btn w-auto btn-secondary text-primary px-5 mx-2 mt-2">M'inscrire</button>
+          {{ form_end(registrationForm) }}
         </div>
-        <button type="submit" class="btn w-auto btn-secondary text-primary px-5 mt-2">M'inscrire</button>
-        {{ form_end(registrationForm) }}
+        
       </div>
     </div>
   {# <section class="form-signin w-100 d-flex justify-content-center align-items-center h-100"> #}
