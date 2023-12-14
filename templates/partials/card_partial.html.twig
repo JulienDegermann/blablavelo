@@ -11,7 +11,7 @@
     </ul>
     <ul class="col-6">
       <li>📍 : {{ ride.getCity }}</li>
-      <li>🕗 : {{ ride.getDate|date('d/m/Y H:i:s') }}</li>
+      <li>🕗 : {{ ride.getDate|date('d/m/Y à  H:i') }}</li>
       <li>👤 :  {{ ride.getUserParticipant|length }} / {{ ride.getMaxRider }}</li>
     </ul>
   </div>

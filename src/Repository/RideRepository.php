@@ -27,6 +27,12 @@ class RideRepository extends ServiceEntityRepository
         $this->_em->flush();
     }
 
+    public function remove(Ride $ride) 
+    {
+        $this->_em->remove($ride);
+        $this->_em->flush();
+    }
+
 //    /**
 //     * @return Ride[] Returns an array of Ride objects
 //     */

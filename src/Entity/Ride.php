@@ -51,7 +51,7 @@ class Ride
     private ?User $user_creator = null;
 
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'rides_participated')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private Collection $user_participant;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]

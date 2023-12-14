@@ -17,18 +17,11 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
 use Symfony\Component\Mime\Email;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Symfony\Component\Mime\Address;
+
 
 
 class SecurityController extends AbstractController
 {
-    private $authorizationChecker;
-
-    public function __construct(AuthorizationCheckerInterface $authorizationChecker)
-    {
-        $this->authorizationChecker = $authorizationChecker;
-    }
 
     #[Route(path: '/connexion', name: 'app_login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
@@ -37,10 +30,10 @@ class SecurityController extends AbstractController
         if ($this->getUser()) {
             /** @var User $user */
             $user = $this->getUser();
-            if ($user !== null && $this->authorizationChecker->isGranted('ROLE_ADMIN', $user)) {
+            if ($this->isGranted('ROLE_ADMIN', $user)) {
                 return $this->redirectToRoute('admin');
             }
-            elseif ($user !== null && $this->authorizationChecker->isGranted('ROLE_USER', $user)) {
+            elseif ($this->isGranted('ROLE_USER', $user)) {
                 return $this->redirectToRoute('app_home');
             }
         }
@@ -51,7 +44,6 @@ class SecurityController extends AbstractController
         $error = $authenticationUtils->getLastAuthenticationError();
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
-        // dd($error);
         if($error != '' || $error !== null) {
             $this->addFlash('danger', 'Identifiants incorrects');
         }

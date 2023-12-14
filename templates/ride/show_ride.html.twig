@@ -13,28 +13,31 @@
           </div>
           <div class="col-12 col-md-6 position-relative">
             <h2 class="">{{ ride.getTitle }}</h2>
-            <p class="fst-italic text-primary text-end">posté par : {{ ride.getUserCreator }}</p>
+            <p class="fst-italic text-primary text-end">Guide : {{ ride.getUserCreator }}</p>
             <h3 class="fs-6">Informations générales</h3>
             <p>
               🚴 : {{ ride.getPractice }} <br />
               🎯 : {{ ride.getMind }} <br />
               🏁 : {{ ride.getDistance }} kms <br />
-              
               📈 : {{ ride.getAscent }} m <br>
               📍 : {{ ride.getCity }} <br />
-              📆 : {{ ride.getDate|date('d/m/Y à h:m') }}<br />
+              📆 : {{ ride.getDate|date('d/m/Y à H:i') }}<br />
               👤 : {{ ride.getUserParticipant|length }} / {{ ride.getMaxRider }}             
             </p>
             
             <h3 class="fs-6">Détails</h3>
             <p>{{ ride.getDescription }}</p>
-            {% if ride.getMaxRider > (ride.getUserParticipant|length) %}
-              {% if user in ride.getUserParticipant %}
-                <a href="{{ path('app_ride_remove', {'id': ride.getId()}) }}" class="btn btn-secondary text-primary px-5 py-2">Ne plus participer</a>
-              {% else %}
-                <a href="{{ path('app_ride_connect', {'id': ride.getId()}) }}" class="btn btn-secondary text-primary px-5 py-2">J'EN SUIS !</a>
+            {% if user != ride.getUserCreator %}
+              {% if ride.getMaxRider > (ride.getUserParticipant|length) %}
+                {% if user in ride.getUserParticipant %}
+                  <a href="{{ path('app_ride_remove', {'id': ride.getId()}) }}" class="btn btn-secondary text-primary px-5 py-2">Ne plus participer</a>
+                {% else %}
+                  <a href="{{ path('app_ride_connect', {'id': ride.getId()}) }}" class="btn btn-secondary text-primary px-5 py-2">J'EN SUIS !</a>
+                {% endif %}
               {% endif %}
-            {% endif %}
+            {% else %}
+              <a href="{{ path('app_ride_delete', {'id': ride.getId()}) }}" class="btn btn-secondary text-primary px-5 py-2">Supprimer la sortie</a>
+            {% endif %} 
             
             
             <div class="profile position-absolute participant d-flex flex-row-reverse">

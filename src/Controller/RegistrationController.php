@@ -146,7 +146,6 @@ class RegistrationController extends AbstractController
                 ->subject('Confirmation de votre e-mail')
                 ->html('<p>Vous pouvez confirmer votre e-mail en cliquant sur le lien suivant :</p> <a href="'.$url.'">cliquez ici</a>');
             $mail->send($email);
-            
         }
 
         $this->addFlash('success', 'Un nouveau code de vérification vous a été envoyé par e-mail.');
