@@ -8,6 +8,7 @@
         {{ form_start(form) }}
         {{ form_row(form.password) }}
         <input class="btn btn-secondary text-primary px-5 py-2 m-2" type="submit" name="pwd_recover" value="Réinitialiser le mot de passe" />
+        {{ form_errors(form.password) }}
         {{ form_end(form) }}
       </div>
     </div>

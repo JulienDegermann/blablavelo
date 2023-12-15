@@ -30,7 +30,8 @@ class PasswordResetType extends AbstractType
                 ],
                 'second_options' => [
                     'label' => 'Confirmation du mot de passe',
-                ]
+                    'invalid_message' => 'Les mots de passe ne correspondent pas.',
+                ],
             ]);
     }
 

@@ -12208,4 +12208,11 @@ h1, .h1 {
 .form-signin input[type=checkbox] {
   margin-right: 1em;
   transform: translate(50%, 50%);
+}
+
+form ul {
+  padding: 0;
+}
+form ul li {
+  color: rgb(220, 53, 69);
 }/*# sourceMappingURL=app.css.map */

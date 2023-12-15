@@ -166,7 +166,7 @@ footer {
   .rounded-circle {
     width: 50px;
     height: 50px;
-    display: inline-flex!important;
+    display: inline-flex !important;
     justify-content: center;
     align-items: center;
     color: $secondary;
@@ -213,12 +213,13 @@ footer {
   @media screen and (min-width: 768px) {
     height: 400px;
   }
+
   @media screen and (max-width: 767px) {
     height: 200px;
   }
 
   div img {
-    object-position: 25% 50% ;
+    object-position: 25% 50%;
   }
 }
 
@@ -244,8 +245,8 @@ h1 {
 }
 
 .participant .rounded-circle {
-  width: 30px!important;
-  height: 30px!important;
+  width: 30px !important;
+  height: 30px !important;
 }
 
 .vich-image img {
@@ -264,4 +265,13 @@ h1 {
 .form-signin input[type="checkbox"] {
   margin-right: 1em;
   transform: translate(50%, 50%);
+}
+
+form ul {
+  padding: 0;
+  // margin-top: -1em;
+
+  li {
+    color: rgb(220, 53, 69);
+  }
 }

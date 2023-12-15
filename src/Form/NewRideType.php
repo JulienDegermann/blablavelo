@@ -2,25 +2,23 @@
 
 namespace App\Form;
 
+use App\Entity\User;
 use App\Entity\City;
 use App\Entity\Mind;
 use App\Entity\Ride;
 use DateTimeImmutable;
 use App\Entity\Practice;
-use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
-use Doctrine\DBAL\Types\DateTimeImmutableType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\DateTyoe;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Validator\Constraints as Assert;
 
 
 class NewRideType extends AbstractType
@@ -29,6 +27,8 @@ class NewRideType extends AbstractType
     {
 
         $user = $options['user'];
+
+        // dd($user->getDepartment());  
 
         $builder
             ->add('title', TextType::class, [
@@ -45,7 +45,7 @@ class NewRideType extends AbstractType
                 ]
             ])
             ->add('ascent', IntegerType::class, [
-                'label' => 'Dénivelé positif estimé',
+                'label' => 'Dénivelé positif estimé (m)',
                 'required' => true,
                 'attr' => [
                     'class' => 'form-control mb-3',
@@ -61,14 +61,12 @@ class NewRideType extends AbstractType
                     new Assert\Range([
                         'min' => 1,
                         'max' => 10,
-                        'minMessage' => 'Le nombre de participants doit être compris entre 1 et 10.',
-                        'maxMessage' => 'Le nombre de participants doit être compris entre 1 et 10.',
+                        'notInRangeMessage' => 'Le nombre doit être compris entre 1 et 10.'
                     ])
-                    ],
-                    'invalid_message' => 'Le nombre de participants doit être compris entre 1 et 10.'
+                    ]
             ])
             ->add('average_speed', IntegerType::class, [
-                'label' => 'Vitesse moyenne de la sortie',
+                'label' => 'Vitesse moyenne de la sortie (km/h)',
                 'required' => true,
                 'attr' => [
                     'class' => 'form-control mb-3'
@@ -77,10 +75,18 @@ class NewRideType extends AbstractType
             ->add('date', DateTimeType::class, [
                 'label' => 'Date et heure de départ',
                 'required' => true,
+                'widget' => 'single_text',
                 'attr' => [
-                    'class' => 'form-control mb-3 d-flex'
-                ]
-                
+                    'class' => 'form-control mb-3 d-flex',
+                    'data-date-format' => 'dd-mm-yy HH:ii'
+                ],
+                // 'constraints' => [
+                //     new Assert\DateTime([
+                //         'format' => 'd-m-y H:i',
+                //         'message' => 'La date et l\'heure doivent être au format jj/mm/aaaa hh:mm.'
+                //     ])
+                // ],
+                'data' => new \DateTime('now')      
             ])
             ->add('description', TextareaType::class, [
                 'label' => 'Description et informations complémentaires',
@@ -90,13 +96,6 @@ class NewRideType extends AbstractType
                     'rows' => '10'
                 ]
             ])
-            // ->add('updatedAt', DateTimeType::class, [
-            //     'label' => 'Date de modification de l\'annonce',
-            //     'required' => true,
-            //     'attr' => [
-            //         'class' => 'form-control m-2'
-            //     ]
-            // ])
             ->add('mind', EntityType::class, [
                 'label' => 'Objectif de la sortie',
                 'required' => true,
@@ -121,7 +120,13 @@ class NewRideType extends AbstractType
                 'attr' => [
                     'class' => 'form-control mb-3'
                 ],
-                'class' => City::class
+                'class' => City::class,
+                'query_builder' => function (EntityRepository $er) use ($user): QueryBuilder {
+                    return $er->createQueryBuilder('c')
+                        ->leftJoin('c.department', 'd')
+                        ->andWhere('c.department = :d')
+                        ->setParameter(':d', $user->getDepartment());
+                },
             ]);
     }
 
@@ -129,7 +134,7 @@ class NewRideType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Ride::class,
-            'user' => UserInterface::class
+            'user' => User::class
         ]);
     }
 }

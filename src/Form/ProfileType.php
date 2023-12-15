@@ -59,7 +59,8 @@ class ProfileType extends AbstractType
                 'required' => true,
                 'attr' => [
                     'class' => 'form-control mb-3'                
-                ]
+                ],
+                'invalid_message' => 'L\'adresse e-mail n\'est pas valide.',
             ])
             // ->add('department', EntityType::class, [
             //     'label' => 'Département',

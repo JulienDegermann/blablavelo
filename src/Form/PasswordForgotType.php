@@ -24,6 +24,8 @@ class PasswordForgotType extends AbstractType
                 'attr' => [
                     'class' => 'form-control mb-3'
                 ],
+                'required' => true,
+                'invalid_message' => 'L\'adresse e-mail n\'est pas valide.',
             ]);
     }
 
