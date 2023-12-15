@@ -21,14 +21,21 @@ class RideController extends AbstractController
         RideRepository $rideRepository
     ): Response {
         
-        $rides = $rideRepository->findBy([], ['id' => 'DESC']);
         
         $user = null;
+        $userdepartment = null;
         if ($this->getUser()) {
             /** @var User $user */
             $user = $this->getUser();
+        
+            if ($user->getDepartment() != null) {
+            	$userdepartment = $user->getDepartment();
+            } else {
+            }
         }
 
+        $rides = $rideRepository->rideList($userdepartment);
+        
         return $this->render('ride/index.html.twig', [
             'user' => $user,
             'all_rides' => $rides,

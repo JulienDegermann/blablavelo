@@ -15,14 +15,21 @@ class HomeController extends AbstractController
         RideRepository $rideRepository
         ): Response
     {
-        $rides = $rideRepository->findBy([], ['id' => 'DESC'], 5);
         
         $user = null;
+        $userdepartment = null;
         if ($this->getUser()) {
             /** @var User $user */
             $user = $this->getUser();
+        
+            if ($user->getDepartment() != null) {
+            	$userdepartment = $user->getDepartment();
+            } else {
+            }
         }
-
+        
+        $rides = $rideRepository->rideList($userdepartment, 3);
+        
         return $this->render('home/index.html.twig', [
             'user' => $user,
             'all_rides' => $rides,

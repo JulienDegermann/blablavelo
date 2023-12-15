@@ -1,13 +1,15 @@
 <a class="col-md-6 col-lg-4 rounded-3 ride-card d-block" href="{{ path('app_ride', {'id': ride.getId}) }}">
 <div class="rounded-3 m-2 p-3 border-multiple ride-card position@-relative"> 
-  <h3 class="text-center fs-4">{{ ride.getTitle }}</h3>
-  {% include "/partials/img_partial.html.twig" %}
+  <h3 class="text-center fs-5">{{ ride.getTitle }}</h3>
+  <div class="img-container my-2">
+    {% include "/partials/img_partial.html.twig" %}
+  </div>
   <div class="row">
     <ul class="col-6">
       <li>🚴 : {{ ride.getPractice }}</li>
       <li>🎯 : {{ ride.getMind }}</li>
-      <li>Dist : {{ ride.getDistance }} kms</li>
-      <li>D+ : {{ ride.getAscent }} m</li>
+      <li>🏁 : {{ ride.getDistance }} kms</li>
+      <li>📈 : {{ ride.getAscent }} m</li>
     </ul>
     <ul class="col-6">
       <li>📍 : {{ ride.getCity }}</li>

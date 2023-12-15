@@ -33,6 +33,21 @@ class RideRepository extends ServiceEntityRepository
         $this->_em->flush();
     }
 
+
+    public function rideList($userdepartment = null, int $limit = null) {
+        $qb = $this->createQueryBuilder('r')
+            ->orderBy('r.id', 'DESC');
+        if($userdepartment) {
+            $qb->join('r.city', 'c')
+                ->andWhere('c.department = :department')
+                ->setParameter(':department', $userdepartment);
+        }
+        if($limit) {
+            $qb->setMaxResults($limit);
+        }
+        return $qb->getQuery()->getResult();
+    }
+
 //    /**
 //     * @return Ride[] Returns an array of Ride objects
 //     */

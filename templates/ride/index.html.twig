@@ -1,20 +1,17 @@
 {% extends 'base.html.twig' %}
 
 {% block main %}
-  <section class="my-5">
-    <img src="" alt="photo VTT en groupe" />
-    <div class="container">
+  <section class="position-relative banner">
+    <img class="h-100 w-100 object-fit-cover" src="{{ asset('assets/images/map.webp') }}"  alt="photo carte" />
+    <div class="container position-absolute px-3 top-50 start-50 translate-middle">
       <div class="row">
-        <div>
-          <h1>Les derniers rides proposés</h1>
-        </div>
+          <h1 class="text-white text-center fs-1">Les sorties par chez toi</h1>
       </div>
     </div>
   </section>
 
   <section class="my-md-5 px-md-5">
     <div class="container">
-      <h2 class="col-12 text-center">Les sorties par chez toi !</h2>
       <div class="row">
         {% for ride in all_rides %}
           {% include '/partials/card_partial.html.twig' %}
