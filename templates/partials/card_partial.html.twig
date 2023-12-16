@@ -1,4 +1,4 @@
-<a class="col-md-6 col-lg-4 rounded-3 ride-card d-block" href="{{ path('app_ride', {'id': ride.getId}) }}">
+<a class="col-md-6 col-xl-4 rounded-3 ride-card d-block" href="{{ path('app_ride', {'id': ride.getId}) }}">
 <div class="rounded-3 m-2 p-3 border-multiple ride-card position@-relative"> 
   <h3 class="text-center fs-5">{{ ride.getTitle }}</h3>
   <div class="img-container my-2">
@@ -13,7 +13,8 @@
     </ul>
     <ul class="col-6">
       <li>📍 : {{ ride.getCity }}</li>
-      <li>🕗 : {{ ride.getDate|date('d/m/Y à  H:i') }}</li>
+      <li>📆 : {{ ride.getDate|date('d/m/y') }}</li>
+      <li>🕗 : {{ ride.getDate|date('H:i') }}</li>
       <li>👤 :  {{ ride.getUserParticipant|length }} / {{ ride.getMaxRider }}</li>
     </ul>
   </div>

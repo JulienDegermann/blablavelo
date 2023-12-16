@@ -27,7 +27,8 @@
               🏁 : {{ ride.getDistance }} kms <br />
               📈 : {{ ride.getAscent }} m <br>
               📍 : {{ ride.getCity }} <br />
-              📆 : {{ ride.getDate|date('d/m/Y à H:i') }}<br />
+              📆 : {{ ride.getDate|date('d/m/Y') }}<br />
+              🕗 : {{ ride.getDate|date('H:i') }} <br />
               👤 : {{ ride.getUserParticipant|length }} / {{ ride.getMaxRider }}             
             </p>
             

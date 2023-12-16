@@ -7,18 +7,22 @@ use App\Entity\User;
 use App\Form\NewRideType;
 use App\Repository\RideRepository;
 use App\Repository\UserRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Config\KnpPaginatorConfig;
 
 class RideController extends AbstractController
 {
     #[Route('/sorties', name: 'app_rides')]
     public function index(
-        RideRepository $rideRepository
+        RideRepository $rideRepository,
+        Request $request,
+        PaginatorInterface $paginator,
     ): Response {
         
         
@@ -34,11 +38,17 @@ class RideController extends AbstractController
             }
         }
 
+        $pagination = $paginator->paginate(
+            $rideRepository->ridePaginated($userdepartment),
+            $request->query->getInt('page', 1),
+            6
+        );
+
         $rides = $rideRepository->rideList($userdepartment);
         
         return $this->render('ride/index.html.twig', [
             'user' => $user,
-            'all_rides' => $rides,
+            'all_rides' => $pagination,
         ]);
     }
 
@@ -105,11 +115,8 @@ class RideController extends AbstractController
                 ->subject('IMPORTANT : Sortie annulée')
                 ->html('<p>Bonjour ' . $participant . ', ' . $ride->getUserCreator() . ' a annulé une sortie à laquelle vous êitez inscrit. N\'hésitez pas à retourner sur l\'application pour trouver une nouvelle sortie !</p>
                 <p>Équipe BlablaBike</p>');
-            $mailer->send($email);
-
-           
+            $mailer->send($email);           
         }
-        dd('coucou');
         $rideRepository->remove($ride);
 
 

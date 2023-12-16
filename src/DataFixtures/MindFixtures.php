@@ -14,8 +14,8 @@ class MindFixtures extends Fixture
     {
       $minds = [
         'Ballade',
-        'Sport : Entretien',
-        'Sport : Compétition'
+        'Loisir',
+        'Perf\''
     ];
         foreach($minds as $key => $mind) {
             $current = new Mind();

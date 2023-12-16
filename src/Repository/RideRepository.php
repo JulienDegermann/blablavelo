@@ -48,6 +48,18 @@ class RideRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
+
+    public function ridePaginated($userdepartment = null) {
+        $qb = $this->createQueryBuilder('r')
+            ->orderBy('r.id', 'DESC');
+        if($userdepartment) {
+        $qb->join('r.city', 'c')
+            ->andWhere('c.department = :department')
+            ->setParameter(':department', $userdepartment);
+        }
+        return $qb->getQuery();
+    }
+
 //    /**
 //     * @return Ride[] Returns an array of Ride objects
 //     */
