@@ -38,13 +38,18 @@ class RideController extends AbstractController
             }
         }
 
+        $allRides = $rideRepository->findAll();
+        foreach($allRides as $ride) {
+            if($ride->getDate() < (new \DateTime('now - 1 day'))) {
+                $rideRepository->remove($ride);
+            }
+        }
+
         $pagination = $paginator->paginate(
             $rideRepository->ridePaginated($userdepartment),
             $request->query->getInt('page', 1),
             6
         );
-
-        $rides = $rideRepository->rideList($userdepartment);
         
         return $this->render('ride/index.html.twig', [
             'user' => $user,
@@ -57,6 +62,13 @@ class RideController extends AbstractController
         RideRepository $rideRepository,
         Request $request
     ): Response {
+
+        $allRides = $rideRepository->findAll();
+        foreach($allRides as $ride) {
+            if($ride->getDate() < (new \DateTime('now - 1 day'))) {
+                $rideRepository->remove($ride);
+            }
+        }
 
         $id = $request->attributes->get('id');
         $rides = $rideRepository->findBy(['id' => $id]);

@@ -16,6 +16,13 @@ class HomeController extends AbstractController
         ): Response
     {
         
+        $allRides = $rideRepository->findAll();
+        foreach($allRides as $ride) {
+            if($ride->getDate() < (new \DateTime('now - 1 day'))) {
+                $rideRepository->remove($ride);
+            }
+        }
+
         $user = null;
         $userdepartment = null;
         if ($this->getUser()) {
