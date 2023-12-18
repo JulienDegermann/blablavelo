@@ -12120,6 +12120,10 @@ footer .social img {
   align-items: center;
   color: #FFB800;
 }
+.profile .rounded-circle:last-child {
+  border: #FFB800 solid 1px !important;
+  box-shadow: #FFB800 0 0 5px;
+}
 .profile img,
 .profile svg {
   -o-object-fit: cover;
@@ -12153,7 +12157,7 @@ footer .social img {
 
 @media screen and (min-width: 768px) {
   .banner {
-    height: 400px;
+    height: 200px;
   }
 }
 @media screen and (max-width: 767px) {

@@ -1,10 +1,13 @@
 {% extends 'base.html.twig' %}
   
 {% block main %}
-  <section>
+  <section class="banner position-relative">
+    <img class="w-100 h-100 object-fit-cover" src="{{ asset('assets/images/contact.webp') }}" alt="cycliste au téléphone" />
+    <h1 class="text-center position-absolute top-50 start-50 translate-middle text-white">Politique de confidentialité</h1>
+  </section>
+  <section class="my-3 my-md-5">
     <div class="container">
       <div class="row">
-        <h1 class="text-center">Politique de confidentialité</h1>
         <article class="col-md-8 m-auto">
           <h2 class="text-lowercase">Collecte des informations</h2>
           <p>

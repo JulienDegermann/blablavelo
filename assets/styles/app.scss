@@ -170,6 +170,11 @@ footer {
     justify-content: center;
     align-items: center;
     color: $secondary;
+
+    &:last-child {
+      border: $secondary solid 1px!important;
+      box-shadow: $secondary 0 0 5px;
+    }
   }
 
   img,
@@ -211,7 +216,7 @@ footer {
 .banner {
 
   @media screen and (min-width: 768px) {
-    height: 400px;
+    height: 200px;
   }
 
   @media screen and (max-width: 767px) {
@@ -314,6 +319,7 @@ form ul {
     transition: all .5s ease;
   }
 }
+
 .pagination .page-item:focus,
 .pagination .page-item .page-link:focus {
   background: none;

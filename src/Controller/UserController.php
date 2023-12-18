@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Ride;
 use App\Entity\User;
 use App\Form\ProfileType;
+use App\Repository\RideRepository;
 use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,21 +19,24 @@ class UserController extends AbstractController
     #[Route('/profil', name: 'app_profile')]
     public function index(
         UserRepository $repo,
+        RideRepository $rideRepo,
         Request $request,
-        TokenGeneratorInterface $tokenGenerator
         ): Response {
         
+            
+        /** @var User $user */
+        $user = $this->getUser();
+            
         if (!$this->getUser()) {
             $this->addFlash('warning', 'Vous devez être connecté pour utiliser l\'application');
             return $this->redirectToRoute('app_login');
         }
+        
+        $rides = $rideRepo->rideOfUser($user);
 
-        /** @var User $user */
-        $user = $this->getUser();
-    
         $form = $this->createForm(ProfileType::class, $user);
         $form->handleRequest($request);
-
+            
         if ($form->isSubmitted() && $form->isValid()) {
             $user = $form->getData();
             $repo->save($user);
@@ -43,6 +48,7 @@ class UserController extends AbstractController
         return $this->render('user/index.html.twig', [
             'user' => $user,
             'form' => $form->createView(),
+            'user_rides' => $rides,
 
         ]);
     }

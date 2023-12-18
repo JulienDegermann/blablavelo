@@ -1,13 +1,21 @@
 {% extends 'base.html.twig' %}
 
 {% block main %}
-  <section class="form-signin h-100">
+  <section class="position-relative banner">
+    <img class="h-100 w-100 object-fit-cover" src="{{ asset('assets/images/login.webp') }}"  alt="photo carte" />
+    <div class="container position-absolute px-3 top-50 start-50 translate-middle">
+      <div class="row">
+          <h1 class="text-white text-center fs-1">Inscription</h1>
+      </div>
+    </div>
+  </section>
+
+  <section class="form-signin my-3 my-md-5">
     <div class="container h-100">
       <div class="row h-100">
         <div class="col-12 col-lg-6 m-md-auto">
 
           <img class="translate-middle-x" src="{{ asset('assets/images/ty_ride_192.png') }}" alt="logo Blabla Bike">
-          <h1 class="text-center">Inscription</h1>
           {{ form_start(registrationForm) }}
           {{ form_errors(registrationForm) }}
             {{ form_row(registrationForm.user_name) }}
@@ -23,7 +31,5 @@
         
       </div>
     </div>
-  {# <section class="form-signin w-100 d-flex justify-content-center align-items-center h-100"> #}
-
   </section>
 {% endblock %}

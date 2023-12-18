@@ -45,7 +45,20 @@ class RideRepository extends ServiceEntityRepository
         if($limit) {
             $qb->setMaxResults($limit);
         }
+        $qb->andWhere('SIZE(r.user_participant) < r.max_rider');
+        // ->setParameter(':r.max_rider', 'r.max_rider');
         return $qb->getQuery()->getResult();
+    }
+
+    public function rideOfUser($user) {
+        $qb = $this->createQueryBuilder('r')
+            ->join('r.user_participant', 'u')
+            ->andWhere(':user MEMBER OF r.user_participant')
+            ->setParameter(':user', $user)
+            ->orderBy('r.id', 'DESC')
+            ->getQuery();
+
+        return $qb->getResult();
     }
 
 
@@ -57,6 +70,8 @@ class RideRepository extends ServiceEntityRepository
             ->andWhere('c.department = :department')
             ->setParameter(':department', $userdepartment);
         }
+        $qb->andWhere('SIZE(r.user_participant) < r.max_rider');
+            // ->setParameter(':r.max_rider', 'r.max_rider');
         return $qb->getQuery();
     }
 

@@ -1,11 +1,18 @@
 {% extends 'base.html.twig' %}
 
 {% block main %}
-  <section class="my-5">
+  <section class="position-relative banner">
+    <img class="h-100 w-100 object-fit-cover" src="{{ asset('assets/images/map.webp') }}"  alt="photo carte" />
+    <div class="container position-absolute px-3 top-50 start-50 translate-middle">
+      <div class="row">
+          <h1 class="text-white text-center fs-1">Nouvelle sortie</h1>
+      </div>
+    </div>
+  </section>
+
+  <section class="my-3 my-md-5">
     <div class="container">
       <div class="row">
-        <h1 class="text-center">Ma sortie</h1>
-
         {{ form_start(form) }}
         <div class="row">
           <fieldset class="col-md-6">

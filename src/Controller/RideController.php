@@ -14,7 +14,6 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Config\KnpPaginatorConfig;
 
 class RideController extends AbstractController
 {
