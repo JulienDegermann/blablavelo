@@ -12,7 +12,7 @@
       <li>📈 : {{ ride.getAscent }} m</li>
     </ul>
     <ul class="col-6">
-      <li>📍 : {{ ride.getCity }}</li>
+      <li>📍 : {{ ride.getCity|capitalize}}</li>
       <li>📆 : {{ ride.getDate|date('d/m/y') }}</li>
       <li>🕗 : {{ ride.getDate|date('H:i') }}</li>
       <li>👤 :  {{ ride.getUserParticipant|length }} / {{ ride.getMaxRider }}</li>

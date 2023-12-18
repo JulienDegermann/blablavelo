@@ -24,7 +24,6 @@ class RideController extends AbstractController
         PaginatorInterface $paginator,
     ): Response {
         
-        
         $user = null;
         $userdepartment = null;
         if ($this->getUser()) {
@@ -117,6 +116,12 @@ class RideController extends AbstractController
             return $this->redirectToRoute('app_rides');
         }
 
+        if ($user->getIsVerified() == false) {
+            $this->addFlash('warning', 'Veuillez vérifier votre e-mail pour profiter de l\'application. 
+            Pas de mail ? <a class="px-2 text-primary fw-bold" title="demander un nouveau lien de validation" href=" '. $this->generateUrl("app_new_token") . '">Générer un lien</a>');
+            return $this->redirectToRoute('app_home');
+        }
+
         $participants = $ride->getUserParticipant();
         foreach($participants as $participant) {
             $email = (new Email())
@@ -129,8 +134,6 @@ class RideController extends AbstractController
             $mailer->send($email);           
         }
         $rideRepository->remove($ride);
-
-
         
         $this->addFlash('success', 'La sortie a bien été supprimée.');
         return $this->redirectToRoute('app_home');
@@ -147,6 +150,12 @@ class RideController extends AbstractController
         if ($this->getUser()) {
             /** @var User $user */
             $user = $this->getUser();
+        }
+
+        if ($user->getIsVerified() == false) {
+            $this->addFlash('warning', 'Veuillez vérifier votre e-mail pour profiter de l\'application. 
+            Pas de mail ? <a class="px-2 text-primary fw-bold" title="demander un nouveau lien de validation" href=" '. $this->generateUrl("app_new_token") . '">Générer un lien</a>');
+            return $this->redirectToRoute('app_home');
         }
 
         $id = $request->attributes->get('id');
@@ -175,7 +184,8 @@ class RideController extends AbstractController
         $user = $this->getUser();
 
         if ($user->getIsVerified() == false) {
-            $this->addFlash('warning', 'Veuillez vérifier votre e-mail pour profiter de l\'application.');
+            $this->addFlash('warning', 'Veuillez vérifier votre e-mail pour profiter de l\'application. 
+            Pas de mail ? <a class="px-2 text-primary fw-bold" title="demander un nouveau lien de validation" href=" '. $this->generateUrl("app_new_token") . '">Générer un lien</a>');
             return $this->redirectToRoute('app_home');
         }
 
@@ -206,7 +216,8 @@ class RideController extends AbstractController
         $user = $this->getUser();
 
         if ($user->getIsVerified() == false) {
-            $this->addFlash('warning', 'Veuillez vérifier votre e-mail pour profiter de l\'application.');
+            $this->addFlash('warning', 'Veuillez vérifier votre e-mail pour profiter de l\'application. 
+            Pas de mail ? <a class="px-2 text-primary fw-bold" title="demander un nouveau lien de validation" href=" '. $this->generateUrl("app_new_token") . '">Générer un lien</a>');
             return $this->redirectToRoute('app_home');
         }
         

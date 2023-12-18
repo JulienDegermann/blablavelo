@@ -38,11 +38,11 @@ class ImportCitiesService
 			$city = $this->createOrUpdateCity($arrayCity, $department);
 			$this->em->persist($city);
 			
+			$this->em->flush();
 			// forward indicator
 			$io->progressAdvance();		
 		}
 		
-		$this->em->flush();
 
 		$io->progressFinish();
 		$io->success('L\'importation est terminée');
@@ -73,8 +73,6 @@ class ImportCitiesService
 		$io->success('L\'importation est terminée');
 	}
 
-
-
 	private function readCsvFile (): Reader
 	{
 		$csv = Reader::createFromPath('%kernel.root.dir%/../import/cities.csv', 'r'); // class Reader (librairy : composer require	league/csv / kernel = repertoire root du projet ; mode Read
@@ -93,7 +91,6 @@ class ImportCitiesService
 			$department->setName($arrayCity['department_name'])
 								->setCode($arrayCity['department_number']);
 		}
-
 
 		return $department;
 	}

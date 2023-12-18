@@ -80,12 +80,6 @@ class NewRideType extends AbstractType
                     'class' => 'form-control mb-3 d-flex',
                     'data-date-format' => 'dd-mm-yy HH:ii'
                 ],
-                // 'constraints' => [
-                //     new Assert\DateTime([
-                //         'format' => 'd-m-y H:i',
-                //         'message' => 'La date et l\'heure doivent être au format jj/mm/aaaa hh:mm.'
-                //     ])
-                // ],
                 'data' => new \DateTime('now')      
             ])
             ->add('description', TextareaType::class, [
@@ -118,14 +112,15 @@ class NewRideType extends AbstractType
                 'label' => 'Ville de départ',
                 'required' => true,
                 'attr' => [
-                    'class' => 'form-control mb-3'
+                    'class' => 'form-control mb-3 text-capitalize'
                 ],
                 'class' => City::class,
                 'query_builder' => function (EntityRepository $er) use ($user): QueryBuilder {
                     return $er->createQueryBuilder('c')
                         ->leftJoin('c.department', 'd')
                         ->andWhere('c.department = :d')
-                        ->setParameter(':d', $user->getDepartment());
+                        ->setParameter(':d', $user->getDepartment())
+                        ->orderBy('c.name', 'ASC');
                 },
             ]);
     }

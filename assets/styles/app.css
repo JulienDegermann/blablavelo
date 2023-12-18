@@ -12208,7 +12208,7 @@ h1.shadow-none, .shadow-none.h1 {
 }
 
 .form-signin img {
-  margin-left: 50%;
+  margin-left: 25%;
   transform: translateX(-50%);
 }
 
