@@ -27,38 +27,47 @@ class UserCrudController extends AbstractCrudController
         // yield from parent::configureFields($pageName);
 
 
-        yield TextField::new('user_name');
-        yield TextField::new('first_name');
-        yield TextField::new('last_name');
-
+        yield TextField::new('user_name')
+            ->setDisabled(true);
+        yield TextField::new('first_name')
+            ->setDisabled(true);
+        yield TextField::new('last_name')
+            ->setDisabled(true);
         yield TextField::new(propertyName: 'password')
             ->onlyOnForms()
             ->setFormType(PasswordType::class)
-            ->setFormTypeOptions(
-                [
-                    'mapped' => true,
-                ]
-            );
-        yield TextField::new('email');
+            ->onlyWhenCreating();
+        yield TextField::new('email')
+            ->setDisabled(true);
         yield DateTimeField::new('birth_date')
-            ->setFormTypeOption('years', range(1920, date('Y') - 18));
+            ->setFormTypeOption('years', range(1920, date('Y') - 18))
+            ->setDisabled(true);
         yield DateTimeField::new('createdAt')
             ->setFormTypeOption('disabled', true)
             ->setFormTypeOption('years', range(2023, date('Y')));
-        yield AssociationField::new('city');
-        yield AssociationField::new('mind');
-        yield AssociationField::new('practice');
-        yield AssociationField::new('bike');
+        yield AssociationField::new('city')
+            ->onlyWhenCreating()
+            ->setDisabled(true);
+        yield AssociationField::new('mind')
+            ->onlyWhenCreating()
+            ->setDisabled(true);
+        yield AssociationField::new('practice')
+            ->onlyWhenCreating()
+            ->setDisabled(true);
+        yield AssociationField::new('bike')
+            ->setDisabled(true);
         yield ChoiceField::new('roles')
             ->setChoices([
                 'user' => 'ROLE_USER',
                 'moderator' => 'ROLE_MODERATOR',
                 'admin' => 'ROLE_ADMIN',
             ])
+            ->onlyWhenCreating()
             ->allowMultipleChoices();
         yield TextField::new('file', 'Photo de profil')
             ->setFormType(VichImageType::class)
-            ->onlyOnForms();
+            ->onlyOnForms()
+            ->onlyWhenCreating();
         yield ImageField::new('file_name', 'Photo de profil')
             ->setBasePath('/uploads/images/users')
             ->onlyOnIndex();

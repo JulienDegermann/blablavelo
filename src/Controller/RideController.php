@@ -7,11 +7,13 @@ use App\Entity\User;
 use App\Form\NewRideType;
 use App\Repository\RideRepository;
 use App\Repository\UserRepository;
+use App\Service\MailSendService;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Mailer\Command\MailerTestCommand;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Mailer\MailerInterface;
 
@@ -96,7 +98,7 @@ class RideController extends AbstractController
         RideRepository $rideRepository,
         UserRepository $userRepository,
         Request $request,
-        MailerInterface $mailer
+        MailSendService $mailSendService,
     ): Response {
         
         /** @var User $user */
@@ -122,20 +124,12 @@ class RideController extends AbstractController
             return $this->redirectToRoute('app_home');
         }
 
-        $participants = $ride->getUserParticipant();
-        foreach($participants as $participant) {
-            $email = (new Email())
-                ->from('no-reply.blablabike@julien-degermann.fr')
-                // ->to($participant->getEmail()) -> replace when all is ok
-                ->to('degermann.julien@gmail.com')
-                ->subject('IMPORTANT : Sortie annulée')
-                ->html('<p>Bonjour ' . $participant . ', ' . $ride->getUserCreator() . ' a annulé une sortie à laquelle vous êitez inscrit. N\'hésitez pas à retourner sur l\'application pour trouver une nouvelle sortie !</p>
-                <p>Équipe BlablaBike</p>');
-            $mailer->send($email);           
-        }
+        $participants = $ride->getUserParticipant();    
+        $mail = $mailSendService->deleteRideEmail($participants, $user);
+
         $rideRepository->remove($ride);
         
-        $this->addFlash('success', 'La sortie a bien été supprimée.');
+        $this->addFlash('success', $mail);
         return $this->redirectToRoute('app_home');
     }
 
@@ -214,6 +208,11 @@ class RideController extends AbstractController
 
         /** @var User $user */
         $user = $this->getUser();
+
+        if ($user->getDepartment() == null) {
+            $this->addFlash('warning', 'Veuillez renseigner votre département pour créer une sortie.');
+            return $this->redirectToRoute('app_profile');
+        }
 
         if ($user->getIsVerified() == false) {
             $this->addFlash('warning', 'Veuillez vérifier votre e-mail pour profiter de l\'application. 

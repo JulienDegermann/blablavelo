@@ -21,9 +21,9 @@ class MessageCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
-            TextField::new('title'),
-            EmailField::new('email'),
-            TextareaField::new('content'),
+            TextField::new('title')->setDisabled(true),
+            EmailField::new('email')->setDisabled(true),
+            TextareaField::new('content')->setDisabled(true)
         ];
     }
 }

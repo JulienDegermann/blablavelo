@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Form\PasswordResetType;
 use App\Form\PasswordForgotType;
 use App\Repository\UserRepository;
+use App\Service\MailSendService;
 use EasyCorp\Bundle\EasyAdminBundle\Security\AuthorizationChecker;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\MailerInterface;
@@ -22,7 +23,6 @@ use Symfony\Component\Mime\Email;
 
 class SecurityController extends AbstractController
 {
-
     #[Route(path: '/connexion', name: 'app_login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
@@ -66,6 +66,7 @@ class SecurityController extends AbstractController
         Request $request,
         TokenGeneratorInterface $tokenGenerator,
         MailerInterface $mail,
+        MailSendService $mailSendService
     ): Response {
         
         $user = null;
@@ -88,23 +89,10 @@ class SecurityController extends AbstractController
             $user = $repo->findOneBy(['email' => $form->getData()->getEmail()]);
             
             if ($user) {
-                $token = $tokenGenerator->generateToken();
-                $user->setToken($token);
-                $repo->save($user);
-
-                if ($user->getToken()) {
-                    $url = $this->generateUrl('app_pwd_reset', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
-                    $email = new Email();
-                    $email->from('no-reply.blablabike@julien-degermann.fr')
-                        // ->to($user->getEmail()) -> replace when all is ok
-                        ->to('degermann.julien@gmail.com')
-                        ->subject('Réinitialisation de votre mot de passe Blabla Bike')
-                        ->html('<p>Lien de réinitialisation de votre mot de passe : </p> <a href="'.$url.'">cliquez ici</a>');
-                    $mail->send($email);
-                }
+                $mail = $mailSendService->forgotPasswordEmail($user);
+                $this->addFlash('success', $mail);
             }
 
-            $this->addFlash('success', 'Un e-mail a été envoyé à l\'adresse indiquée.');
             return $this->render('security/pwd_forgot.html.twig', [
                 'form' => $form->createView()
             ]);
@@ -122,7 +110,7 @@ class SecurityController extends AbstractController
         UserRepository $repo,
         UserPasswordHasherInterface $pwdhash
     ): Response {
-
+    
         $user = $repo->findOneBy(['token' => $token]);
 
         if (!$user) {

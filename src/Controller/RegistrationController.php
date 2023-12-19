@@ -18,7 +18,8 @@ use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
 use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Mime\Address;
-
+use App\Service\MailSendService;
+use Symfony\Component\Mailer\Mailer;
 
 class RegistrationController extends AbstractController
 {
@@ -28,12 +29,11 @@ class RegistrationController extends AbstractController
         UserPasswordHasherInterface $userPasswordHasher, 
         UserAuthenticatorInterface $userAuthenticator, 
         UserAuthAuthenticator $authenticator, 
-        TokenGeneratorInterface $tokenGenerator,
         MailerInterface $mail,
-        UserRepository $userRepo
+        UserRepository $userRepo,
+        MailSendService $mailSendService
         ): Response
     {
-
         if ($this->getUser()) {
             return $this->redirectToRoute('app_home');
         }
@@ -52,30 +52,21 @@ class RegistrationController extends AbstractController
             };
 
             // encode the plain password
-            $token = $tokenGenerator->generateToken();
             $user->setPassword(
                 $userPasswordHasher->hashPassword(
                     $user,
                     $form->get('plainPassword')->getData()
                 )
             )
-                ->setRoles(['ROLE_USER'])
-                ->setToken($token);            
+                ->setRoles(['ROLE_USER']);
+                // ->setToken($token);            
 
             $userRepo->save($user);
-
+            
             // mail sending
-            if ($user->getToken()) {
-                    $url = $this->generateUrl('app_email_verify', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
-                    $email = (new Email())
-                        ->from('no-reply.blablabike@julien-degermann.fr')
-                        // ->to($user->getEmail()) -> replace when all is ok
-                        ->to('degermann.julien@gmail.com')
-                        ->subject('Confirmation de votre e-mail')
-                        ->html('<p>Vous pouvez confirmer votre e-mail en cliquant sur le lien suivant :</p> <a href="'.$url.'">cliquez ici</a>');
-                    $mail->send($email);
-                }
-
+            $mail = $mailSendService->emailConfirmation($user);
+                            
+            $this->addFlash('success', $mail);
             return $userAuthenticator->authenticateUser(
                 $user,
                 $authenticator,
@@ -117,38 +108,23 @@ class RegistrationController extends AbstractController
         return $this->redirectToRoute('app_home');
     }
 
-
-
+    // for addFlash if user has not recieved email
     #[Route('/nouveau-code', name: 'app_new_token')]
     public function newCode(
-        UserRepository $repo,
-        TokenGeneratorInterface $tokenGenerator,
-        MailerInterface $mail,
+        MailSendService $mailSendService
     ) {
-
-        if(!$this->getUser()) {
-            $this->addFlash('danger', 'Vous devez être connecté pour utiliser l\'application.');
-            return $this->redirectToRoute('app_login');
-        }
         
         /** @var User $user */
         $user = $this->getUser();
-        $token = $tokenGenerator->generateToken();
-        $user->setToken($token);
-
-        $repo->save($user);
-        if ($user->getToken()) {
-            $url = $this->generateUrl('app_email_verify', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
-            $email = (new Email())
-                ->from('no-reply.blablabike@julien-degermann.fr')
-                // ->to($user->getEmail()) -> replace when all is ok
-                ->to('degermann.julien@gmail.com')
-                ->subject('Confirmation de votre e-mail')
-                ->html('<p>Vous pouvez confirmer votre e-mail en cliquant sur le lien suivant :</p> <a href="'.$url.'">cliquez ici</a>');
-            $mail->send($email);
+        
+        if(!$user) {
+            $this->addFlash('danger', 'Vous devez être connecté pour utiliser l\'application.');
+            return $this->redirectToRoute('app_login');
         }
 
-        $this->addFlash('success', 'Un nouveau code de vérification vous a été envoyé par e-mail.');
+        $mail = $mailSendService->emailConfirmation($user);
+
+        $this->addFlash('success', $mail);
         return $this->redirectToRoute('app_home');
     }
 

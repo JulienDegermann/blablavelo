@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Entity\City;
 use App\Entity\Mind;
 use App\Entity\Ride;
+use App\Entity\Department;
 use DateTimeImmutable;
 use App\Entity\Practice;
 use Doctrine\ORM\QueryBuilder;
@@ -26,10 +27,9 @@ class NewRideType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
 
+        /** @var User $user */
         $user = $options['user'];
-
-        // dd($user->getDepartment());  
-
+        
         $builder
             ->add('title', TextType::class, [
                 'label' => 'Titre de la sortie',
@@ -116,11 +116,11 @@ class NewRideType extends AbstractType
                 ],
                 'class' => City::class,
                 'query_builder' => function (EntityRepository $er) use ($user): QueryBuilder {
-                    return $er->createQueryBuilder('c')
-                        ->leftJoin('c.department', 'd')
-                        ->andWhere('c.department = :d')
-                        ->setParameter(':d', $user->getDepartment())
-                        ->orderBy('c.name', 'ASC');
+                            return $er->createQueryBuilder('c')
+                                ->leftJoin('c.department', 'd')
+                                ->andWhere('c.department = :d')
+                                ->setParameter(':d', $user->getDepartment())
+                                ->orderBy('c.name', 'ASC');
                 },
             ]);
     }
