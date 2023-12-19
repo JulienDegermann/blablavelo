@@ -31,6 +31,9 @@ class City
     #[ORM\OneToMany(mappedBy: 'city', targetEntity: Ride::class)]
     private Collection $rides;
 
+    #[ORM\Column(length: 10)]
+    private ?string $insee_code = null;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -139,6 +142,18 @@ class City
                 $ride->setCity(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getInseeCode(): ?string
+    {
+        return $this->insee_code;
+    }
+
+    public function setInseeCode(string $insee_code): static
+    {
+        $this->insee_code = $insee_code;
 
         return $this;
     }

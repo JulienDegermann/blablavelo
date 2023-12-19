@@ -13,11 +13,11 @@ class PracticeFixtures extends Fixture
   public function load(ObjectManager $manager): void
   {
     $practices = [
-      'VTT roulant',
-      'VTT engagé',
+      'Rando',
+      'Randuro',
       'Gravel',
       'Route',
-      'Bike Packing',
+      'Bikepack'
     ];
     foreach ($practices as $key => $practice) {
       $current = new Practice();

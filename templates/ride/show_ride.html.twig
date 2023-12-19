@@ -40,7 +40,7 @@
             🎯 : {{ ride.getMind }} <br />
             🏁 : {{ ride.getDistance }} kms <br />
             📈 : {{ ride.getAscent }} m <br />
-            📍 : {{ ride.getCity }} <br />
+            📍 : {{ ride.getCity|capitalize }} <br />
             📆 : {{ ride.getDate|date('d/m/Y') }}<br />
             🕗 : {{ ride.getDate|date('H:i') }} <br />
             👤 : {{ ride.getUserParticipant|length }} / {{ ride.getMaxRider }}

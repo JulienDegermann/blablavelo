@@ -107,11 +107,11 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
       // $current->setPassword($user['password']);
       $current->setPassword($this->userPasswordHasherInterface->hashPassword($current, $user['password']));
 
-      $current->setBirthDate(new DateTimeImmutable());
-      $current->setBike($this->getReference('model-' . rand(0, 20)));
+      // $current->setBirthDate(new DateTimeImmutable());
+      // $current->setBike($this->getReference('model-' . rand(0, 20)));
       $current->setPractice($this->getReference('practice-' . rand(0, 4)));
       $current->setMind($this->getReference('mind-' . rand(0, 2)));
-      $current->setCity($this->getReference('city-' . rand(0, 20)));
+      // $current->setDepartment($this->getReference('department-' . rand(0, 90)));
       $this->addReference('user' . $key, $current);
 
       $manager->persist($current);
@@ -123,7 +123,6 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
   public function getDependencies()
   {
     return [
-      CityFixtures::class,
       MindFixtures::class,
       PracticeFixtures::class,
       ModelFixtures::class,
