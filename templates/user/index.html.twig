@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block main %}
+  <section class="banner position-relative">
+    <img class="w-100 h-100 object-fit-cover" src="{{ asset('assets/images/contact.webp') }}" alt="cycliste au téléphone" />
+    <h1 class="text-center position-absolute top-50 start-50 translate-middle text-white">Mon profil</h1>
+  </section>
+  
+  <section class="my-3 my-md-5">
+    <div class="container">
+      <div class="row">
+        <h2 class="text-center">Mes informations</h2>
+        {{ form_start(form) }}
+        <div class="row">
+          <fieldset>{{ form_row(form.email) }}
+            {{ form_row(form.department) }}
+            {{ form_row(form.mind) }}
+            {{ form_row(form.practice) }}</fieldset>
+        </div>
+
+        <input type="submit" class="btn btn-secondary text-primary px-3 py-2 m-2" value="Enregistrer les modifications" />
+        <a href="{{ path('app_pwd_forgot') }}" class="btn btn-primary text-white m-2 py-2 px-3">Modifier le mot de passe</a> <br />
+        <a href="{{ path('app_delete') }}" class="text-primary m-2 px-3 fs-6">Supprimer mon compte</a>
+        {{ form_end(form) }}
+      </div>
+    </div>
+  </section>
+  <section class="my-3">
+    <div class="container">
+      <div class="row">
+        <h2>Les sorties</h2>
+        <ul class="info-list">
+          {% for ride in user_rides %}
+            <li>
+              <a href="{{ path('app_ride', { id: ride.id }) }}">{{ ride.title }}</a>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </section>
+{% endblock %}

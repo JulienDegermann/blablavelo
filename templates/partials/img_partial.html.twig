@@ -1,0 +1,15 @@
+{% if ride.getPractice == 'Rando' %}
+  <img class="w-100 border-multiple border-grey" src="{{ asset('assets/images/xc.webp') }}" alt="image rando" title="image rando" />
+{% endif %}
+{% if ride.getPractice == 'Randuro' %}
+  <img class="w-100 border-multiple border-grey" src="{{ asset('assets/images/enduro.webp') }}" alt="image randuro" title="image randuro" />
+{% endif %}
+{% if ride.getPractice == 'Route' %}
+  <img class="w-100 border-multiple border-grey" src="{{ asset('assets/images/road.webp') }}" alt="image route" title="image route" />
+{% endif %}
+{% if ride.getPractice == 'Gravel' %}
+  <img class="w-100 border-multiple border-grey" src="{{ asset('assets/images/gravel.webp') }}" alt="image gravel" title="image gravel" />
+{% endif %}
+{% if ride.getPractice == 'Bikepack' %}
+  <img class="w-100 border-multiple border-grey" src="{{ asset('assets/images/bikepacking.webp') }}" alt="image bike packing" title="image bike packing" />
+{% endif %}

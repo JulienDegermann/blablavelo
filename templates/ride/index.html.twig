@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block main %}
+  <section class="position-relative banner">
+    <img class="h-100 w-100 object-fit-cover" src="{{ asset('assets/images/map.webp') }}"  alt="photo carte" />
+    <div class="container position-absolute px-3 top-50 start-50 translate-middle">
+      <div class="row">
+          <h1 class="text-white text-center fs-1">Les sorties par chez toi</h1>
+      </div>
+    </div>
+  </section>
+
+  <section class="my-3 my-md-5">
+    <div class="container">
+      <div class="row">
+        {% for ride in all_rides %}
+          {% include '/partials/card_partial.html.twig' %}
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+  <section>
+    <div class="container">
+        {{ knp_pagination_render(all_rides, '/partials/pagination_partial.html.twig') }}
+    </div>
+  </section>
+{% endblock %}

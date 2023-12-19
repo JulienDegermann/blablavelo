@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+  {% block main %}
+  <section class="banner position-relative">
+    <div class="d-flex justify-content-between h-100 w-100">
+      <div class="h-100 banner-multi">
+        <img class="w-100 h-100 object-fit-cover m-0 p-0" src="{{ asset('assets/images/road.webp') }}" alt="photo cyclisme route" title="photo cyclisme route" loading="lazy"/>
+      </div>
+      <div class="h-100 banner-multi">
+        <img class="w-100 h-100 object-fit-cover m-0 p-0" src="{{ asset('assets/images/xc.webp') }}" alt="photo VTT XC ou rando" title="photo VTT XC ou rando" loading="lazy"/>
+      </div>
+      <div class="h-100 banner-multi">
+        <img class="w-100 h-100 object-fit-cover m-0 p-0" src="{{ asset('assets/images/gravel.webp') }}" alt="photo Gravel" title="photo Gravel" loading="lazy"/>
+      </div>
+      <div class="h-100 banner-multi">
+        <img class="w-100 h-100 object-fit-cover m-0 p-0" src="{{ asset('assets/images/enduro.webp') }}" alt="photo VTT trail" title="photo VTT trail" loading="lazy"/>
+      </div>
+    <div class="container position-absolute px-3 top-50 start-50 translate-middle">
+      <div class="d-flex flex-column align-items-end py-5 w-100 m-auto">
+          <h1 class="text-white text-center w-100 fs-2 mb-5">LE VÉLO : BIEN PLUS QU'UNE PASSION À PARTAGER</h1>
+          <a class="w-auto fs-6 btn px-2 py-1 fw-bold px-md-5 py-md-2 mx-2 btn-secondary text-primary" href="/inscription">INSCRIS-TOI !</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="my-3 my-md-5">
+    <div class="container">
+      <div class="row">
+        <div class="text-center border-multiple w-auto my-5 mx-auto p-5">
+          + de <strong class="text-secondary">CONVIVIALITÉ</strong> et de <strong class="text-secondary">MOTIVATION</strong> <br />
+          - de <strong class="text-secondary">FRUSTRATION</strong> ou <strong class="text-secondary">PRESSION</strong> (🍺 ou avec modération !)
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="my-3 my-md-5">
+
+    <div class="container">
+      <div class="row">
+      {% for ride in all_rides %}
+        {% include '/partials/card_partial.html.twig' %}
+      {% endfor %}
+      </div>
+    </div>
+  </section>
+
+{% endblock %}

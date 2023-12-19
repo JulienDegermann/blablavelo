@@ -1,0 +1,19 @@
+<nav class="col-12 col-md-6 fw-bold collapse navbar-collapse w-50" id="navbarNav">
+  <ul class="navbar-nav d-flex-md bg-primary justify-content-start ps-0">
+    <li class="nav-item">
+      <a href="{{ path('app_home') }}" class="nav-link mx-1 py-2 px-4 
+        {% if app.request.attributes.get('_route') is same as('app_home') %} text-secondary {% else %} text-white {% endif %}">ACCUEIL
+      </a>
+    </li>
+    <li class="nav-item">
+      <a href="{{ path('app_rides') }}" class="nav-link mx-1 py-2 px-4 
+        {% if app.request.attributes.get('_route') is same as('app_rides') %} text-secondary {% else %} text-white {% endif %}">RIDES
+      </a>
+    </li>
+    <li class="nav-item">
+      <a href="{{ path('app_contact') }}" class="nav-link mx-1 py-2 px-4 
+        {% if app.request.attributes.get('_route') is same as('app_contact') %} text-secondary {% else %} text-white {% endif %}">CONTACT
+      </a>
+    </li>
+  </ul>
+</nav>
