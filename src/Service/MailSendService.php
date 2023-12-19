@@ -50,8 +50,7 @@ class MailSendService
     // send email with confirmation url
     $email = new Email();
     $email->from($this->from)
-      ->to('degermann.julien@gmail.com')
-      // ->to($user->getEmail()) -> replace when all is ok
+      ->to($user->getEmail())
       ->subject('Confirmation d\'e-mail')
       ->html('<p>Vous pouvez confirmer votre e-mail en cliquant sur le lien suivant :</p> <a href="' . $url . '">cliquez ici</a>');
     $this->mailer->send($email);
@@ -60,15 +59,13 @@ class MailSendService
     return $addFlash;
   }
 
-
   public function deleteRideEmail(Collection $participants, User $user): string
   {
     foreach ($participants as $participant) {
       if ($participant != $user) {
         $email = (new Email())
           ->from($this->from)
-          ->to('degermann.julien@gmail.com')
-          // ->to($participant->getEmail()) -> replace when all is ok
+          ->to($participant->getEmail())
           ->subject('IMPORTANT : Sortie annulée')
           ->html('<p>Bonjour ' . $participant . ', ' . $user . ' a annulé une sortie à laquelle vous êitez inscrit. N\'hésitez pas à retourner sur l\'application pour trouver une nouvelle sortie !</p>
                   <p>Équipe Blabla Vélo</p>');
@@ -88,11 +85,10 @@ class MailSendService
     $url = $this->urlGenerator->generate('app_pwd_reset', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
 
     $email = (new Email())
-    ->from($this->from)
-    // ->to($user->getEmail())
-    ->to('degermann.julien@gmail.com')
-    ->subject('Réinitialisation de votre mot de passe Blabla Vélo')
-    ->html('<p>Vous pouvez réinitialiser votre mot de passe en cliquant sur le lien suivant :</p> <a href="' . $url . '">cliquez ici</a>');
+      ->from($this->from)
+      ->to($user->getEmail())
+      ->subject('Réinitialisation de votre mot de passe Blabla Vélo')
+      ->html('<p>Vous pouvez réinitialiser votre mot de passe en cliquant sur le lien suivant :</p> <a href="' . $url . '">cliquez ici</a> <br> <p>Équipe Blabla Vélo</p>');
     
     $this->mailer->send($email);
     $addFlash = 'Un e-mail a été envoyé à l\'adresse indiquée.';

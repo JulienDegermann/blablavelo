@@ -2,7 +2,7 @@
 
 {% block main %}
   <section class="banner position-relative" style="height: 200px!important;">
-    <img class="w-100 h-100 object-fit-cover" src="{{ asset('assets/images/route.webp') }}" alt="cycliste au téléphone" />
+    <img class="w-100 h-100 object-fit-cover" src="{{ asset('assets/images/question.webp') }}" alt="image point d'interrogation" />
     <h1 class="text-center position-absolute top-50 start-50 translate-middle text-white">Blabla Vélo : comment ça marche ?</h1>
   </section>
 
@@ -16,11 +16,11 @@
           Elle permet de trouver des partenaires pour rouler, que ce soit pour une sortie ponctuelle ou pour une pratique régulière.
         </p>
         <div class="px-2">
-            <p class="alert alert-danger">
-                <strong class="fw-bold" style="color: inherit;">!! ATTENTION !!</strong><br>
-                L'application est disponible en accès anticipé. <br>
-                Des bugs peuvent donc être présents : si tel est le cas, vous pouvez les signaler via le <a title="lien vers le formulaire de contact" class=" fst-italic text-decoration-underline" href="{{ path('app_contact') }}">formulaire de contact</a>. <br>
-                Aussi, il est fortement conseillé de vérifier régulièrement que les sorties sont toujours maintenues.
+            <p class="alert alert-warning">
+                <strong class="fw-bold" style="color: inherit;">IMPORTANT</strong><br>
+                L'application est <strong>gratuite</strong>. Elle est développée (et continue de l'être) <strong>bénévolement</strong>. <br> 
+                N'hésitez donc pas a remonter les bugs et faire des sugestions via le <a title="lien vers le formulaire de contact" class="text-primary fst-italic text-decoration-underline" href="{{ path('app_contact') }}">formulaire de contact</a>.
+                Il est également important de noter que Blabla Vélo ne peut être tenu responsable du comportement des utilisateurs : il est fortement conseillé de vérifier régulièrement que les sorties sont toujours maintenu et il est possible de .
             </p>
         </div>
     </section>
@@ -30,48 +30,19 @@
                 <h2>Fonctionnement</h2>
                 <p>
                     Pour utiliser l'application, il faut s'inscrire <a class="text-secondary text-decoration-underline" href="{{ path('app_register' )}}">ici</a>.<br />
-                    Lors de l'insription, l'utilisateur renseigne quelques informations (exemples : pseudo, pratique, niveau, attente, …).
+                    Lors de l'insription, l'utilisateur renseigne quelques informations (exemples : pseudo, e-mail, mot de passe). Pour profiter pleinement de l'application, il est conseillé de compléter son profil avec des informations supplémentaires (exemples : pratique, département et objectif). <br />
                 </p>
                 {# video showing how the app works #}
                 <p>
                     Une fois inscrit, chaque membre peut :
                 </p>
                 <ul class="info-list">
-                  <li><span>Proposer des sorties : <br> Il précise alors quelques informations (exemples : distance, nombre de participants maximum, vitesse moyenne, ville de départ, …). Des informations complémentaires peuvent être ajoutées dans la description de la sortie.</span></li>
-                  <li><span>S'inscrire à des sorties : <br> Il peut visionner l'ensemble des sorties proposées depuis la liste des annonces. En cliquant sur une sortie, le détail s'affiche avec la description.</span></li>
+                  <li><span>Proposer des sorties : <br> Il précise alors quelques informations (exemples : distance, nombre de participants maximum, vitesse moyenne, ville de départ, …). 
+                  Des informations complémentaires peuvent être ajoutées dans la description de la sortie. Les sorties sont limitées à 10 personne maximum. Une fois ce nombre atteint, l'annonce n'est plus visible dans la liste des sorties.</span></li>
+                  <li><span>S'inscrire à des sorties : <br> Il peut visionner l'ensemble des sorties proposées depuis la liste des annonces (filtrées selon le départment renseigné dans le profil). En cliquant sur une sortie, le détail s'affiche avec la description.
+                  Il peut également retrouver à tout moment l'ensemble des sorties auxquelles il s'est inscrites depuis son profil pour vérifier des informations ou se désinscrire.</span></li>
                 </ul>
-                
-                proposer ou s'inscrire à des sorties, en respectant la limite de participants fixée par l'annonceur.
             </div>
         </div>
     </section>
-    <section class="my-3">
-        <div class="container">
-            <div class="row">
-                <h2>Et c'est gratuit ?</h2>
-                <p>
-                  L'application est développée bénévolement par un développeur (<a class="text-secondary text-decoration-underline" href="https://julien-degermann.fr/" title="site du développeur (Julien Degermann)" target="_blank">moi-même</a>) : elle est donc <strong>entièrement gratuite</strong>. <br />
-                  Je tiens cependant à préciser que, pour garder une expérience de qualité, l'accès à l'application est limité aux 10000 premiers inscrits. <br />
-                  Une fois ce nombre atteint, vous pourrez notifier votre intérêt pour l'application via le <a title="lien vers le formulaire de contact" class="text-secondary text-decoration-underline" href="{{ path('app_contact') }}">formulaire de contact</a> .<br />
-        
-                  Selon la demande et les retours des utilisateurs, divers solutions pourront être envisagées pour financer le développement, la maintenance et l'hébergement de l'application : <br />
-                  <ul class="info-list">
-                    <li>
-                      <span>Comptes payants : de nouvelles fonctionnalités pourront être réservées à des comptes premiums.</span>
-                    </li>
-                    <li>
-                      <span>Publicités : des publicités pourront être affichées sur le site.</span>
-                    </li>
-                    <li>
-                      <span>Dons : les utilisateurs pourront faire des dons pour soutenir le projet.</span>
-                    </li>
-                    <li>
-                      <span>Autres : de nouvelles solutions pourront être étudiées.</span>
-                    </li>
-                  </ul>
-                </p>
-              </div>
-            </div>
-        </div>
-  </section>
 {% endblock %}
