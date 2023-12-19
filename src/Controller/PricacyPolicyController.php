@@ -12,6 +12,9 @@ class PricacyPolicyController extends AbstractController
     #[Route('/politique-de-confidentialite', name: 'app_pricacy_policy')]
     public function index(): Response
     {
+        if(!$this->isGranted('ROLE_ADMIN')) {
+            return $this->redirectToRoute('app_home');
+        }
         $user = null;
         if ($this->getUser()) {
             /** @var User $user */
