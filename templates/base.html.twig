@@ -50,11 +50,7 @@
               </a>
             </div>
             
-              
-
-            {% if app.request.attributes.get('_route') is not same as('app_login') and app.request.attributes.get('_route') is not same as('app_register') %}
-              {% include "/partials/nav_partial.html.twig" %}
-            {% endif %}
+            {% include "/partials/nav_partial.html.twig" %}
 
             <div class="w-auto text-center connected px-3">
               {% if app.user is not empty %}
