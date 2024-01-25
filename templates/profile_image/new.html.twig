@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New ProfileImage{% endblock %}
+
+{% block body %}
+    <h1>Create new ProfileImage</h1>
+
+    {{ include('profile_image/_form.html.twig') }}
+
+    <a href="{{ path('app_profile_image_index') }}">back to list</a>
+{% endblock %}
