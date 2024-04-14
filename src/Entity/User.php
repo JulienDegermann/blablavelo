@@ -2,15 +2,21 @@
 
 namespace App\Entity;
 
+use DateImmutable;
 use App\Entity\Ride;
 use DateTimeImmutable;
+use App\Entity\Message;
+use App\Entity\Traits\IdTrait;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Traits\Entity\DatesTrait;
 use App\Repository\UserRepository;
+use App\Traits\Entity\NameNumberTrait;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\HttpFoundation\File\File;
 use Doctrine\Common\Collections\ArrayCollection;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -18,16 +24,13 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[Vich\Uploadable]
 #[ORM\Table(name: '`user`')]
-#[UniqueEntity(fields: ['user_name', 'email'], message: 'Un compte existe déjà avec ce nom d\'utilisateur')]
+#[UniqueEntity(fields: ['user_name', 'email'], message: 'Identifiants indisponibles..')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
-
-    #[ORM\Column(length: 180, unique: true)]
-    private ?string $user_name = null;
+    // Traits calls
+    use IdTrait;
+    use DatesTrait;
+    use NameNumberTrait;
 
     #[ORM\Column]
     private array $roles = [];
@@ -36,92 +39,195 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string The hashed password
      */
     #[ORM\Column]
+    #[Assert\Sequentially([
+        new Assert\Type(
+            type: 'string',
+            message: 'Ce champ doit être une chaîne de caractères.'
+        ),
+        new Assert\Length(
+            min: 12,
+            max: 255,
+            minMessage: 'Le mot de passe doit contenir au moins {{ limit }} caractères.',
+            maxMessage: 'Le mot de passe ne peut pas dépasser {{ limit }} caractères.'
+        ),
+        new Assert\Regex(
+            pattern: '/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{12,}$/',
+            message: 'Le mot de passe doit contenir au moins une lettre majuscule, une lettre minuscule et un chiffre.'
+        )
+    ])]
     private ?string $password = null;
 
-    #[ORM\Column(length: 255, nullable:true)]
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Sequentially([
+        new Assert\Type(
+            type: 'string',
+            message: 'Ce champ doit être une chaîne de caractères.'
+        ),
+        new Assert\Length(
+            min: 2,
+            max: 255,
+            minMessage: 'Ce champ doit contenir au moins {{ limit }} caractères.',
+            maxMessage: 'Ce champ ne peut pas dépasser {{ limit }} caractères.'
+        ),
+        new Assert\Regex(
+            pattern: '/^[a-zA-Z\-\p{L}]{2, 255}$/u',
+            message: 'Le mot de passe doit contenir au moins une lettre majuscule, une lettre minuscule et un chiffre.'
+        )
+    ])]
     private ?string $first_name = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Sequentially([
+        new Assert\Type(
+            type: 'string',
+            message: 'Ce champ doit être une chaîne de caractères.'
+        ),
+        new Assert\Length(
+            min: 2,
+            max: 255,
+            minMessage: 'Ce champ doit contenir au moins {{ limit }} caractères.',
+            maxMessage: 'Ce champ ne peut pas dépasser {{ limit }} caractères.'
+        ),
+        new Assert\Regex(
+            pattern: '/^[a-zA-Z\-\p{L}]{2, 255}$/u',
+            message: 'Le mot de passe doit contenir au moins une lettre majuscule, une lettre minuscule et un chiffre'
+        )
+    ])]
     private ?string $last_name = null;
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: true)]
-    private ?\DateTimeImmutable $birth_date = null;
+    #[Assert\Sequentially([
+        new Assert\DateTime(
+            message: 'Date non valide.'
+        ),
+        new Assert\LessThanOrEqual(
+            value: 'today - 18 years',
+            message: 'Vous devez avoir au moins 18 ans pour vous inscrire.'
+        )
+    ])]
+    private ?DateTimeImmutable $birth_date = null;
+
+    #[ORM\Column(length: 255, unique: true)]
+    #[Assert\Sequentially([
+        new Assert\NotBlank(
+            message: 'Ce champ est obligatoire.'
+        ),
+        new Assert\Type(
+            type: 'string',
+            message: 'Ce champ doit être une chaîne de caractères.'
+        ),
+        new Assert\Email(
+            message: 'Email non valide.'
+        ),
+        new Assert\Length(
+            min: 6,
+            max: 255,
+            minMessage: 'Ce champ doit contenir au moins {{ limit }} caractères.',
+            maxMessage: 'Ce champ ne peut pas dépasser {{ limit }} caractères.'
+        ),
+        new Assert\Regex(
+            pattern: '/^([a-zA-Z0-9])+([a-zA-Z0-9\._-]+)*@([a-zA-Z0-9_-])+([a-zA-Z0-9\._-]+)$/',
+            message: 'Email non valide.'
+        )
+    ])]
+    private ?string $email = null;
 
     #[ORM\ManyToOne(inversedBy: 'users')]
     #[ORM\JoinColumn(nullable: true)]
+    #[Assert\Valid]
     private ?City $city = null;
 
     #[ORM\ManyToOne(inversedBy: 'users')]
     #[ORM\JoinColumn(nullable: true)]
+    #[Assert\Valid]
     private ?Mind $mind = null;
 
-    #[ORM\OneToMany(mappedBy: 'user_creator', targetEntity: Ride::class)]
+    #[ORM\OneToMany(mappedBy: 'author', targetEntity: Ride::class)]
+    #[Assert\Valid]
     private Collection $rides_created;
 
-    // link ManyToMany 
-    #[ORM\ManyToMany(mappedBy: 'user_participant', targetEntity: Ride::class)]
+    #[ORM\ManyToMany(mappedBy: 'participants', targetEntity: Ride::class)]
+    #[Assert\Valid]
     private Collection $rides_participated;
 
+    #[ORM\OneToMany(mappedBy: 'author', targetEntity: Message::class)]
+    #[Assert\Valid]
+    private Collection $messages;
+
+
+
+    public function getMessages(): Collection
+    {
+        return $this->messages;
+    }
+
+    public function addMessage(Message $message): static
+    {
+        if (!$this->messages->contains($message)) {
+            $this->messages->add($message);
+            $message->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMessage(Message $message): static
+    {
+        if ($this->messages->removeElement($message)) {
+            // set the owning side to null (unless already changed)
+            if ($message->getAuthor() === $this) {
+                $message->setAuthor(null);
+            }
+        }
+
+        return $this;
+    }
+
+
+
+    
     #[ORM\ManyToOne(inversedBy: 'users')]
     #[ORM\JoinColumn(nullable: true)]
+    #[Assert\Valid]
     private ?Practice $practice = null;
 
     #[ORM\ManyToOne(inversedBy: 'users')]
     #[ORM\JoinColumn(nullable: true)]
+    #[Assert\Valid]
     private ?Model $bike = null;
 
-    #[ORM\Column(length: 255, unique: true)]
-    private ?string $email = null;
-
-    #[ORM\Column]
-    private ?\DateTimeImmutable $createdAt = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?\DateTimeImmutable $updatedAt = null;
-
-    #[Vich\UploadableField(mapping: 'user_image', fileNameProperty: 'file_name', size: 'fileSize')]
-    private ?File $file = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?string $file_name = null;
-
-    private ?int $fileSize = null;
-
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Sequentially([
+        new Assert\Type(
+            type: 'string',
+            message: 'Ce champ doit être une chaîne de caractères.'
+        ),
+        new Assert\Length(
+            min: 2,
+            max: 255,
+            minMessage: 'Ce champ doit contenir au moins {{ limit }} caractères.',
+            maxMessage: 'Ce champ ne peut dépasser {{ limit }} caractères.'
+        )
+    ])]
     private ?string $token = null;
 
     #[ORM\Column]
+    #[Assert\Sequentially([
+        new Assert\NotNull(
+            message: 'Ce champ est obligatoire.'
+        ),
+        new Assert\Type(
+            type: 'bool',
+            message: 'Ce champ doit être un booléen.'
+        )
+    ])]
     private ?bool $is_verified = false;
 
     #[ORM\ManyToOne(inversedBy: 'users')]
     #[ORM\JoinColumn(nullable: true)]
+    #[Assert\Valid]
     private ?Department $department = null;
 
-    public function __construct()
-    {
-        $this->rides_created = new ArrayCollection();
-        $this->setCreatedAt(new DateTimeImmutable());
-        $this->setIsVerified(false);
-        // $this->messages = new ArrayCollection();
-
-    }
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
-    public function getUserName(): ?string
-    {
-        return $this->user_name;
-    }
-
-    public function setUserName(string $user_name): static
-    {
-        $this->user_name = $user_name;
-
-        return $this;
-    }
 
     /**
      * A visual identifier that represents this user.
@@ -130,7 +236,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUserIdentifier(): string
     {
-        return (string) $this->user_name;
+        return (string) $this->nameNumber;
     }
 
     /**
@@ -212,41 +318,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getFileName(): ?string
-    {
-        return $this->file_name;
-    }
-
-    public function setFileName(?string $file_name): void
-    {
-        $this->file_name = $file_name;
-    }
-
-    public function getFile(): ?File
-    {
-        return $this->file;
-    }
-
-    public function setFile(?File $file = null): void
-    {
-        $this->file = $file;
-
-        if (null !== $file) {
-            $this->updatedAt = new \DateTimeImmutable();
-        }
-    }
-
-    public function setFileSize(?int $fileSize): void
-    {
-        $this->fileSize = $fileSize;
-    }
-
-    public function getFileSize(): ?int
-    {
-        return $this->fileSize;
-    }
-// ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
     public function getCity(): ?City
     {
         return $this->city;
@@ -279,22 +350,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->rides_created;
     }
 
-    public function addRidesCreated(Ride $ridesCreated): static
+    public function addRidesCreated(Ride $rideCreated): static
     {
-        if (!$this->rides_created->contains($ridesCreated)) {
-            $this->rides_created->add($ridesCreated);
-            $ridesCreated->setUserCreator($this);
+        if (!$this->rides_created->contains($rideCreated)) {
+            $this->rides_created->add($rideCreated);
+            $rideCreated->setAuthor($this);
         }
 
         return $this;
     }
 
-    public function removeRidesCreated(Ride $ridesCreated): static
+    public function removeRidesCreated(Ride $rideCreated): static
     {
-        if ($this->rides_created->removeElement($ridesCreated)) {
+        if ($this->rides_created->removeElement($rideCreated)) {
             // set the owning side to null (unless already changed)
-            if ($ridesCreated->getUserCreator() === $this) {
-                $ridesCreated->setUserCreator(null);
+            if ($rideCreated->getAuthor() === $this) {
+                $rideCreated->setAuthor(null);
             }
         }
 
@@ -307,24 +378,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->rides_participated;
     }
 
-    public function addRidesParticipated(Ride $ridesParticipated): static
+    public function addRidesParticipated(Ride $rideParticipated): static
     {
-        if (!$this->rides_participated->contains($ridesParticipated)) {
-            $this->rides_participated->add($ridesParticipated);
-            $ridesParticipated->setUserCreator($this);
+        if (!$this->rides_participated->contains($rideParticipated)) {
+            $this->rides_participated->add($rideParticipated);
+            $rideParticipated->addParticipant($this);
         }
 
         return $this;
     }
 
 
-    // add functions
-    public function removeRidesParticipant(Ride $ridesPartipated): static
+    public function removeRidesParticipated(Ride $ridePartipated): static
     {
-        if ($this->rides_created->removeElement($ridesPartipated)) {
+        if ($this->rides_participated->removeElement($ridePartipated)) {
             // set the owning side to null (unless already changed)
-            if ($ridesPartipated->getUserCreator() === $this) {
-                $ridesPartipated->setUserCreator(null);
+            
+            if ($ridePartipated->getParticipants()->contains($this)) {
+                $ridePartipated->removeParticipant($this);
             }
         }
 
@@ -367,34 +438,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function __toString()
-    {
-        return $this->user_name;
-    }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
-    {
-        return $this->createdAt;
-    }
-
-    public function setCreatedAt(\DateTimeImmutable $createdAt): static
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    public function getUpdatedAt(): ?\DateTimeImmutable
-    {
-        return $this->updatedAt;
-    }
-
-    public function setUpdatedAt(?\DateTimeImmutable $updatedAt): static
-    {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
-    }
 
     public function getToken(): ?string
     {
@@ -430,5 +474,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->department = $department;
 
         return $this;
-    }    
+    }
+
+    public function __construct()
+    {
+        $this->rides_created = new ArrayCollection();
+        $this->setCreatedAt(new DateTimeImmutable());
+        $this->setUpdatedAt(new DateTimeImmutable());
+        $this->setIsVerified(false);
+        $this->messages = new ArrayCollection();
+    }
+
+    public function __toString()
+    {
+        return $this->nameNumber;
+    }
 }

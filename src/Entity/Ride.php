@@ -2,73 +2,167 @@
 
 namespace App\Entity;
 
-use DateTimeImmutable;
 use App\Entity\Practice;
+use App\Entity\Traits\IdTrait;
+use App\Traits\Entity\DatesTrait;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\RideRepository;
+use App\Traits\Entity\TitleTrait;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: RideRepository::class)]
 class Ride
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $title = null;
+    // Traits calls
+    use IdTrait;
+    use DatesTrait;
+    use TitleTrait;
 
     #[ORM\Column]
+    #[Assert\Sequentially([
+        new Assert\NotBlank(
+            message: 'Ce champ est obligatoire.'
+        ),
+        new Assert\Type(
+            type: 'integer',
+            message: 'Ce champ doit être un nombre entier.'
+        ),
+        new Assert\Positive(
+            message: 'Ce champ doit être un nombre positif.'
+        )
+    ])]
     private ?int $distance = null;
 
     #[ORM\Column]
+    #[Assert\Sequentially([
+        new Assert\NotBlank(
+            message: 'Ce champ est obligatoire.'
+        ),
+        new Assert\Type(
+            type: 'integer',
+            message: 'Ce champ doit être un nombre entier.'
+        ),
+        new Assert\PositiveOrZero(
+            message: 'Ce champ doit être un nombre supérieur ou égal 0.'
+        ),
+        new Assert\GreaterThanOrEqual(
+            value: 0,
+            message: 'Ce champ doit être un nombre supérieur ou égal à {{ value }}.'
+        )
+    ])]
     private ?int $ascent = null;
 
     #[ORM\Column]
+    #[Assert\Sequentially([
+        new Assert\NotBlank(
+            message: 'Ce champ est obligatoire.'
+        ),
+        new Assert\Type(
+            type: 'integer',
+            message: 'Ce champ doit être un nombre entier.'
+        ),
+        new Assert\Positive(
+            message: 'Ce champ doit être un nombre supérieur à 0.'
+        ),
+        new Assert\Range(
+            min: 1,
+            max: 10,
+            notInRangeMessage: 'Le nombre de participants doit être compris entre {{ min }} et {{ max }}.'
+        )
+    ])]
     private ?int $max_rider = null;
 
     #[ORM\Column]
+    #[Assert\Sequentially([
+        new Assert\NotBlank(
+            message: 'Ce champ est obligatoire.'
+        ),
+        new Assert\Type(
+            type: 'integer',
+            message: 'Ce champ doit être un nombre entier.'
+        ),
+        new Assert\Positive(
+            message: 'Ce champ doit être un nombre supérieur à 0.'
+        ),
+        new Assert\GreaterThanOrEqual(
+            value: 0,
+            message: 'La vitesse moyenne doit être supérieure à {{ value }} km/h.'
+        ),
+        new Assert\LessThanOrEqual(
+            value: 50,
+            message: 'La vitesse moyenne doit être inférieure à {{ value }} km/h.'
+        )
+    ])]
     private ?int $average_speed = null;
 
     #[ORM\Column]
-    private ?\DateTime $date = null;
+    #[Assert\Sequentially([
+        new Assert\NotBlank(
+            message: 'Ce champ est obligatoire.'
+        ),
+        new Assert\DateTime(
+            message: 'Ce champ doit être une date.'
+        ),
+        new Assert\GreaterThan(
+            value: 'now',
+            message: 'La date doit être postérieure à la date du jour.'
+        )
+    ])]
+    private ?\DateTimeImmutable $date = null;
 
     #[ORM\ManyToOne(inversedBy: 'rides')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\Valid]
     private ?Mind $mind = null;
 
     #[ORM\ManyToOne(inversedBy: 'rides')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\Valid]
     private ?Practice $practice = null;
 
     #[ORM\ManyToOne(inversedBy: 'rides_created')]
     #[ORM\JoinColumn(nullable: false, referencedColumnName: 'id', onDelete: 'CASCADE')]
-    private ?User $user_creator = null;
+    #[Assert\Valid]
+    private ?User $author = null;
 
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'rides_participated')]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
-    private Collection $user_participant;
+    #[Assert\Valid]
+    private Collection $participants;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Assert\Sequentially([
+        new Assert\NotBlank(
+            message: 'Ce champ est obligatoire.'
+        ),
+        new Assert\Type(
+            type: 'string',
+            message: 'Ce champ doit être une chaîne de caractères.'
+        ),
+        new Assert\Length(
+            min: 2,
+            minMessage: 'Ce champ doit contenir au moins {{ min }} caractères.'
+        ),
+        new Assert\Regex(
+            pattern: '/^[a-zA-Z0-9\s()\-\'?:.,!\/\"\p{L}]{1,}$/u',
+            message: 'Les caractères autorisés : lettres (minuscules et majuscules, accentuées ou non), chiffres, espaces, parenthèses, tirets et caractères de ponctuation'
+        )
+    ])]
     private ?string $description = null;
 
     #[ORM\ManyToOne(inversedBy: 'users')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\Valid]
     private ?City $city = null;
-
-    #[ORM\Column]
-    private ?\DateTimeImmutable $createdAt = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?\DateTime $updatedAt = null;
 
     public function __construct()
     {
-        $this->user_participant = new ArrayCollection();
-        $this->setCreatedAt(new DateTimeImmutable());
+        $this->participants = new ArrayCollection();
+        $this->setCreatedAt(new \DateTimeImmutable());
+        $this->setUpdatedAt(new \DateTimeImmutable());
     }
 
     public function getId(): ?int
@@ -172,14 +266,14 @@ class Ride
         return $this;
     }
 
-    public function getUserCreator(): ?User
+    public function getAuthor(): ?User
     {
-        return $this->user_creator;
+        return $this->author;
     }
 
-    public function setUserCreator(?User $user_creator): static
+    public function setAuthor(?User $author): static
     {
-        $this->user_creator = $user_creator;
+        $this->author = $author;
 
         return $this;
     }
@@ -199,23 +293,23 @@ class Ride
     /**
      * @return Collection<int, User>
      */
-    public function getUserParticipant(): Collection
+    public function getParticipants(): Collection
     {
-        return $this->user_participant;
+        return $this->participants;
     }
 
-    public function addUserParticipant(User $userParticipant): static
+    public function addParticipant(User $participant): static
     {
-        if (!$this->user_participant->contains($userParticipant)) {
-            $this->user_participant->add($userParticipant);
+        if (!$this->participants->contains($participant)) {
+            $this->participants->add($participant);
         }
 
         return $this;
     }
 
-    public function removeUserParticipant(User $userParticipant): static
+    public function removeParticipant(User $participant): static
     {
-        $this->user_participant->removeElement($userParticipant);
+        $this->participants->removeElement($participant);
 
         return $this;
     }
@@ -233,30 +327,6 @@ class Ride
     public function setDescription(?string $description): static
     {
         $this->description = $description;
-
-        return $this;
-    }
-
-    public function getCreatedAt(): ?\DateTimeImmutable
-    {
-        return $this->createdAt;
-    }
-
-    public function setCreatedAt(\DateTimeImmutable $createdAt): static
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    public function getUpdatedAt(): ?\DateTime
-    {
-        return $this->updatedAt;
-    }
-
-    public function setUpdatedAt(?\DateTime $updatedAt): static
-    {
-        $this->updatedAt = $updatedAt;
 
         return $this;
     }

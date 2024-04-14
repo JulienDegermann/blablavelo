@@ -2,59 +2,85 @@
 
 namespace App\Entity;
 
-use App\Repository\CityRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use App\Entity\Ride;
+use App\Entity\User;
+use App\Entity\Traits\IdTrait;
+use App\Traits\Entity\NameTrait;
 use Doctrine\ORM\Mapping as ORM;
+use App\Traits\Entity\DatesTrait;
+use App\Repository\CityRepository;
+use Doctrine\Common\Collections\Collection;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CityRepository::class)]
 class City
 {
+    // Traits calls
+    use IdTrait;
+    use NameTrait;
+    use DatesTrait;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $name = null;
-
     #[ORM\Column]
+    #[Assert\Sequentially([
+        new Assert\NotBlank(),
+        new Assert\Type(
+            type: 'string',
+            message: 'Ce champ doit être une chaîne de caractères'
+        ),
+        new Assert\Length(
+            min: 5,
+            max: 5,
+            minMessage: 'Ce champ doit contenir 5 chiffres',
+            maxMessage: 'Ce champ doit contenir 5 chiffres'
+        ),
+        new Assert\Regex(
+            pattern: '/^[0-9]{5}$/',
+            message: 'Ce champ doit contenir 5 chiffres'
+        )
+    ])]
     private ?int $zip_code = null;
 
     #[ORM\ManyToOne(inversedBy: 'cities')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\Valid]
     private ?Department $department = null;
 
     #[ORM\OneToMany(mappedBy: 'city', targetEntity: User::class)]
+    #[Assert\Valid]
     private Collection $users;
 
     #[ORM\OneToMany(mappedBy: 'city', targetEntity: Ride::class)]
+    #[Assert\Valid]
     private Collection $rides;
 
     #[ORM\Column(length: 10)]
+    #[Assert\Sequentially([
+        new Assert\NotBlank(),
+        new Assert\Type(
+            type: 'string',
+            message: 'Ce champ doit être une chaîne de caractères'
+        ),
+        new Assert\Length(
+            min: 5,
+            max: 5,
+            minMessage: 'Ce champ doit contenir 5 chiffres',
+            maxMessage: 'Ce champ doit contenir 5 chiffres'
+        ),
+        new Assert\Regex(
+            pattern: '/^[0-9]{5}$/',
+            message: 'Ce champ doit contenir 5 chiffres'
+        )
+    ])]
     private ?string $insee_code = null;
-
-    public function __construct()
-    {
-        $this->users = new ArrayCollection();
-        $this->rides = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
-
-    public function setName(string $name): static
-    {
-        $this->name = $name;
-
-        return $this;
     }
 
     public function getZipCode(): ?int
@@ -156,5 +182,11 @@ class City
         $this->insee_code = $insee_code;
 
         return $this;
+    }
+
+    public function __construct()
+    {
+        $this->createdAt = new \DateTimeImmutable();
+        $this->updatedAt = new \DateTimeImmutable();
     }
 }

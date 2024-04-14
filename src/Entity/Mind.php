@@ -2,50 +2,33 @@
 
 namespace App\Entity;
 
-use App\Repository\MindRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use App\Entity\Ride;
+use App\Entity\User;
+use App\Entity\Traits\IdTrait;
+use App\Traits\Entity\NameTrait;
 use Doctrine\ORM\Mapping as ORM;
+use App\Traits\Entity\DatesTrait;
+use App\Repository\MindRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: MindRepository::class)]
 class Mind
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
-
-    #[ORM\Column(length: 100)]
-    private ?string $name = null;
+    // Traits calls
+    use IdTrait;
+    use DatesTrait;
+    use NameTrait;
 
     #[ORM\OneToMany(mappedBy: 'mind', targetEntity: User::class)]
+    #[Assert\Valid]
     private Collection $users;
 
     #[ORM\OneToMany(mappedBy: 'mind', targetEntity: Ride::class)]
+    #[Assert\Valid]
     private Collection $rides;
 
-    public function __construct()
-    {
-        $this->users = new ArrayCollection();
-        $this->rides = new ArrayCollection();
-    }
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
-
-    public function setName(string $name): static
-    {
-        $this->name = $name;
-
-        return $this;
-    }
 
     /**
      * @return Collection<int, User>
@@ -107,7 +90,14 @@ class Mind
         return $this;
     }
 
-    
+    public function __construct()
+    {
+        $this->createdAt = new \DateTimeImmutable();
+        $this->updatedAt = new \DateTimeImmutable();
+        $this->users = new ArrayCollection();
+        $this->rides = new ArrayCollection();
+    }
+
     public function __toString()
     {
         return $this->name;

@@ -22,48 +22,38 @@ class ImportCitiesService
 	public function importCities(SymfonyStyle $io,): void
 	{
 		$io->title('Importation des villes');
-
-		$cities = $this->readCsvFile(); // stocke toutes les villes
-
-		$io->progressStart(count($cities)); // permet d'avoir une barre de progression dans le terminal
+		// use CSV file
+		$cities = $this->readCsvFile();
+		$io->progressStart(count($cities));
 
 		foreach ($cities as $arrayCity) {
-			// ce qu'on veut faire des données
-
-			$department = $this->createOrUpdateDepartment($arrayCity);
-
-			// create or update city
+			// save cities
+			$department = $this->departmentRepo->findOneBy(['code' => $arrayCity['department_number']]);  // changer ici la valeur
+			
 			$city = $this->createOrUpdateCity($arrayCity, $department);
 			$this->em->persist($city);
 
-			$this->em->flush();
-			// forward indicator
 			$io->progressAdvance();
 		}
-
+		$this->em->flush();
 
 		$io->progressFinish();
 		$io->success('L\'importation est terminée');
 	}
 
-
-	public function importDepartments(SymfonyStyle $io,): void
+	public function importDepartments(SymfonyStyle $io): void
 	{
 		$io->title('Importation des départements');
-
-		$cities = $this->readCsvFile(); // stocke toutes les villes
-
-		$io->progressStart(count($cities)); // permet d'avoir une barre de progression dans le terminal
+		// use CSV file
+		$cities = $this->readCsvFile();
+		$io->progressStart(count($cities));
 
 		foreach ($cities as $arrayCity) {
-			// ce qu'on veut faire des données
-
-			// create or update department
+			// save departments
 			$department = $this->createOrUpdateDepartment($arrayCity);
 			$this->em->persist($department);
 			$this->em->flush();
 
-			// forward indicator
 			$io->progressAdvance();
 		}
 
@@ -73,9 +63,11 @@ class ImportCitiesService
 
 	private function readCsvFile(): Reader
 	{
-		$csv = Reader::createFromPath('%kernel.root.dir%/../import/cities.csv', 'r'); // class Reader (librairy : composer require	league/csv / kernel = repertoire root du projet ; mode Read
-		$csv->setHeaderOffset(0); // header = ligne 0 du fichier
-
+		// class Reader (librairy : composer require	league/csv / kernel = repertoire root du projet ; mode Read
+		$csv = Reader::createFromPath('%kernel.root.dir%/../import/cities.csv', 'r'); 
+		// header = ligne 0 du fichier
+		$csv->setHeaderOffset(0); 
+		
 		return $csv;
 	}
 

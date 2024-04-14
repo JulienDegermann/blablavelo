@@ -2,65 +2,49 @@
 
 namespace App\Entity;
 
-use App\Repository\MessageRepository;
-use Doctrine\DBAL\Types\Types;
+use App\Entity\Traits\IdTrait;
+use App\Traits\Entity\DatesTrait;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\MessageRepository;
+use App\Traits\Entity\TextTrait;
+use App\Traits\Entity\TitleTrait;
+use App\Entity\User;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: MessageRepository::class)]
 class Message
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    // Traits calls
+    use IdTrait;
+    use TitleTrait;
+    use DatesTrait;
+    use TextTrait;
 
-    #[ORM\Column(length: 255)]
-    private ?string $title = null;
+    #[ORM\ManyToOne(inversedBy: 'messages', cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false, referencedColumnName: 'id')]
+    #[Assert\Valid]
+    private ?User $author = null;
 
-    #[ORM\Column(type: Types::TEXT)]
-    private ?string $content = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $email = null;
-
-    public function getId(): ?int
+    public function getAuthor(): ?User
     {
-        return $this->id;
+        return $this->author;
     }
 
-    public function getTitle(): ?string
+    public function setAuthor(?User $author): static
+    {
+        $this->author = $author;
+
+        return $this;
+    }
+
+    public function __construct()
+    {
+        $this->createdAt = new \DateTimeImmutable();
+        $this->updatedAt = new \DateTimeImmutable();
+    }
+
+    public function __toString(): string
     {
         return $this->title;
-    }
-
-    public function setTitle(string $title): static
-    {
-        $this->title = $title;
-
-        return $this;
-    }
-
-    public function getContent(): ?string
-    {
-        return $this->content;
-    }
-
-    public function setContent(string $content): static
-    {
-        $this->content = $content;
-
-        return $this;
-    }
-
-    public function getEmail(): ?string
-    {
-        return $this->email;
-    }
-
-    public function setEmail(string $email): static
-    {
-        $this->email = $email;
-
-        return $this;
     }
 }

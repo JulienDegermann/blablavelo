@@ -2,46 +2,25 @@
 
 namespace App\Entity;
 
-use App\Repository\BrandRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use App\Entity\Model;
+use App\Entity\Traits\IdTrait;
 use Doctrine\ORM\Mapping as ORM;
+use App\Traits\Entity\DatesTrait;
+use App\Repository\BrandRepository;
+use App\Traits\Entity\NameNumberTrait;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity(repositoryClass: BrandRepository::class)]
 class Brand
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $name = null;
+    // Traits calls
+    use IdTrait;
+    use DatesTrait;
+    use NameNumberTrait;
 
     #[ORM\OneToMany(mappedBy: 'brand', targetEntity: Model::class)]
     private Collection $models;
-
-    public function __construct()
-    {
-        $this->models = new ArrayCollection();
-    }
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
-
-    public function setName(string $name): static
-    {
-        $this->name = $name;
-
-        return $this;
-    }
 
     /**
      * @return Collection<int, Model>
@@ -72,10 +51,16 @@ class Brand
 
         return $this;
     }
-
     
+    public function __construct()
+    {
+        $this->createdAt = new \DateTimeImmutable();
+        $this->updatedAt = new \DateTimeImmutable();
+        $this->models = new ArrayCollection();
+    }
+
     public function __toString()
     {
-        return $this->name;
+        return $this->nameNumber;
     }
 }

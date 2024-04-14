@@ -2,53 +2,50 @@
 
 namespace App\Entity;
 
-use App\Repository\DepartmentRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use App\Entity\Traits\IdTrait;
+use App\Traits\Entity\DatesTrait;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\DepartmentRepository;
+use App\Traits\Entity\NameTrait;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: DepartmentRepository::class)]
 class Department
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $name = null;
+    // Traits calls
+    use IdTrait;
+    use DatesTrait;
+    use NameTrait;
 
     #[ORM\Column(length: 3)]
+    #[Assert\Sequentially([
+        new Assert\NotBlank(),
+        new Assert\Type(
+            type: 'string',
+            message: 'Ce champ doit être une chaîne de caractères'
+        ),
+        new Assert\Length(
+            min: 5,
+            max: 5,
+            minMessage: 'Ce champ doit contenir 5 chiffres',
+            maxMessage: 'Ce champ doit contenir 5 chiffres'
+        ),
+        new Assert\Regex(
+            pattern: '/^[0-9]{2,3}[A-B]{0,1}$/',
+            message: 'Ce champ doit contenir 5 chiffres'
+        )
+    ])]
     private ?string $code = null;
 
     #[ORM\OneToMany(mappedBy: 'department', targetEntity: City::class)]
+    #[Assert\Valid]
     private Collection $cities;
-
+    
     #[ORM\OneToMany(mappedBy: 'department', targetEntity: User::class)]
+    #[Assert\Valid]
     private Collection $users;
-
-    public function __construct()
-    {
-        $this->cities = new ArrayCollection();
-        $this->users = new ArrayCollection();
-    }
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
-
-    public function setName(string $name): static
-    {
-        $this->name = $name;
-
-        return $this;
-    }
 
     public function getCode(): ?string
     {
@@ -92,12 +89,6 @@ class Department
         return $this;
     }
 
-    
-    public function __toString()
-    {
-        return $this->name;
-    }
-
     /**
      * @return Collection<int, User>
      */
@@ -126,5 +117,17 @@ class Department
         }
 
         return $this;
+    }
+    public function __construct()
+    {
+        $this->createdAt = new \DateTimeImmutable();
+        $this->updatedAt = new \DateTimeImmutable();
+        $this->cities = new ArrayCollection();
+        $this->users = new ArrayCollection();
+    }
+
+    public function __toString()
+    {
+        return $this->name;
     }
 }

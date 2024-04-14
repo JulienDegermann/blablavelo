@@ -2,61 +2,57 @@
 
 namespace App\Entity;
 
-use App\Repository\ModelRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\DBAL\Types\Types;
+use App\Entity\Traits\IdTrait;
+use App\Traits\Entity\DatesTrait;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\ModelRepository;
+use App\Traits\Entity\NameNumberTrait;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ModelRepository::class)]
 class Model
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    // Traits calls
+    use IdTrait;
+    use DatesTrait;
+    use NameNumberTrait;
 
-    #[ORM\Column(length: 255)]
-    private ?string $name = null;
 
-    #[ORM\Column(type: Types::DATE_IMMUTABLE)]
-    private ?\DateTimeImmutable $year = null;
+    #[ORM\Column(nullable: true)]
+    #[Assert\Sequentially([
+        new Assert\Type(
+            type: 'integer',
+            message: 'Date invalide.'
+        ),
+        new Assert\Range(
+            min: 1950,
+            max: 'this year',
+            notInRangeMessage: 'L\'année doit être comprise entre {{ value }} et l\'année courante.'
+        ),
+        new Assert\LessThanOrEqual(
+            value: 'now',
+            message: 'La date ne peut être postérieure à la date actuelle.'
+        )
+    ])]
+    private ?int $year = null;
 
     #[ORM\ManyToOne(inversedBy: 'models')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\Valid]
     private ?Brand $brand = null;
 
     #[ORM\OneToMany(mappedBy: 'bike', targetEntity: User::class)]
+    #[Assert\Valid]
     private Collection $users;
 
-    public function __construct()
-    {
-        $this->users = new ArrayCollection();
-    }
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
-
-    public function setName(string $name): static
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    public function getYear(): ?\DateTimeImmutable
+    public function getYear(): ?int
     {
         return $this->year;
     }
 
-    public function setYear(\DateTimeImmutable $year): static
+    public function setYear(?int $year): static
     {
         $this->year = $year;
 
@@ -105,9 +101,15 @@ class Model
         return $this;
     }
 
+    public function __construct()
+    {
+        $this->createdAt = new \DateTimeImmutable();
+        $this->updatedAt = new \DateTimeImmutable();
+        $this->users = new ArrayCollection();
+    }
+
     public function __toString()
     {
-        return $this->name;
+        return $this->nameNumber;
     }
 }
-

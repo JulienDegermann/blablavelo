@@ -21,7 +21,7 @@ class ImportCitiesCommand extends Command
   protected function execute(InputInterface $input, OutputInterface $output): int
 	{
 		ini_set('memory_limit', '2048M');
-		$io = new SymfonyStyle($input, $output); // mise en page dans la ligne de commande
+		$io = new SymfonyStyle($input, $output);
 
 		$this->importCitiesService->importDepartments($io);
 		$this->importCitiesService->importCities($io);

@@ -2,20 +2,23 @@
 
 namespace App\Entity;
 
-use App\Repository\ProfileImageRepository;
+use App\Traits\Entity\DatesTrait;
 use Doctrine\ORM\Mapping as ORM;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use App\Repository\ProfileImageRepository;
 use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: ProfileImageRepository::class)]
 #[Vich\Uploadable]
 class ProfileImage
 {
+    // Traits calls
+    use DatesTrait;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
-
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private ?User $user = null;
@@ -33,10 +36,6 @@ class ProfileImage
 
     #[ORM\Column(nullable: true)]
     private ?int $fileSize = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?\DateTimeImmutable $updatedAt = null;
-
 
     public function getFileName(): ?string
     {
@@ -84,16 +83,10 @@ class ProfileImage
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeImmutable
+    public function __construct()
     {
-        return $this->updatedAt;
-    }
-
-    public function setUpdatedAt(?\DateTimeImmutable $updatedAt): static
-    {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
+        $this->setCreatedAt(new \DateTimeImmutable());
+        $this->setUpdatedAt(new \DateTimeImmutable());
     }
 
     public function __toString(): string
