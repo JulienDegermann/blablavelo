@@ -27,8 +27,8 @@ class Department
             message: 'Ce champ doit être une chaîne de caractères'
         ),
         new Assert\Length(
-            min: 5,
-            max: 5,
+            min: 2,
+            max: 4,
             minMessage: 'Ce champ doit contenir 5 chiffres',
             maxMessage: 'Ce champ doit contenir 5 chiffres'
         ),
@@ -40,11 +40,9 @@ class Department
     private ?string $code = null;
 
     #[ORM\OneToMany(mappedBy: 'department', targetEntity: City::class)]
-    #[Assert\Valid]
     private Collection $cities;
     
     #[ORM\OneToMany(mappedBy: 'department', targetEntity: User::class)]
-    #[Assert\Valid]
     private Collection $users;
 
     public function getCode(): ?string
@@ -128,6 +126,6 @@ class Department
 
     public function __toString()
     {
-        return $this->name;
+        return   $this->code . ' - ' . strtoupper($this->name);
     }
 }

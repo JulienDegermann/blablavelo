@@ -2,18 +2,16 @@
 
 namespace App\Entity;
 
-use DateImmutable;
 use App\Entity\Ride;
 use DateTimeImmutable;
 use App\Entity\Message;
+use App\Entity\ProfileImage;
 use App\Entity\Traits\IdTrait;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Traits\Entity\DatesTrait;
 use App\Repository\UserRepository;
 use App\Traits\Entity\NameNumberTrait;
 use Doctrine\Common\Collections\Collection;
-use Symfony\Component\HttpFoundation\File\File;
 use Doctrine\Common\Collections\ArrayCollection;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -24,7 +22,7 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[Vich\Uploadable]
 #[ORM\Table(name: '`user`')]
-#[UniqueEntity(fields: ['user_name', 'email'], message: 'Identifiants indisponibles..')]
+#[UniqueEntity(fields: ['nameNumber', 'email'], message: 'Identifiants indisponibles..')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     // Traits calls
@@ -38,7 +36,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var string The hashed password
      */
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     #[Assert\Sequentially([
         new Assert\Type(
             type: 'string',
@@ -70,11 +68,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             maxMessage: 'Ce champ ne peut pas dépasser {{ limit }} caractères.'
         ),
         new Assert\Regex(
-            pattern: '/^[a-zA-Z\-\p{L}]{2, 255}$/u',
-            message: 'Le mot de passe doit contenir au moins une lettre majuscule, une lettre minuscule et un chiffre.'
+            pattern: '/^(?![×Þß÷þø])[a-zA-ZÀ-ÿ]{2,255}$/u',
+            message: 'Ce champ contient des caractères non autorisés.'
         )
     ])]
-    private ?string $first_name = null;
+    private ?string $firstName = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Assert\Sequentially([
@@ -89,23 +87,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             maxMessage: 'Ce champ ne peut pas dépasser {{ limit }} caractères.'
         ),
         new Assert\Regex(
-            pattern: '/^[a-zA-Z\-\p{L}]{2, 255}$/u',
-            message: 'Le mot de passe doit contenir au moins une lettre majuscule, une lettre minuscule et un chiffre'
+            pattern: '/^(?![×Þß÷þø])[a-zA-ZÀ-ÿ]{2,255}$/u',
+            message: 'Ce champ contient des caractères non autorisés.'
         )
     ])]
-    private ?string $last_name = null;
+    private ?string $lastName = null;
 
-    #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: true)]
+    #[ORM\Column(nullable: true)]
     #[Assert\Sequentially([
-        new Assert\DateTime(
-            message: 'Date non valide.'
+        new Assert\Type(
+            type: 'datetimeimmutable',
+            message: 'Date invalide.'
         ),
         new Assert\LessThanOrEqual(
-            value: 'today - 18 years',
-            message: 'Vous devez avoir au moins 18 ans pour vous inscrire.'
+            value: 'now',
+            message: 'La date ne peut être postérieure à la date actuelle.'
         )
     ])]
-    private ?DateTimeImmutable $birth_date = null;
+    private ?DateTimeImmutable $birthDate = null;
 
     #[ORM\Column(length: 255, unique: true)]
     #[Assert\Sequentially([
@@ -135,26 +134,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToOne(inversedBy: 'users')]
     #[ORM\JoinColumn(nullable: true)]
     #[Assert\Valid]
-    private ?City $city = null;
-
-    #[ORM\ManyToOne(inversedBy: 'users')]
-    #[ORM\JoinColumn(nullable: true)]
-    #[Assert\Valid]
     private ?Mind $mind = null;
 
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: Ride::class)]
-    #[Assert\Valid]
-    private Collection $rides_created;
+    private Collection $ridesCreated;
 
     #[ORM\ManyToMany(mappedBy: 'participants', targetEntity: Ride::class)]
-    #[Assert\Valid]
-    private Collection $rides_participated;
+    private Collection $ridesParticipated;
 
-    #[ORM\OneToMany(mappedBy: 'author', targetEntity: Message::class)]
-    #[Assert\Valid]
+    #[ORM\OneToMany(mappedBy: 'author', targetEntity: Message::class, cascade: ['persist', 'remove'])]
     private Collection $messages;
-
-
 
     public function getMessages(): Collection
     {
@@ -183,9 +172,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-
-
-    
     #[ORM\ManyToOne(inversedBy: 'users')]
     #[ORM\JoinColumn(nullable: true)]
     #[Assert\Valid]
@@ -227,6 +213,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\JoinColumn(nullable: true)]
     #[Assert\Valid]
     private ?Department $department = null;
+
+    #[ORM\OneToOne(
+        inversedBy: 'user',
+        cascade: ['persist', 'remove'],
+        targetEntity: ProfileImage::class,
+        orphanRemoval: true
+    )]
+    #[Assert\Valid]
+    private ?ProfileImage $profileImage = null;
 
 
     /**
@@ -284,48 +279,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getFirstName(): ?string
     {
-        return $this->first_name;
+        return $this->firstName;
     }
 
-    public function setFirstName(string $first_name): static
+    public function setFirstName(string $firstName): static
     {
-        $this->first_name = $first_name;
+        $this->firstName = $firstName;
 
         return $this;
     }
 
     public function getLastName(): ?string
     {
-        return $this->last_name;
+        return $this->lastName;
     }
 
-    public function setLastName(string $last_name): static
+    public function setLastName(string $lastName): static
     {
-        $this->last_name = $last_name;
+        $this->lastName = $lastName;
 
         return $this;
     }
 
     public function getBirthDate(): ?\DateTimeImmutable
     {
-        return $this->birth_date;
+        return $this->birthDate;
     }
 
-    public function setBirthDate(\DateTimeImmutable $birth_date): static
+    public function setBirthDate(?\DateTimeImmutable $birthDate): static
     {
-        $this->birth_date = $birth_date;
-
-        return $this;
-    }
-
-    public function getCity(): ?City
-    {
-        return $this->city;
-    }
-
-    public function setCity(?City $city): static
-    {
-        $this->city = $city;
+        $this->birthDate = $birthDate;
 
         return $this;
     }
@@ -347,13 +330,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getRidesCreated(): Collection
     {
-        return $this->rides_created;
+        return $this->ridesCreated;
     }
 
     public function addRidesCreated(Ride $rideCreated): static
     {
-        if (!$this->rides_created->contains($rideCreated)) {
-            $this->rides_created->add($rideCreated);
+        if (!$this->ridesCreated->contains($rideCreated)) {
+            $this->ridesCreated->add($rideCreated);
             $rideCreated->setAuthor($this);
         }
 
@@ -362,7 +345,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function removeRidesCreated(Ride $rideCreated): static
     {
-        if ($this->rides_created->removeElement($rideCreated)) {
+        if ($this->ridesCreated->removeElement($rideCreated)) {
             // set the owning side to null (unless already changed)
             if ($rideCreated->getAuthor() === $this) {
                 $rideCreated->setAuthor(null);
@@ -375,13 +358,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getRidesParticipated(): Collection
     {
-        return $this->rides_participated;
+        return $this->ridesParticipated;
     }
 
     public function addRidesParticipated(Ride $rideParticipated): static
     {
-        if (!$this->rides_participated->contains($rideParticipated)) {
-            $this->rides_participated->add($rideParticipated);
+        if (!$this->ridesParticipated->contains($rideParticipated)) {
+            $this->ridesParticipated->add($rideParticipated);
             $rideParticipated->addParticipant($this);
         }
 
@@ -391,9 +374,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function removeRidesParticipated(Ride $ridePartipated): static
     {
-        if ($this->rides_participated->removeElement($ridePartipated)) {
+        if ($this->ridesParticipated->removeElement($ridePartipated)) {
             // set the owning side to null (unless already changed)
-            
+
             if ($ridePartipated->getParticipants()->contains($this)) {
                 $ridePartipated->removeParticipant($this);
             }
@@ -478,7 +461,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function __construct()
     {
-        $this->rides_created = new ArrayCollection();
+        $this->ridesCreated = new ArrayCollection();
         $this->setCreatedAt(new DateTimeImmutable());
         $this->setUpdatedAt(new DateTimeImmutable());
         $this->setIsVerified(false);
@@ -488,5 +471,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __toString()
     {
         return $this->nameNumber;
+    }
+
+    public function getProfileImage(): ?ProfileImage
+    {
+        return $this->profileImage;
+    }
+
+    public function setProfileImage(?ProfileImage $profileImage): static
+    {
+        $this->profileImage = $profileImage;
+
+        return $this;
     }
 }

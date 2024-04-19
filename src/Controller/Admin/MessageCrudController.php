@@ -3,27 +3,36 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Message;
-use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use App\Traits\EasyAdmin\ActionsTrait;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 
 class MessageCrudController extends AbstractCrudController
 {
+    use ActionsTrait;
+    
     public static function getEntityFqcn(): string
     {
         return Message::class;
     }
 
+    public function configureActions(Actions $actions): Actions
+    {
+        $actions = $this->configureDefaultActions($actions);
+
+        return $actions;
+    }
 
     public function configureFields(string $pageName): iterable
     {
         return [
-            TextField::new('title')->setDisabled(true),
-            EmailField::new('email')->setDisabled(true),
-            TextareaField::new('content')->setDisabled(true)
+            TextField::new('title', 'Titre'),
+            AssociationField::new('author', 'Auteur')
+                ->renderAsEmbeddedForm(),
+            TextareaField::new('text', 'Message')
         ];
     }
 }

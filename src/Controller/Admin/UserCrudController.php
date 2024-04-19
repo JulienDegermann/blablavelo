@@ -2,60 +2,68 @@
 
 namespace App\Controller\Admin;
 
+
 use App\Entity\User;
-use DateTimeImmutable;
+use App\Form\ProfileImageType;
+use App\Traits\EasyAdmin\ActionsTrait;
 use Vich\UploaderBundle\Form\Type\VichImageType;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
-use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
+use PHPUnit\TextUI\XmlConfiguration\CodeCoverage\Report\Text;
 
 class UserCrudController extends AbstractCrudController
 {
+    use ActionsTrait;
+
     public static function getEntityFqcn(): string
     {
         return User::class;
     }
 
+    public function configureActions(Actions $actions): Actions
+    {
+        $actions = $this->configureDefaultActions($actions);
+
+        return $actions;
+    }
+
     public function configureFields(string $pageName): iterable
     {
-
-        // yield from parent::configureFields($pageName);
-
-
-        yield TextField::new('user_name')
-            ->setDisabled(true);
-        yield TextField::new('first_name')
-            ->setDisabled(true);
-        yield TextField::new('last_name')
-            ->setDisabled(true);
-        yield TextField::new(propertyName: 'password')
+        yield TextField::new('nameNumber', 'Pseudo')
+            ->setDisabled(false);
+        yield TextField::new('email', 'Email')
+            ->hideOnIndex()
+            ->setDisabled(false);
+        yield TextField::new('firstName', 'Prénom')
+            ->setDisabled(false);
+        yield TextField::new('lastName', 'Nom')
+            ->setDisabled(false);
+        yield TextField::new('password', 'Mot de passe')
             ->onlyOnForms()
             ->setFormType(PasswordType::class)
             ->onlyWhenCreating();
-        yield TextField::new('email')
-            ->setDisabled(true);
-        yield DateTimeField::new('birth_date')
+        yield DateTimeField::new('birth_date', 'Date de naissance')
             ->setFormTypeOption('years', range(1920, date('Y') - 18))
-            ->setDisabled(true);
-        yield DateTimeField::new('createdAt')
-            ->setFormTypeOption('disabled', true)
-            ->setFormTypeOption('years', range(2023, date('Y')));
-        yield AssociationField::new('city')
+            ->hideOnIndex()
+            ->setDisabled(false);
+        yield DateTimeField::new('createdAt', "Créé le")
+            ->hideOnForm();
+        yield AssociationField::new('mind', 'Objectif')
             ->onlyWhenCreating()
-            ->setDisabled(true);
-        yield AssociationField::new('mind')
+            ->setDisabled(false);
+        yield AssociationField::new('practice', 'Pratique')
             ->onlyWhenCreating()
-            ->setDisabled(true);
-        yield AssociationField::new('practice')
-            ->onlyWhenCreating()
-            ->setDisabled(true);
-        yield AssociationField::new('bike')
-            ->setDisabled(true);
+            ->setDisabled(false);
+        yield BooleanField::new('isVerified', 'Vérifié')
+            ->renderAsSwitch(false);
         yield ChoiceField::new('roles')
             ->setChoices([
                 'user' => 'ROLE_USER',
@@ -64,12 +72,17 @@ class UserCrudController extends AbstractCrudController
             ])
             ->onlyWhenCreating()
             ->allowMultipleChoices();
-        yield TextField::new('file', 'Photo de profil')
-            ->setFormType(VichImageType::class)
-            ->onlyOnForms()
-            ->onlyWhenCreating();
-        yield ImageField::new('file_name', 'Photo de profil')
+        yield AssociationField::new('bike', 'Vélo');
+        // yield AssociationField::new('profileImage', 'Photo de profil')
+        yield ImageField::new('profileImage', 'Photo de profil')
             ->setBasePath('/uploads/images/users')
-            ->onlyOnIndex();
+            ->onlyOnIndex();        
+        // yield AssociationField::new('profileImage', 'Photo de profil')
+        //     ->renderAsEmbeddedForm()
+        //     ->setCrudController(ProfileImageCrudController::class)
+        //     ->onlyOnForms();
+        yield AssociationField::new('profileImage', 'Photo de profil')
+            ->renderAsEmbeddedForm()
+            ->onlyOnForms();
     }
 }

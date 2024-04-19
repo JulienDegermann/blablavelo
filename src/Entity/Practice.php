@@ -24,7 +24,6 @@ class Practice
     private Collection $rides;
 
     #[ORM\OneToMany(mappedBy: 'practice', targetEntity: User::class)]
-    #[Assert\Valid]
     private Collection $users;
 
     /**

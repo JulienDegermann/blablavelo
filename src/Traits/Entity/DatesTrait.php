@@ -10,7 +10,8 @@ trait DatesTrait
 
   #[ORM\Column]
   #[Assert\Sequentially([
-    new Assert\DateTime(
+    new Assert\Type(
+      type: 'datetimeimmutable',
       message: 'Date invalide.'
     ),
     new Assert\LessThanOrEqual(
@@ -22,7 +23,8 @@ trait DatesTrait
 
   #[ORM\Column]
   #[Assert\Sequentially([
-    new Assert\DateTime(
+    new Assert\Type(
+      type: 'datetimeimmutable',
       message: 'Date invalide.'
     ),
     new Assert\LessThanOrEqual(

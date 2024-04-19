@@ -31,7 +31,7 @@ class Ride
             message: 'Ce champ doit être un nombre entier.'
         ),
         new Assert\Positive(
-            message: 'Ce champ doit être un nombre positif.'
+            message: 'La distance doit être supérieure à 0 kms.'
         )
     ])]
     private ?int $distance = null;
@@ -46,11 +46,15 @@ class Ride
             message: 'Ce champ doit être un nombre entier.'
         ),
         new Assert\PositiveOrZero(
-            message: 'Ce champ doit être un nombre supérieur ou égal 0.'
+            message: 'Le dénivelé positif doit être un nombre supérieur ou égal à 0 m.'
         ),
         new Assert\GreaterThanOrEqual(
             value: 0,
-            message: 'Ce champ doit être un nombre supérieur ou égal à {{ value }}.'
+            message: 'Le dénivelé positif doit être supérieur ou égal à {{ compared_value }} m.'
+        ),
+        new Assert\LessThanOrEqual(
+            value: 5000,
+            message: 'Le dénivelé positif doit être indérieur ou égal à {{ compared_value }} m.'
         )
     ])]
     private ?int $ascent = null;
@@ -65,7 +69,7 @@ class Ride
             message: 'Ce champ doit être un nombre entier.'
         ),
         new Assert\Positive(
-            message: 'Ce champ doit être un nombre supérieur à 0.'
+            message: 'Le nombre de participants doit être supérieur à 0.'
         ),
         new Assert\Range(
             min: 1,
@@ -85,15 +89,15 @@ class Ride
             message: 'Ce champ doit être un nombre entier.'
         ),
         new Assert\Positive(
-            message: 'Ce champ doit être un nombre supérieur à 0.'
+            message: 'La vitesse moyenne doit être supérieure à 0 km/h.'
         ),
         new Assert\GreaterThanOrEqual(
             value: 0,
-            message: 'La vitesse moyenne doit être supérieure à {{ value }} km/h.'
+            message: 'La vitesse moyenne doit être supérieure à {{ compared_value }} km/h.'
         ),
         new Assert\LessThanOrEqual(
             value: 50,
-            message: 'La vitesse moyenne doit être inférieure à {{ value }} km/h.'
+            message: 'La vitesse moyenne doit être inférieure à {{ compared_value }} km/h.'
         )
     ])]
     private ?int $average_speed = null;
@@ -103,7 +107,8 @@ class Ride
         new Assert\NotBlank(
             message: 'Ce champ est obligatoire.'
         ),
-        new Assert\DateTime(
+        new Assert\Type(
+            type: 'datetimeimmutable',
             message: 'Ce champ doit être une date.'
         ),
         new Assert\GreaterThan(
@@ -123,12 +128,12 @@ class Ride
     #[Assert\Valid]
     private ?Practice $practice = null;
 
-    #[ORM\ManyToOne(inversedBy: 'rides_created')]
+    #[ORM\ManyToOne(inversedBy: 'ridesCreated')]
     #[ORM\JoinColumn(nullable: false, referencedColumnName: 'id', onDelete: 'CASCADE')]
     #[Assert\Valid]
     private ?User $author = null;
 
-    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'rides_participated')]
+    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'ridesParticipated')]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     #[Assert\Valid]
     private Collection $participants;
@@ -140,14 +145,14 @@ class Ride
         ),
         new Assert\Type(
             type: 'string',
-            message: 'Ce champ doit être une chaîne de caractères.'
+            message: 'Ce champ doit être une chaine de caractères.'
         ),
         new Assert\Length(
             min: 2,
-            minMessage: 'Ce champ doit contenir au moins {{ min }} caractères.'
+            minMessage: 'Ce champ doit contenir au moins {{ limit }} caractères.'
         ),
         new Assert\Regex(
-            pattern: '/^[a-zA-Z0-9\s()\-\'?:.,!\/\"\p{L}]{1,}$/u',
+            pattern: '/^[a-zA-Z0-9\s()\-\'?:.,!\/\"\p{L}]{2,255}$/u',
             message: 'Les caractères autorisés : lettres (minuscules et majuscules, accentuées ou non), chiffres, espaces, parenthèses, tirets et caractères de ponctuation'
         )
     ])]
@@ -230,12 +235,12 @@ class Ride
         return $this;
     }
 
-    public function getDate(): ?\DateTime
+    public function getDate(): ?\DateTimeImmutable
     {
         return $this->date;
     }
 
-    public function setDate(\DateTime $date): static
+    public function setDate(?\DateTimeImmutable $date): static
     {
         $this->date = $date;
 

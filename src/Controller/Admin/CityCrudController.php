@@ -3,25 +3,36 @@
 namespace App\Controller\Admin;
 
 use App\Entity\City;
-use App\Entity\Department;
-use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
+use App\Traits\EasyAdmin\ActionsTrait;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use PHPUnit\TextUI\XmlConfiguration\CodeCoverage\Report\Text;
 
 class CityCrudController extends AbstractCrudController
 {
+    use ActionsTrait;
+    
     public static function getEntityFqcn(): string
     {
         return City::class;
     }
 
+    public function configureActions(Actions $actions): Actions
+    {
+        $actions = $this->configureDefaultActions($actions);
+        
+        return $actions;
+    }
+
     public function configureFields(string $pageName): iterable
     {
         return [
-            yield from parent::configureFields($pageName),
-            yield AssociationField::new('department'),
+
+            TextField::new('name', 'Nom'),
+            TextField::new('zip_code', 'Code postal'),
+            AssociationField::new('department', 'Département'),
         ];
     }
 }

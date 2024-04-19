@@ -15,7 +15,7 @@ trait NameNumberTrait
     ),
     new Assert\Type(
       type: 'string',
-      message: 'Ce champ doit être une chaîne de caractères.'
+      message: 'Ce champ doit être une chaine de caractères.'
     ),
     new Assert\Length(
       min: 2,
@@ -24,7 +24,7 @@ trait NameNumberTrait
       maxMessage: 'Ce champ ne peut dépasser {{ limit }} caractères.'
     ),
     new Assert\Regex(
-      pattern: '/^[a-zA-Z0-9\-\p{L}]{2, 255}$/u',
+      pattern: '/^(?![×Þß÷þø])[0-9a-zA-ZÀ-ÿ\-]{2,255}$/u',
       message: 'Ce champ ne peut contenir que des lettres (majuscules et minuscules), des chiffres et des tirets.'
     )
   ])]

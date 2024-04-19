@@ -31,7 +31,7 @@ class BrandFixtures extends Fixture
 
     foreach ($brands as $key => $brand) {
       $current = new Brand();
-      $current->setName($brand);
+      $current->setNameNumber($brand);
       $this->addReference('brand-' . $key, $current);
 
       $manager->persist($current);

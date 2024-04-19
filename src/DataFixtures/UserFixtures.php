@@ -3,8 +3,6 @@
 namespace App\DataFixtures;
 
 use App\Entity\User;
-use DateTimeImmutable;
-use App\DataFixtures\CityFixtures;
 use App\DataFixtures\MindFixtures;
 use App\DataFixtures\ModelFixtures;
 use App\DataFixtures\PracticeFixtures;
@@ -17,15 +15,15 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
 {
   public function __construct(
     private UserPasswordHasherInterface $userPasswordHasherInterface
-) {
-  $this->userPasswordHasherInterface = $userPasswordHasherInterface;
-}
+  ) {
+    $this->userPasswordHasherInterface = $userPasswordHasherInterface;
+  }
 
   public function load(ObjectManager $manager): void
   {
     $users = [
       [
-        'first_name' => 'John',
+        'first_name' => 'John&',
         'last_name' => 'Doe',
         'user_name' => 'johndoe',
         'email' => 'john@example.com',
@@ -96,9 +94,20 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
       ],
     ];
 
+
+    $admin = (new User())
+      ->setNameNumber('SuperAdmin56')
+      ->setEmail('admin@admin.com')
+      ->setFirstName('Super')
+      ->setLastName('Admin')
+      ->setRoles(['ROLE_ADMIN', 'ROLE_USER']);
+    $admin->setPassword($this->userPasswordHasherInterface->hashPassword($admin, 'superAdmin56'));
+    $manager->persist($admin);
+
+
     foreach ($users as $key => $user) {
       $current = new User();
-      $current->setUserName($user['user_name']);
+      $current->setNameNumber($user['user_name']);
       $current->setEmail($user['email']);
       $current->setFirstName($user['first_name']);
       $current->setLastName($user['last_name']);

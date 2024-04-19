@@ -19,7 +19,7 @@ class Brand
     use DatesTrait;
     use NameNumberTrait;
 
-    #[ORM\OneToMany(mappedBy: 'brand', targetEntity: Model::class)]
+    #[ORM\OneToMany(mappedBy: 'brand', targetEntity: Model::class, cascade: ['persist', 'remove'])]
     private Collection $models;
 
     /**

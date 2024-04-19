@@ -15,7 +15,7 @@ trait TitleTrait
     ),
     new Assert\Type(
       type: 'string',
-      message: 'Ce champ doit être une chaîne de caractères.'
+      message: 'Ce champ doit être une chaine de caractères.'
     ),
     new Assert\Length(
       min: 2,
@@ -24,15 +24,15 @@ trait TitleTrait
       maxMessage: 'Ce champ ne peut dépasser {{ limit }} caractères.'
     ),
     new Assert\Regex(
-      pattern: '/^[a-zA-Z\-/s\p{L}]{2, 255}$/u',
-      message: 'Ce champ ne peut contenir que des lettres (majuscules et minuscules) et des tirets.'
+      pattern: '/^(?![×Þß÷þø])[0-9a-zA-ZÀ-ÿ\-\s\'()]{2,255}$/u',
+      message: 'Ce champ ne peut contenir que des lettres (majuscules et minuscules), des chiffres et des tirets.'
     )
   ])]
   private ?string $title = null;
 
   public function getTitle(): ?string
   {
-    return $this->Title;
+    return $this->title;
   }
 
   public function setTitle(string $title): static

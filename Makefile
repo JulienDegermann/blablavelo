@@ -37,11 +37,11 @@ db_start:
 
 start:
 	make cache
-	$(SYMFONY) server:start -d
+	symfony server:start -d
 .PHONY: db_start_datas
 
 stop:
-	$(SYMFONY) server:stop
+	symfony server:stop
 .PHONY: stop
 
 restart:
@@ -67,6 +67,7 @@ db_start_datas:
 db_reset:
 	make db_delete
 	make db_create
+	make new_migration
 	make db_migrate
 .PHONY: db_reset
 

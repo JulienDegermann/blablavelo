@@ -2,41 +2,82 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\City;
 use App\Entity\Ride;
-use Doctrine\DBAL\Types\IntegerType;
+use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\Mapping\Entity;
+use App\Repository\CityRepository;
+use App\Traits\EasyAdmin\ActionsTrait;
+use Doctrine\ORM\EntityManagerInterface;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+
 
 class RideCrudController extends AbstractCrudController
 {
+    use ActionsTrait;
+
     public static function getEntityFqcn(): string
     {
         return Ride::class;
     }
 
+    public function configureCrud(Crud $crud): Crud
+    {
+        return $crud
+            ->setEntityLabelInSingular('Sortie')
+            ->setEntityLabelInPlural('Sorties')
+            ->setSearchFields(['title', 'description', 'date', 'distance', 'ascent', 'max_rider', 'average_speed', 'createdAt', 'updatedAt'])
+            ->setDefaultSort(['date' => 'DESC']);
+    }
+
+    public function configureActions(Actions $actions): Actions
+    {
+        $actions = $this->configureDefaultActions($actions);
+
+        return $actions;
+    }
+
+
+    private CityRepository $cityRepo;
+
+    public function __construct(CityRepository $cityRepo)
+    {
+        $this->cityRepo = $cityRepo;
+    }
+
+
     public function configureFields(string $pageName): iterable
     {
-
-        // yield from parent::configureFields($pageName);
-        yield AssociationField::new('user_creator')->setDisabled(true);
-        yield AssociationField::new('user_participant')->setDisabled(true);
-        yield DateTimeField::new('createdAt')->setDisabled(true);
-        yield AssociationField::new('city')->setDisabled(true)->onlyOnIndex();
-        yield AssociationField::new('practice')->setDisabled(true);
-        yield AssociationField::new('mind')->setDisabled(true);
-        yield TextField::new('title')->setDisabled(true);
-        yield DateTimeField::new('date')->setDisabled(true);
-        yield DateTimeField::new('updated_at')->setDisabled(true)->hideOnForm();
-        yield NumberField::new('distance')->setDisabled(true);
-        yield NumberField::new('ascent')->setDisabled(true);
-        yield NumberField::new('max_rider')->setDisabled(true);
-        yield NumberField::new('average_speed')->setDisabled(true);
-        yield TextareaField::new('description')->setDisabled(true);
+        yield DateTimeField::new('date', 'Date');
+        yield TextField::new('title', 'Titre');
+        yield AssociationField::new('city', 'Ville')
+            ->setQueryBuilder(
+                function (QueryBuilder $qb) {
+                    return $qb
+                        ->select('c')
+                        ->from(City::class, 'c')
+                        ->where( 'c.zip_code = :id')
+                        ->setParameter('id', '56000');
+                }
+            );
+        yield AssociationField::new('author', 'Organisateur');
+        yield AssociationField::new('participants', 'Participants');
+        yield AssociationField::new('practice', 'Pratique');
+        yield AssociationField::new('mind', 'Objectif');
+        // yield DateTimeField::new('createdAt', 'Créé le')->hideOnForm();
+        // yield DateTimeField::new('updated_at', 'Modifié le')->hideOnForm();
+        yield IntegerField::new('distance', 'Distance');
+        yield IntegerField::new('ascent', 'D+ (m)');
+        yield IntegerField::new('max_rider', 'Nombre max');
+        yield IntegerField::new('average_speed', 'V.moy (km/h)');
+        yield TextareaField::new('description', 'Description');
     }
 }

@@ -110,6 +110,6 @@ class Model
 
     public function __toString()
     {
-        return $this->nameNumber;
+        return strtoupper($this->brand->getNameNumber()) . ' ' . $this->nameNumber . ' ' . $this->year;
     }
 }

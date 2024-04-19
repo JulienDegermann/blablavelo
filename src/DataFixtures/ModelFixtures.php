@@ -127,8 +127,8 @@ class ModelFixtures extends Fixture implements DependentFixtureInterface
     foreach ($models as $key => $model) {
       foreach ($model as $modelItem) {
         $current = new Model();
-        $current->setName($modelItem);
-        $current->setYear(new DateTimeImmutable());
+        $current->setNameNumber($modelItem);
+        $current->setYear(rand(1950, 2021));
         $current->setBrand($this->getReference('brand-' . rand(1, 14)));
         $this->addReference('model-' . $i, $current);
 

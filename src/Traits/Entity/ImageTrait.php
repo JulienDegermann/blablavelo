@@ -26,10 +26,10 @@ trait ImageTrait
 
 
   #[ORM\Column(length: 255, nullable: true)]
-  #[Assert\Sequentially([
-    new Assert\Length(min: 5, max: 255, minMessage: 'Ce champ doit contenir au moins {{ limit }} caractères.', maxMessage: 'Ce champ est limité à {{ limit }} caractères.'),
-    new Assert\Regex(pattern: '/^[a-zA-Z0-9.\s\(\)\-\'\"\p{L}]{5,255}+$/u', message: 'Ce champ contient des caractères non autorisés.')
-  ])]
+  // #[Assert\Sequentially([
+  //   new Assert\Length(min: 5, max: 255, minMessage: 'Ce champ doit contenir au moins {{ limit }} caractères.', maxMessage: 'Ce champ est limité à {{ limit }} caractères.'),
+  //   new Assert\Regex(pattern: '/^[a-zA-Z0-9.\s\(\)\-\'\"\p{L}]{5,255}+$/u', message: 'Ce champ contient des caractères non autorisés.')
+  // ])]
   private ?string $fileName = null;
 
   private ?int $fileSize = null;

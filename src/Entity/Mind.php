@@ -22,7 +22,6 @@ class Mind
     use NameTrait;
 
     #[ORM\OneToMany(mappedBy: 'mind', targetEntity: User::class)]
-    #[Assert\Valid]
     private Collection $users;
 
     #[ORM\OneToMany(mappedBy: 'mind', targetEntity: Ride::class)]

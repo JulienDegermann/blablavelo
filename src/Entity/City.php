@@ -43,19 +43,14 @@ class City
             message: 'Ce champ doit contenir 5 chiffres'
         )
     ])]
-    private ?int $zip_code = null;
+    private ?string $zip_code = null;
 
     #[ORM\ManyToOne(inversedBy: 'cities')]
     #[ORM\JoinColumn(nullable: false)]
     #[Assert\Valid]
     private ?Department $department = null;
 
-    #[ORM\OneToMany(mappedBy: 'city', targetEntity: User::class)]
-    #[Assert\Valid]
-    private Collection $users;
-
     #[ORM\OneToMany(mappedBy: 'city', targetEntity: Ride::class)]
-    #[Assert\Valid]
     private Collection $rides;
 
     #[ORM\Column(length: 10)]
@@ -83,12 +78,12 @@ class City
         return $this->id;
     }
 
-    public function getZipCode(): ?int
+    public function getZipCode(): ?string
     {
         return $this->zip_code;
     }
 
-    public function setZipCode(int $zip_code): static
+    public function setZipCode(string $zip_code): static
     {
         $this->zip_code = $zip_code;
 
@@ -105,41 +100,6 @@ class City
         $this->department = $department;
 
         return $this;
-    }
-
-    /**
-     * @return Collection<int, User>
-     */
-    public function getUsers(): Collection
-    {
-        return $this->users;
-    }
-
-    public function addUser(User $user): static
-    {
-        if (!$this->users->contains($user)) {
-            $this->users->add($user);
-            $user->setCity($this);
-        }
-
-        return $this;
-    }
-
-    public function removeUser(User $user): static
-    {
-        if ($this->users->removeElement($user)) {
-            // set the owning side to null (unless already changed)
-            if ($user->getCity() === $this) {
-                $user->setCity(null);
-            }
-        }
-
-        return $this;
-    }
-
-    public function __toString()
-    {
-        return $this->name;
     }
 
     /**
@@ -182,6 +142,11 @@ class City
         $this->insee_code = $insee_code;
 
         return $this;
+    }
+
+    public function __toString()
+    {
+        return strtoupper($this->name) . ' (' . $this->zip_code . ')';
     }
 
     public function __construct()
