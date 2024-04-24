@@ -11,15 +11,10 @@ use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Session\Session;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
 use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
-use Symfony\Component\Mime\Email;
-use Symfony\Component\Mime\Address;
 use App\Service\MailSendService;
-use Symfony\Component\Mailer\Mailer;
 
 class RegistrationController extends AbstractController
 {
@@ -44,9 +39,9 @@ class RegistrationController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $plain_email = $form->get('email')->getData();
-            $plain_user_name = $form->get('user_name')->getData();
+            $plain_user_name = $form->get('nameNumber')->getData();
 
-            if($userRepo->findBy(['email' => $plain_email]) || $userRepo->findBy(['user_name' => $plain_user_name])) {
+            if($userRepo->findBy(['email' => $plain_email]) || $userRepo->findBy(['nameNumber' => $plain_user_name])) {
                 $this->addFlash('danger', 'Impossible de créer le compte avec les informations fournies. Veuillez recommencer.');
                 return $this->redirectToRoute('app_register');
             };

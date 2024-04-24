@@ -8,7 +8,6 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use PHPUnit\TextUI\XmlConfiguration\CodeCoverage\Report\Text;
 
 class CityCrudController extends AbstractCrudController
 {

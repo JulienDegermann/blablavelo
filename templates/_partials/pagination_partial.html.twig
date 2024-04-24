@@ -13,7 +13,7 @@
 
       {% for page in pagesInRange %}
         <li class="page-item {% if page == current %}{% endif %}">
-          <a href="{{ path(route, query|merge({ (pageParameterName): page })) }}" class="page-link border-0 {% if page == current %}fw-bold text-secondary{% endif %}">{{ page }}</a>
+          <a href="{{ path(route, query|merge({ (pageParameterName): page })) }}" class="page-link border-0 {% if page == current %}fw-bold text-primary{% endif %}">{{ page }}</a>
         </li>
       {% endfor %}
 

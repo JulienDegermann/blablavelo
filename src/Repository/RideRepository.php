@@ -20,29 +20,30 @@ class RideRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Ride::class);
     }
-    
-    public function save(Ride $ride) 
+
+    public function save(Ride $ride)
     {
         $this->_em->persist($ride);
         $this->_em->flush();
     }
 
-    public function remove(Ride $ride) 
+    public function remove(Ride $ride)
     {
         $this->_em->remove($ride);
         $this->_em->flush();
     }
 
 
-    public function rideList($userdepartment = null, int $limit = null) {
+    public function rideList($userdepartment = null, int $limit = null)
+    {
         $qb = $this->createQueryBuilder('r')
             ->orderBy('r.id', 'DESC');
-        if($userdepartment) {
+        if ($userdepartment) {
             $qb->join('r.city', 'c')
                 ->andWhere('c.department = :department')
                 ->setParameter(':department', $userdepartment);
         }
-        if($limit) {
+        if ($limit) {
             $qb->setMaxResults($limit);
         }
         $qb->andWhere('SIZE(r.participants) < r.max_rider');
@@ -50,53 +51,74 @@ class RideRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
-    public function rideOfUser($user) {
+    public function rideOfUser($user)
+    {
         $qb = $this->createQueryBuilder('r')
-            ->join('r.user_participant', 'u')
+            ->join('r.participants', 'u')
             ->andWhere(':user MEMBER OF r.participants')
             ->setParameter(':user', $user)
-            ->orderBy('r.id', 'DESC')
+            ->orderBy('r.date', 'ASC')
             ->getQuery();
 
         return $qb->getResult();
     }
 
 
-    public function ridePaginated($userdepartment = null) {
+    public function ridePaginated($userdepartment = null)
+    {
         $qb = $this->createQueryBuilder('r')
             ->orderBy('r.id', 'DESC');
-        if($userdepartment) {
-        $qb->join('r.city', 'c')
-            ->andWhere('c.department = :department')
-            ->setParameter(':department', $userdepartment);
+        if ($userdepartment) {
+            $qb->join('r.city', 'c')
+                ->andWhere('c.department = :department')
+                ->setParameter(':department', $userdepartment);
         }
-        $qb->andWhere('SIZE(r.user_participant) < r.max_rider');
-            // ->setParameter(':r.max_rider', 'r.max_rider');
+        $qb->andWhere('SIZE(r.participants) < r.max_rider');
+        // ->setParameter(':r.max_rider', 'r.max_rider');
         return $qb->getQuery();
     }
 
-//    /**
-//     * @return Ride[] Returns an array of Ride objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('r')
-//            ->andWhere('r.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('r.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function rideFilter(
+        $mind = null,
+        $department = null,
+        $date = null,
+        $distance = null,
+        $participants = null,
+        $average_speed = null,
+        $ascent = null
+    ) {
+        $qb = $this->createQueryBuilder('r')->orderBy('r.date', 'ASC');
+        $mind ? $qb->andWhere('r.mind = :mind')->setParameter(':mind', $mind) : null;
+        $department ? $qb->join('r.city', 'c')->andWhere('c.department = :department')->setParameter(':department', $department) : null;
+        $date ? $qb->andWhere('r.date = :date')->setParameter(':date', $date) : null;
+        $distance ? $qb->andWhere('r.distance = :distance')->setParameter(':distance', $distance) : null;
+        $participants ? $qb->andWhere('r.max_rider = :participants')->setParameter(':participants', $participants) : null;
+        $average_speed ? $qb->andWhere('r.average_speed = :average_speed')->setParameter(':average_speed', $average_speed) : null;
+        $ascent ? $qb->andWhere('r.ascent = :ascent')->setParameter(':ascent', $ascent) : null;
+        return $qb->getQuery()->getResult();
+    }
+    //    /**
+    //     * @return Ride[] Returns an array of Ride objects
+    //     */
+    //    public function findByExampleField($value): array
+    //    {
+    //        return $this->createQueryBuilder('r')
+    //            ->andWhere('r.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->orderBy('r.id', 'ASC')
+    //            ->setMaxResults(10)
+    //            ->getQuery()
+    //            ->getResult()
+    //        ;
+    //    }
 
-//    public function findOneBySomeField($value): ?Ride
-//    {
-//        return $this->createQueryBuilder('r')
-//            ->andWhere('r.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    //    public function findOneBySomeField($value): ?Ride
+    //    {
+    //        return $this->createQueryBuilder('r')
+    //            ->andWhere('r.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->getQuery()
+    //            ->getOneOrNullResult()
+    //        ;
+    //    }
 }

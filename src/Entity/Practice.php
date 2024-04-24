@@ -20,7 +20,6 @@ class Practice
     use DatesTrait;
 
     #[ORM\OneToMany(mappedBy: 'practice', targetEntity: Ride::class)]
-    #[Assert\Valid]
     private Collection $rides;
 
     #[ORM\OneToMany(mappedBy: 'practice', targetEntity: User::class)]

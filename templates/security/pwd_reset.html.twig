@@ -1,14 +1,9 @@
 {% extends 'base.html.twig' %}
 
 {% block main %}
-  <section class="position-relative banner">
-    <img class="h-100 w-100 object-fit-cover" src="{{ asset('assets/images/login.webp') }}"  alt="photo de cadenas" title="photo de cadenas"/>
-    <div class="container position-absolute px-3 top-50 start-50 translate-middle">
-      <div class="row">
-          <h1 class="text-white text-center fs-1">Réinitialiser le mot de passe</h1>
-      </div>
-    </div>
-  </section>
+  {% block mainTitle %}
+    Réinitialiser le mot de passe
+  {% endblock %}
 
   <section class="my-3 my-md-5">
     <div class="container">

@@ -1,27 +1,65 @@
 {% extends 'base.html.twig' %}
 
 {% block main %}
-  <section class="position-relative banner">
-    <img class="h-100 w-100 object-fit-cover" src="{{ asset('assets/images/map.webp') }}"  alt="photo carte" title="photo carte" />
-    <div class="container position-absolute px-3 top-50 start-50 translate-middle">
-      <div class="row">
-          <h1 class="text-white text-center fs-1">Les sorties de ton département</h1>
-      </div>
-    </div>
-  </section>
+  {% block titleSection %}
 
-  <section class="my-3 my-md-5">
-    <div class="container">
-      <div class="row">
-        {% for ride in all_rides %}
-          {% include '/partials/card_partial.html.twig' %}
+  {% endblock %}
+
+  <div class="row p-3 my-5">
+    <div class="col-md-4 px-5">
+      <section class="bg-white rounded-1 px-2 py-5 my-5">
+        <h2 class="text-center mb-3 fs-4">{{ user.nameNumber }}</h2>
+        <h3 class="fs-6">Bilan {{ 'now'|date('Y') }}</h3>
+        <p>
+          {{ my_rides|length }} sorties créées<br />
+          {{ all_my_rides|length }} sorties participées
+        </p>
+        <ul>
+          <li>
+            <a class="text-dark fs-6" href="{{ path('app_profile') }}" title="ajouter une sortie">Mon profil</a>
+          </li>
+          <li>
+            <a class="text-dark fs-6" href="{{ path('app_new_ride') }}" title="ajouter une sortie">Créer ma sortie</a>
+          </li>
+          <li>
+            <a class="text-dark fs-6" href="{{ path('app_logout') }}" title="ajouter une sortie">Me déconnecter</a>
+          </li>
+        </ul>
+      </section>
+      <section class="bg-white rounded-1 px-2 py-5 my-5">
+        <h2 class="text-center mb-3 fs-4">Section pour les filtres</h2>
+
+        {{ form_start(filter_form) }}
+        {{ form_row(filter_form.mind) }}
+        {{ form_row(filter_form.department) }}
+        {{ form_row(filter_form.date) }}
+        {{ form_row(filter_form.distance) }}
+        {{ form_row(filter_form.participants) }}
+        {{ form_row(filter_form.ascent) }}
+        {{ form_row(filter_form.average_speed) }}
+        <div class="d-flex">
+          {{ form_row(filter_form.submit) }}
+          <a class="px-2 py-2" href="{{ path('app_rides') }}">Réinitialiser les filtres</a>
+        </div>
+        {{ form_end(filter_form) }}
+      </section>
+    </div>
+
+    <div class="col-md-8 px-5">
+      <section class="rounded-1 my-5">
+        <h2 class="text-center mb-3 fs-3">Mes prochaines sorties</h2>
+        {% for ride in my_rides %}
+          {% include '/_partials/card_partial.html.twig' %}
         {% endfor %}
-      </div>
+      </section>
+      <section class="rounded-1 my-5">
+        <h2 class="text-center mb-3 fs-3">Les sorties à venir</h2>
+
+        {% for ride in all_rides %}
+          {% include '/_partials/card_partial.html.twig' %}
+        {% endfor %}
+      </section>
+      <div class="container">{{ knp_pagination_render(all_rides, '/_partials/pagination_partial.html.twig') }}</div>
     </div>
-  </section>
-  <section>
-    <div class="container">
-        {{ knp_pagination_render(all_rides, '/partials/pagination_partial.html.twig') }}
-    </div>
-  </section>
+  </div>
 {% endblock %}

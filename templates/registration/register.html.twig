@@ -1,15 +1,10 @@
 {% extends 'base.html.twig' %}
 
-{% block main %}
-  <section class="position-relative banner">
-    <img class="h-100 w-100 object-fit-cover" src="{{ asset('assets/images/login.webp') }}"  alt="photo de cadenas" title="photo de cadenas" />
-    <div class="container position-absolute px-3 top-50 start-50 translate-middle">
-      <div class="row">
-          <h1 class="text-white text-center fs-1">Inscription</h1>
-      </div>
-    </div>
-  </section>
+  {% block mainTitle %}
+    Inscription
+  {% endblock %}
 
+{% block main %}
   <section class="form-signin my-3 my-md-5">
     <div class="container h-100">
       <div class="row h-100">
@@ -18,14 +13,14 @@
           <img class="translate-middle-x w-25" src="{{ asset('assets/images/blablabike.webp') }}" alt="logo Blabla Vélo">
           {{ form_start(registrationForm) }}
           {{ form_errors(registrationForm) }}
-            {{ form_row(registrationForm.user_name) }}
+            {{ form_row(registrationForm.nameNumber) }}
             {{ form_row(registrationForm.email) }}
             {{ form_row(registrationForm.plainPassword, { label: 'Password' }) }}
           <div class="d-inline-flex my-2">
             {{ form_widget(registrationForm.RGPDConscents) }}
             {{ form_label(registrationForm.RGPDConscents) }}
           </div>
-          <button type="submit" class="btn w-auto btn-secondary text-primary px-5 mx-2 mt-2">M'inscrire</button>
+          <button type="submit" class="btn w-auto btn-primary text-white px-4 py-2 mx-2 mt-2">M'inscrire</button>
           {{ form_end(registrationForm) }}
         </div>
         

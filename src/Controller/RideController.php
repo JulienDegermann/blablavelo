@@ -5,17 +5,15 @@ namespace App\Controller;
 use App\Entity\Ride;
 use App\Entity\User;
 use App\Form\NewRideType;
+use App\Form\RideFilterType;
+use App\Service\MailSendService;
 use App\Repository\RideRepository;
 use App\Repository\UserRepository;
-use App\Service\MailSendService;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Mailer\Command\MailerTestCommand;
-use Symfony\Component\Mime\Email;
-use Symfony\Component\Mailer\MailerInterface;
 
 class RideController extends AbstractController
 {
@@ -25,35 +23,52 @@ class RideController extends AbstractController
         Request $request,
         PaginatorInterface $paginator,
     ): Response {
-        
+
         $user = null;
         $userdepartment = null;
         if ($this->getUser()) {
             /** @var User $user */
             $user = $this->getUser();
-        
+
             if ($user->getDepartment() != null) {
-            	$userdepartment = $user->getDepartment();
+                $userdepartment = $user->getDepartment();
             } else {
             }
         }
 
-        $allRides = $rideRepository->findAll();
-        foreach($allRides as $ride) {
-            if($ride->getDate() < (new \DateTime('now - 1 day'))) {
-                $rideRepository->remove($ride);
-            }
+        $myCreatedRides = $rideRepository->findBy(['author' => $user], ['date' => 'ASC']);
+        $myParticipatedRides = $rideRepository->rideOfUser($user);
+
+        $allRides = $rideRepository->findBy([], ['date' => 'ASC']);
+
+
+
+        $form = $this->createForm(RideFilterType::class, null,['user' => $user]);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            // get all datas from form
+            $mind = $request->request->all()['ride_filter']['mind'];
+            $department = $request->request->all()['ride_filter']['department'];
+            $date = $request->request->all()['ride_filter']['date'];
+            $distance = $request->request->all()['ride_filter']['distance'];
+            $participants = $request->request->all()['ride_filter']['participants'];
+            $averageSpeed = $request->request->all()['ride_filter']['average_speed'];
+            $ascent = $request->request->all()['ride_filter']['ascent'];
+            
+            $allRides = $rideRepository->rideFilter($mind, $department, $date, $distance, $participants, $averageSpeed, $ascent);   
         }
 
         $pagination = $paginator->paginate(
-            $rideRepository->ridePaginated($userdepartment),
+            $allRides,
             $request->query->getInt('page', 1),
-            6
+            10
         );
-        
         return $this->render('ride/index.html.twig', [
             'user' => $user,
             'all_rides' => $pagination,
+            'my_rides' => $myCreatedRides,
+            'all_my_rides' => $myParticipatedRides,
+            'filter_form' => $form->createView(),
         ]);
     }
 
@@ -64,11 +79,6 @@ class RideController extends AbstractController
     ): Response {
 
         $allRides = $rideRepository->findAll();
-        foreach($allRides as $ride) {
-            if($ride->getDate() < (new \DateTime('now - 1 day'))) {
-                $rideRepository->remove($ride);
-            }
-        }
 
         $id = $request->attributes->get('id');
         $rides = $rideRepository->findBy(['id' => $id]);
@@ -81,9 +91,9 @@ class RideController extends AbstractController
 
         /** @var User $user */
         $user = $this->getUser();
-        if($user->getIsVerified() == false) {
+        if ($user->getIsVerified() == false) {
             $this->addFlash('warning', 'Veuillez vérifier votre e-mail pour profiter de l\'application. 
-            Pas de mail ? <a class="px-2 text-primary fw-bold" title="demander un nouveau lien de validation" href=" '. $this->generateUrl("app_new_token") . '">Générer un lien</a>');
+            Pas de mail ? <a class="px-2 text-primary fw-bold" title="demander un nouveau lien de validation" href=" ' . $this->generateUrl("app_new_token") . '">Générer un lien</a>');
             return $this->redirectToRoute('app_rides');
         }
         return $this->render('ride/show_ride.html.twig', [
@@ -100,11 +110,11 @@ class RideController extends AbstractController
         Request $request,
         MailSendService $mailSendService,
     ): Response {
-        
+
         /** @var User $user */
         $user = $this->getUser();
 
-        if(!$user) {
+        if (!$user) {
             $this->addFlash('warning', 'Vous devez être connecté pour utiliser l\'application.');
             return $this->redirectToRoute('app_login');
         }
@@ -113,22 +123,22 @@ class RideController extends AbstractController
         /** @var Ride $ride */
         $ride = $rideRepository->findOneBy(['id' => $id]);
 
-        if($ride->getUserCreator() != $user) {
+        if ($ride->getAuthor() != $user) {
             $this->addFlash('warning', 'Vous ne pouvez pas supprimer cette sortie.');
             return $this->redirectToRoute('app_rides');
         }
 
         if ($user->getIsVerified() == false) {
             $this->addFlash('warning', 'Veuillez vérifier votre e-mail pour profiter de l\'application. 
-            Pas de mail ? <a class="px-2 text-primary fw-bold" title="demander un nouveau lien de validation" href=" '. $this->generateUrl("app_new_token") . '">Générer un lien</a>');
+            Pas de mail ? <a class="px-2 text-primary fw-bold" title="demander un nouveau lien de validation" href=" ' . $this->generateUrl("app_new_token") . '">Générer un lien</a>');
             return $this->redirectToRoute('app_home');
         }
 
-        $participants = $ride->getUserParticipant();    
+        $participants = $ride->getParticipants();
         $mail = $mailSendService->deleteRideEmail($participants, $user);
 
         $rideRepository->remove($ride);
-        
+
         $this->addFlash('success', $mail);
         return $this->redirectToRoute('app_home');
     }
@@ -148,7 +158,7 @@ class RideController extends AbstractController
 
         if ($user->getIsVerified() == false) {
             $this->addFlash('warning', 'Veuillez vérifier votre e-mail pour profiter de l\'application. 
-            Pas de mail ? <a class="px-2 text-primary fw-bold" title="demander un nouveau lien de validation" href=" '. $this->generateUrl("app_new_token") . '">Générer un lien</a>');
+            Pas de mail ? <a class="px-2 text-primary fw-bold" title="demander un nouveau lien de validation" href=" ' . $this->generateUrl("app_new_token") . '">Générer un lien</a>');
             return $this->redirectToRoute('app_home');
         }
 
@@ -156,7 +166,7 @@ class RideController extends AbstractController
         $rides = $rideRepository->findBy(['id' => $id]);
         $ride = $rides[0];
         $user = $this->getUser();
-        $ride->addUserParticipant($user);
+        $ride->addParticipant($user);
         $rideRepository->save($ride);
 
         $this->addFlash('success', 'Vous êtes inscrit à la sortie.');
@@ -169,7 +179,7 @@ class RideController extends AbstractController
         Request $request
     ): Response {
 
-        if(!$this->getUser()) {
+        if (!$this->getUser()) {
             $this->addFlash('warning', 'Vous devez être connecté pour voir les annonces');
             return $this->redirectToRoute('app_login');
         }
@@ -179,7 +189,7 @@ class RideController extends AbstractController
 
         if ($user->getIsVerified() == false) {
             $this->addFlash('warning', 'Veuillez vérifier votre e-mail pour profiter de l\'application. 
-            Pas de mail ? <a class="px-2 text-primary fw-bold" title="demander un nouveau lien de validation" href=" '. $this->generateUrl("app_new_token") . '">Générer un lien</a>');
+            Pas de mail ? <a class="px-2 text-primary fw-bold" title="demander un nouveau lien de validation" href=" ' . $this->generateUrl("app_new_token") . '">Générer un lien</a>');
             return $this->redirectToRoute('app_home');
         }
 
@@ -187,7 +197,7 @@ class RideController extends AbstractController
         $rides = $rideRepository->findBy(['id' => $id]);
         $ride = $rides[0];
         $user = $this->getUser();
-        $ride->removeUserParticipant($user);
+        $ride->removeParticipant($user);
         $rideRepository->save($ride);
 
         $this->addFlash('success', 'Vous êtes désinscrit de la sortie.');
@@ -200,7 +210,7 @@ class RideController extends AbstractController
         RideRepository $repo,
         Request $request
     ): Response {
-        
+
         if (!$this->getUser()) {
             $this->addFlash('danger', 'Vous devez être connecté utiliser l\'application.');
             return $this->redirectToRoute('app_login');
@@ -216,13 +226,13 @@ class RideController extends AbstractController
 
         if ($user->getIsVerified() == false) {
             $this->addFlash('warning', 'Veuillez vérifier votre e-mail pour profiter de l\'application. 
-            Pas de mail ? <a class="px-2 text-primary fw-bold" title="demander un nouveau lien de validation" href=" '. $this->generateUrl("app_new_token") . '">Générer un lien</a>');
+            Pas de mail ? <a class="px-2 text-primary fw-bold" title="demander un nouveau lien de validation" href=" ' . $this->generateUrl("app_new_token") . '">Générer un lien</a>');
             return $this->redirectToRoute('app_home');
         }
-        
+
         $ride = new Ride();
-        $ride->setUserCreator($this->getUser());
-        $ride->addUserParticipant($this->getUser());
+        $ride->setAuthor($this->getUser());
+        $ride->addParticipant($this->getUser());
         $form = $this->createForm(NewRideType::class, $ride, ['user' => $user]);
         $form->handleRequest($request);
 

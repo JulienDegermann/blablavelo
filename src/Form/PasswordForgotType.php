@@ -22,7 +22,7 @@ class PasswordForgotType extends AbstractType
             ->add('email', EmailType::class, [
                 'label' => 'E-mail',
                 'attr' => [
-                    'class' => 'form-control mb-3'
+                    'class' => 'form-control mb-3 border border-dark'
                 ],
                 'required' => true,
                 'invalid_message' => 'L\'adresse e-mail n\'est pas valide.',

@@ -6,7 +6,6 @@ use App\Entity\Message;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
@@ -18,26 +17,21 @@ class MessageType extends AbstractType
             ->add('title', ChoiceType::class,[
                 'label' => 'Objet',
                 'required' => true,
-                'attr' => [
-                    'class' => 'form-control mb-3'
-                ],
+                'attr' => ['class' => 'form-control mb-3 border border-dark'],
                 'choices' => [
                     'Signaler un bug' => 'bug',
                     'Suggestion' => 'suggestion',
                 ]
                 ])
-            ->add('content', TextareaType::class, [
+            ->add('text', TextareaType::class, [
                 'label' => 'Contenu du message',
                 'required' => true,
-                'attr' => [
-                    'class' => 'form-control mb-3',
-                    'rows' => "10"
-                ],
+                'attr' => ['class' => 'form-control mb-3 border border-dark', 'rows' => 10]
             ])
-            ->add('email', EmailType::class, [
+            ->add('author', AuthorType::class, [
                 'label' => 'E-mail',
                 'required' => true,
-                'attr' => ['class' => 'form-control mb-3'],
+                'attr' => ['class' => 'form-control mb-3 border border-dark']
             ]);
     }
 

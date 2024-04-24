@@ -22,7 +22,8 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[Vich\Uploadable]
 #[ORM\Table(name: '`user`')]
-#[UniqueEntity(fields: ['nameNumber', 'email'], message: 'Identifiants indisponibles..')]
+#[UniqueEntity(fields: 'nameNumber', message: 'Identifiants indisponibles.')]
+#[UniqueEntity(fields: 'email', message: 'Identifiants indisponibles.')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     // Traits calls
@@ -214,15 +215,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\Valid]
     private ?Department $department = null;
 
-    #[ORM\OneToOne(
-        inversedBy: 'user',
-        cascade: ['persist', 'remove'],
-        targetEntity: ProfileImage::class,
-        orphanRemoval: true
-    )]
-    #[Assert\Valid]
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private ?ProfileImage $profileImage = null;
-
 
     /**
      * A visual identifier that represents this user.

@@ -19,66 +19,19 @@ class RegistrationFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('user_name', TextType::class, [
+            ->add('nameNumber', TextType::class, [
                 'attr' => [
-                    'class' => 'form-control mb-3'
+                    'class' => 'form-control mb-3 border border-dark'
                 ],
                 'label' => 'Nom d\'utilisateur'
             ])
-            // ->add('first_name', TextType::class, [
-            //     'attr' => [
-            //         'class' => 'form-control mb-3'
-            //     ],
-            //     'label' => 'Prénom'
-            // ])
-            // ->add('last_name', TextType::class, [
-            //     'attr' => [
-            //         'class' => 'form-control mb-3'
-            //     ],
-            //     'label' => 'Nom'
-            // ])
-            // ->add('city', EntityType::class, [
-            //     'class' => City::class,
-            //     'attr' => [
-            //         'class' => 'form-control mb-3'
-            //     ],
-            //     'label' => 'Ville'
-            // ])
-            // ->add('department', EntityType::class, [
-            //     'class' => Department::class,
-            //     'attr' => [
-            //         'class' => 'form-control mb-3'
-            //     ],
-            //     'label' => 'Département'
-            // ])
             ->add('email', EmailType::class, [
                 'attr' => [
-                    'class' => 'form-control mb-3'
+                    'class' => 'form-control mb-3 border border-dark'
                 ],
                 'label' => 'E-mail'
 
             ])
-            // ->add('mind', EntityType::class, [
-            //     'class' => Mind::class,
-            //     'attr' => [
-            //         'class' => 'form-control mb-3'
-            //     ],
-            //     'label' => 'Objectif'
-            // ])
-            // ->add('birth_date', BirthdayType::class, [
-            //     'input' => 'datetime_immutable',
-            //     'attr' => [
-            //         'class' => 'form-control mb-3'
-            //     ],
-            //     'label' => 'Date de naissance'
-            // ])
-            // ->add('practice', EntityType::class, [
-            //     'class' => Practice::class,
-            //     'attr' => [
-            //         'class' => 'form-control mb-3'
-            //     ],
-            //     'label' => 'Pratique'
-            // ])
             ->add('RGPDConscents', CheckboxType::class, [
                 'mapped' => false,
                 'attr' => [
@@ -97,7 +50,7 @@ class RegistrationFormType extends AbstractType
                 'mapped' => false,
                 'attr' => [
                     'autocomplete' => 'new-password',
-                    'class' => 'form-control mb-3'
+                    'class' => 'form-control mb-3 border border-dark'
                 ],
                 'label' => 'Mot de passe',
                 'constraints' => [

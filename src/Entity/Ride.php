@@ -32,7 +32,11 @@ class Ride
         ),
         new Assert\Positive(
             message: 'La distance doit être supérieure à 0 kms.'
-        )
+        ),
+        new Assert\LessThanOrEqual(
+            value: 400,
+            message: 'La distance doit être supérieure à {{ compared_value }} kms.'
+        ),
     ])]
     private ?int $distance = null;
 

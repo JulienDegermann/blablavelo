@@ -29,64 +29,48 @@ class NewRideType extends AbstractType
 
         /** @var User $user */
         $user = $options['user'];
-        
+
         $builder
             ->add('title', TextType::class, [
                 'label' => 'Titre de la sortie',
                 'required' => true,
-                'attr' => [
-                    'class' => 'form-control mb-3',
-            ]])
+                'attr' => ['class' => 'form-control mb-3 border border-dark border border-dark'],
+            ])
             ->add('distance', IntegerType::class, [
                 'label' => 'Distance estimée (kms)',
                 'required' => true,
-                'attr' => [
-                    'class' => 'form-control mb-3'
-                ]
+                'attr' => ['class' => 'form-control mb-3 border border-dark border border-dark'],
             ])
             ->add('ascent', IntegerType::class, [
                 'label' => 'Dénivelé positif estimé (m)',
                 'required' => true,
-                'attr' => [
-                    'class' => 'form-control mb-3',
-                ]
+                'attr' => ['class' => 'form-control mb-3 border border-dark border border-dark'],
             ])
             ->add('max_rider', IntegerType::class, [
                 'label' => 'Nombre maximum de participants',
                 'required' => true,
-                'attr' => [
-                    'class' => 'form-control mb-3'
-                ],
-                'constraints' => [
-                    new Assert\Range([
-                        'min' => 1,
-                        'max' => 10,
-                        'notInRangeMessage' => 'Le nombre doit être compris entre 1 et 10.'
-                    ])
-                    ]
+                'attr' => ['class' => 'form-control mb-3 border border-dark border border-dark'],
             ])
             ->add('average_speed', IntegerType::class, [
                 'label' => 'Vitesse moyenne de la sortie (km/h)',
                 'required' => true,
-                'attr' => [
-                    'class' => 'form-control mb-3'
-                ]
+                'attr' => ['class' => 'form-control mb-3 border border-dark border border-dark'],
             ])
             ->add('date', DateTimeType::class, [
                 'label' => 'Date et heure de départ',
                 'required' => true,
                 'widget' => 'single_text',
                 'attr' => [
-                    'class' => 'form-control mb-3 d-flex',
+                    'class' => 'form-control mb-3 border border-dark border border-dark',
                     'data-date-format' => 'dd-mm-yy HH:ii'
                 ],
-                'data' => new \DateTime('now')      
+                'data' => new \DateTime('now')
             ])
             ->add('description', TextareaType::class, [
                 'label' => 'Description et informations complémentaires',
                 'required' => true,
                 'attr' => [
-                    'class' => 'form-control mb-3',
+                    'class' => 'form-control mb-3 border border-dark border border-dark',
                     'rows' => '10'
                 ]
             ])
@@ -94,7 +78,7 @@ class NewRideType extends AbstractType
                 'label' => 'Objectif de la sortie',
                 'required' => true,
                 'attr' => [
-                    'class' => 'form-control mb-3'
+                    'class' => 'form-control mb-3 border border-dark border border-dark'
                 ],
                 'class' => Mind::class,
                 'data' => $user->getMind()
@@ -103,7 +87,7 @@ class NewRideType extends AbstractType
                 'label' => 'Pratique',
                 'required' => true,
                 'attr' => [
-                    'class' => 'form-control mb-3'
+                    'class' => 'form-control mb-3 border border-dark'
                 ],
                 'class' => Practice::class,
                 'data' => $user->getPractice()
@@ -112,15 +96,15 @@ class NewRideType extends AbstractType
                 'label' => 'Ville de départ',
                 'required' => true,
                 'attr' => [
-                    'class' => 'form-control mb-3 text-capitalize'
+                    'class' => 'form-control mb-3 border border-dark text-capitalize'
                 ],
                 'class' => City::class,
                 'query_builder' => function (EntityRepository $er) use ($user): QueryBuilder {
-                            return $er->createQueryBuilder('c')
-                                ->leftJoin('c.department', 'd')
-                                ->andWhere('c.department = :d')
-                                ->setParameter(':d', $user->getDepartment())
-                                ->orderBy('c.name', 'ASC');
+                    return $er->createQueryBuilder('c')
+                        ->leftJoin('c.department', 'd')
+                        ->andWhere('c.department = :d')
+                        ->setParameter(':d', $user->getDepartment())
+                        ->orderBy('c.name', 'ASC');
                 },
             ]);
     }

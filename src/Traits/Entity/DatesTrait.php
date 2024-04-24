@@ -16,7 +16,7 @@ trait DatesTrait
     ),
     new Assert\LessThanOrEqual(
       value: 'now',
-      message: 'La date ne peut être postérieure à la date actuelle.'
+      message: 'La date ne peut être antérieure à la date actuelle.'
     )
   ])]
   private \DateTimeImmutable $createdAt;
@@ -29,7 +29,7 @@ trait DatesTrait
     ),
     new Assert\LessThanOrEqual(
       value: 'now',
-      message: 'La date ne peut être postérieure à la date actuelle.'
+      message: 'La date ne peut être antérieure à la date actuelle.'
     )
   ])]
   private \DateTimeImmutable $updatedAt;

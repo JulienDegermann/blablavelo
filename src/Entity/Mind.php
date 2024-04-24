@@ -25,7 +25,6 @@ class Mind
     private Collection $users;
 
     #[ORM\OneToMany(mappedBy: 'mind', targetEntity: Ride::class)]
-    #[Assert\Valid]
     private Collection $rides;
 
 

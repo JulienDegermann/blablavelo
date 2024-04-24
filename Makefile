@@ -80,7 +80,7 @@ cache:
 	$(SYMFONY) cache:clear
 .PHONY: cache
 
-compile_dev:
+compile:
 	npm run dev
 	make cache
 .PHONY: compile_dev

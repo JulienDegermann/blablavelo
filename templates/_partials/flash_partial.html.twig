@@ -1,0 +1,13 @@
+<div class="position-absolute z-1 top-0 left-0 w-auto">
+
+{% for label, messages in app.flashes %}
+  {% for message in messages %}
+    <div class="alert alert-{{ label }} m-1 rounded-0">
+      <button type="button" class="btn m-0 close position-absolute top-0 end-0 p-0 translate-middle-y mt-1" data-bs-dismiss="alert" aria-label="Close">
+        <span class="fs-5" aria-hidden="true">&times;</span>
+      </button>
+      {{ message | raw }}
+    </div>
+  {% endfor %}
+{% endfor %}
+</div>

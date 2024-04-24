@@ -8,3 +8,16 @@
 // any CSS you import will output into a single css file (app.css in this case)
 import 'bootstrap/dist/js/bootstrap.bundle';
 import './styles/app.scss';
+
+const ranges = document.querySelectorAll('input[type="range"]');  
+
+ranges.forEach(range => {
+    const value = document.createElement('span');
+    value.classList.add('range-value');
+    value.textContent = range.value;
+    range.parentElement.appendChild(value);
+
+    range.addEventListener('input', () => {
+        value.textContent = range.value;
+    });
+});

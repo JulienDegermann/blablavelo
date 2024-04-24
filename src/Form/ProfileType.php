@@ -27,14 +27,14 @@ class ProfileType extends AbstractType
             //     'label' => 'Prénom',
             //     'required' => true,
             //     'attr' => [
-            //         'class' => 'form-control mb-3'                
+            //         'class' => 'form-control mb-3 border border-dark'                
             //     ]
             // ])
             // ->add('last_name', TextType::class, [
             //     'label' => 'Nom',
             //     'required' => true,
             //     'attr' => [
-            //         'class' => 'form-control mb-3'                
+            //         'class' => 'form-control mb-3 border border-dark'                
             //     ]
             // ])
             // ->add('birth_date', DateType::class, [
@@ -52,14 +52,14 @@ class ProfileType extends AbstractType
             //     'delete_label' => 'Supprimer',
             //     'download_uri' => false,
             //     'attr' => [
-            //         'class' => 'form-control mb-3'                
+            //         'class' => 'form-control mb-3 border border-dark'                
             //     ]
             // ])
             ->add('email', TextType::class, [
                 'label' => 'E-mail',
                 'required' => true,
                 'attr' => [
-                    'class' => 'form-control mb-3'                
+                    'class' => 'form-control mb-3 border border-dark'                
                 ],
                 'invalid_message' => 'L\'adresse e-mail n\'est pas valide.',
                 'data' => $user->getEmail(),
@@ -69,7 +69,7 @@ class ProfileType extends AbstractType
                 'label' => 'Département',
                 'required' => false,
                 'attr' => [
-                    'class' => 'form-control mb-3 text-capitalize'
+                    'class' => 'form-control mb-3 border border-dark text-capitalize'
                 ],
                 'class' => Department::class,
                 'query_builder' => function (DepartmentRepository $er) {
@@ -82,7 +82,7 @@ class ProfileType extends AbstractType
             //     'class' => City::class,
             //     'required' => true,
             //     'attr' => [
-            //         'class' => 'form-control mb-3'                
+            //         'class' => 'form-control mb-3 border border-dark'                
             //     ]
             // ])
             ->add('mind', EntityType::class, [
@@ -90,7 +90,7 @@ class ProfileType extends AbstractType
                 'class' => Mind::class,
                 'required' => false,
                 'attr' => [
-                    'class' => 'form-control mb-3'                
+                    'class' => 'form-control mb-3 border border-dark'                
                 ]
             ])
             ->add('practice', EntityType::class, [
@@ -98,7 +98,7 @@ class ProfileType extends AbstractType
                 'class' => Practice::class,
                 'required' => false,
                 'attr' => [
-                    'class' => 'form-control mb-3'
+                    'class' => 'form-control mb-3 border border-dark'
                 ]
             ])
             // ->add('bike', EntityType::class, [
@@ -106,7 +106,7 @@ class ProfileType extends AbstractType
             //     'class' => Model::class,
             //     'required' => true,
             //     'attr' => [
-            //         'class' => 'form-control mb-3'                
+            //         'class' => 'form-control mb-3 border border-dark'                
             //     ]
             // ])
         ;

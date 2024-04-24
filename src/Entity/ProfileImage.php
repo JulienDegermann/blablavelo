@@ -44,14 +44,6 @@ class ProfileImage
 
     private ?int $fileSize = null;
 
-    #[ORM\OneToOne(
-        inversedBy: 'profileImage',
-        cascade: ['persist', 'remove'],
-        orphanRemoval: true,
-        targetEntity: User::class
-    )]
-    private ?User $user = null;
-
     public function getFileName(): ?string
     {
         return $this->file_name;
@@ -95,27 +87,5 @@ class ProfileImage
     public function __toString(): string
     {
         return $this->file_name ?? '';
-    }
-
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(?User $user): static
-    {
-        // unset the owning side of the relation if necessary
-        if ($user === null && $this->user !== null) {
-            $this->user->setProfileImage(null);
-        }
-
-        // set the owning side of the relation if necessary
-        if ($user !== null && $user->getProfileImage() !== $this) {
-            $user->setProfileImage($this);
-        }
-
-        $this->user = $user;
-
-        return $this;
     }
 }

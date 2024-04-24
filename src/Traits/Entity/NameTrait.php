@@ -24,7 +24,7 @@ trait NameTrait
       maxMessage: 'Ce champ ne peut dépasser {{ limit }} caractères.'
     ),
     new Assert\Regex(
-      pattern: '/^(?![×Þß÷þø])[a-zA-ZÀ-ÿ\-]{2,255}$/u',
+      pattern: '/^(?![×Þß÷þø])[a-zA-ZÀ-ÿ\-\s]{2,255}$/u',
       message: 'Ce champ ne peut contenir que des lettres (majuscules et minuscules) et des tirets.'
     )
   ])]
