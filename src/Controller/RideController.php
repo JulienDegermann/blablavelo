@@ -24,26 +24,26 @@ class RideController extends AbstractController
         PaginatorInterface $paginator,
     ): Response {
 
-        $user = null;
-        $userdepartment = null;
-        if ($this->getUser()) {
-            /** @var User $user */
-            $user = $this->getUser();
 
-            if ($user->getDepartment() != null) {
-                $userdepartment = $user->getDepartment();
-            } else {
-            }
+        /** @var User $user */
+        $user = $this->getUser();
+
+
+        if (!$user) {
+            return $this->redirectToRoute('app_home');
         }
+        
+        $userdepartment = $user->getDepartment() ? $user->getDepartment() : null;
 
         $myCreatedRides = $rideRepository->findBy(['author' => $user], ['date' => 'ASC']);
         $myParticipatedRides = $rideRepository->rideOfUser($user);
+        
+        // get all rides of user's department
+        $allRides = $rideRepository->rideFilter(null, $user->getDepartment(), null, null, null, null, null);
 
-        $allRides = $rideRepository->findBy([], ['date' => 'ASC']);
 
 
-
-        $form = $this->createForm(RideFilterType::class, null,['user' => $user]);
+        $form = $this->createForm(RideFilterType::class, null, ['user' => $user]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             // get all datas from form
@@ -54,8 +54,8 @@ class RideController extends AbstractController
             $participants = $request->request->all()['ride_filter']['participants'];
             $averageSpeed = $request->request->all()['ride_filter']['average_speed'];
             $ascent = $request->request->all()['ride_filter']['ascent'];
-            
-            $allRides = $rideRepository->rideFilter($mind, $department, $date, $distance, $participants, $averageSpeed, $ascent);   
+
+            $allRides = $rideRepository->rideFilter($mind, $department, $date, $distance, $participants, $averageSpeed, $ascent);
         }
 
         $pagination = $paginator->paginate(

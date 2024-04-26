@@ -83,7 +83,11 @@ class SecurityController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $user = $repo->findOneBy(['email' => $form->getData()->getEmail()]);
+            // get data from form without link
+            $data = $request->request->all();
+            // $user = $repo->findOneBy(['email' => $form->getData()->getEmail()]);
+            $user = $repo->findOneBy(['email' => $data['password_forgot']['email']]);
+
             
             if ($user) {
                 $mail = $mailSendService->forgotPasswordEmail($user);

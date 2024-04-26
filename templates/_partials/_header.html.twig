@@ -1,0 +1,36 @@
+<header class="navbar navbar-expand-lg bg-white py-2 position-relative z-1">
+  <div class="container p-0 p-md-auto position-relative">
+    <div class="d-flex align-items-center position-relative">
+      <button class="navbar-toggler outline-none border-none d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+      <a href=" {{ path('app_home') }}" class="d-md-inline-flex link-body-emphasis text-decoration-none p-3"><img src="{{ asset('assets/images/blablabike.webp') }}" alt="Logo Blabla Vélo" /></a>
+    </div>
+
+    <div class="w-auto text-center connected">
+      {% if app.user is not empty %}
+        <div class="profile">
+          <a class="btn btn-primary text-white rounded d-inline-block fs-6 px-4 py-2 me-3" href=" {{ path('app_new_ride') }}" title="ajouter une sortie">Ajouter une sortie</a>
+        </div>
+        <div class="profile text-start">
+          {% if user.profileImage is not null %}
+            <img class="rounded-circle mx-2 border border-2 border-primary" src="{{ asset('uploads/images/users/' ~ user.profileImage.getFileName) }}" alt="photo de profil" />
+          {% else %}
+            <div class="mx-2 account rounded-circle border border-2 border-primary d-flex justify-content-center align-item-center">
+              {% include '_partials/_avatar.html.twig' %}
+            </div>
+          {% endif %}
+        </div>
+        <div class="profile-menu w-auto">
+          <div class="bg-white w-auto p-2 text-primary text-start">
+            <p class="fw-bold border-bottom border-primary mt-1 mb-3 text-center">{{ user.getNameNumber }}</p>
+            <a class="my-0 fw-normal text-primary" href="{{ path('app_profile') }}">Mon profil</a> <br />
+            <a class="my-0 fw-normal text-primary" href="{{ path('app_logout') }}">Déconnexion</a>
+          </div>
+        </div>
+      {% else %}
+        {% if app.request.attributes.get('_route') is not same as('app_login') and app.request.attributes.get('_route') is not same as('app_register') %}
+          <a class="btn px-1 px-md-3 mx-2 h-auto fs-6 fs-md-4 col btn-primary border-secondary text-white" href="{{ path('app_login') }}">CONNEXION</a>
+        {% endif %}
+      {% endif %}
+    </div>
+  </div>
+</header>

@@ -15,7 +15,7 @@
           {{ form_errors(registrationForm) }}
             {{ form_row(registrationForm.nameNumber) }}
             {{ form_row(registrationForm.email) }}
-            {{ form_row(registrationForm.plainPassword, { label: 'Password' }) }}
+            {{ form_row(registrationForm.password, { label: 'Mot de passe' }) }}
           <div class="d-inline-flex my-2">
             {{ form_widget(registrationForm.RGPDConscents) }}
             {{ form_label(registrationForm.RGPDConscents) }}

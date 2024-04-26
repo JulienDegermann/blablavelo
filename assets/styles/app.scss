@@ -114,12 +114,13 @@ footer {
     }
   }
 
-  nav {
-    width: 100% !important;
+  ul {
+    flex-direction: column;
+  }
 
-    ul {
-      flex-direction: column;
-    }
+  ul {
+    flex-direction: column;
+    padding-inline-start: 0;
   }
 
   .social {
@@ -130,6 +131,12 @@ footer {
     }
   }
 }
+
+ul {
+  padding-inline-start: 0;
+}
+
+
 
 
 .connected {
@@ -213,36 +220,53 @@ footer a {
 }
 
 .banner {
+  @media screen and (max-width: 767px) {
+    .banner-image {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: -10;
+      height: 25%;
+    }
+  }
 
   @media screen and (min-width: 768px) {
-    height: 200px;
-  }
-
-  @media screen and (max-width: 767px) {
-    height: 200px;
-  }
-
-  div img {
-    object-position: 25% 50%;
+    .banner-image {
+      position: relative;
+      width: 50% !important;
+      height: 100%;
+    }
   }
 }
 
-h1 {
-  text-shadow: 0 0 5px $primary;
-
-  &.shadow-none {
-    text-shadow: none;
-  }
-}
 
 /* =====================================================================================================================
                                                                                 BEFORE LI
 ==================================================================================================================== */
-// .info-list li::before {
-//   content:"🚲";
-//   margin-left: 1em;
-//   text-align: left;
-// }
+
+
+.info-list {
+  padding-inline-start: 2rem;
+
+  ul {
+    padding-inline-start: 2rem;
+  }
+}
+
+.info-list li {
+  position: relative;
+
+  &::before {
+    content: "-";
+    margin-left: 1em;
+    text-align: left;
+    position: absolute;
+    top: 0;
+    left: -2rem;
+  }
+
+}
 
 .participant {
   bottom: 1em;
@@ -274,7 +298,6 @@ h1 {
 
 form ul {
   padding: 0;
-  // margin-top: -1em;
 }
 
 .banner-multi {

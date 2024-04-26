@@ -1,5 +1,4 @@
 {% extends 'base.html.twig' %}
-
 {% block mainTitle %}
   Nouvelle sortie
 {% endblock %}
@@ -14,14 +13,10 @@
             <legend>Informations générales</legend>
             {{ form_label(form.title) }}
             {{ form_widget(form.title) }}
-            <div class="text-danger">
-              {{ form_errors(form.title) }}
-              </div>
+            <div class="text-danger">{{ form_errors(form.title) }}</div>
             {{ form_label(form.description) }}
             {{ form_widget(form.description) }}
-            <div class="text-danger">
-              {{ form_errors(form.description) }}
-              </div>
+            <div class="text-danger">{{ form_errors(form.description) }}</div>
           </fieldset>
           <fieldset class="col-md-6">
             <div class="row">
@@ -29,59 +24,42 @@
               <div class="col-6">
                 {{ form_label(form.city) }}
                 {{ form_widget(form.city) }}
-                <div class="text-danger">
-                  {{ form_errors(form.city) }}
-                  </div>
+                <div class="text-danger">{{ form_errors(form.city) }}</div>
               </div>
               <div class="col-6">
                 {{ form_label(form.date) }}
                 {{ form_widget(form.date) }}
-                <div class="text-danger">
-                  {{ form_errors(form.date) }}
-                  </div>
+                <div class="text-danger">{{ form_errors(form.date) }}</div>
               </div>
               <div class="col-6">
                 {{ form_label(form.practice) }}
                 {{ form_widget(form.practice) }}
-                <div class="text-danger">
-                  {{ form_errors(form.practice) }}
-                  </div>
+                <div class="text-danger">{{ form_errors(form.practice) }}</div>
               </div>
               <div class="col-6">
                 {{ form_label(form.mind) }}
                 {{ form_widget(form.mind) }}
-                <div class="text-danger">
-                  {{ form_errors(form.mind) }}
-                  </div>
+                <div class="text-danger">{{ form_errors(form.mind) }}</div>
               </div>
               <div class="col-6">
                 {{ form_label(form.ascent) }}
-                {{ form_widget(form.ascent)  }}
-                <div class="text-danger">
-                  {{ form_errors(form.ascent ) }}
-                </div>
-
+                {{ form_widget(form.ascent) }}
+                <div class="text-danger">{{ form_errors(form.ascent) }}</div>
               </div>
               <div class="col-6">
                 {{ form_label(form.distance) }}
                 {{ form_widget(form.distance) }}
-                <div class="text-danger">
-                  {{ form_errors(form.distance) }}
-                  </div>
+                <div class="text-danger">{{ form_errors(form.distance) }}</div>
               </div>
               <div class="col-6">
                 {{ form_label(form.average_speed) }}
                 {{ form_widget(form.average_speed) }}
-                <div class="text-danger">
-                  {{ form_errors(form.average_speed) }}
-                  </div>
+                <div class="text-danger">{{ form_errors(form.average_speed) }}</div>
               </div>
               <div class="col-6">
                 {{ form_label(form.max_rider) }}
                 {{ form_widget(form.max_rider) }}
-                <div class="text-danger">
-                  {{ form_errors(form.max_rider) }}
-                  </div>
+                <div class="text-danger">{{ form_errors(form.max_rider) }}</div>
               </div>
             </div>
           </fieldset>

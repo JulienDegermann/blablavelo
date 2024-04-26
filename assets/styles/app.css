@@ -12069,17 +12069,22 @@ footer .copyrights {
 footer .copyrights a {
   text-decoration: none;
 }
-footer nav {
-  width: 100% !important;
-}
-footer nav ul {
+footer ul {
   flex-direction: column;
+}
+footer ul {
+  flex-direction: column;
+  padding-inline-start: 0;
 }
 footer .social {
   flex-direction: row !important;
 }
 footer .social img {
   width: 30px;
+}
+
+ul {
+  padding-inline-start: 0;
 }
 
 .connected {
@@ -12154,31 +12159,46 @@ footer a:hover {
   display: block;
 }
 
-@media screen and (min-width: 768px) {
-  .banner {
-    height: 200px;
-  }
-}
 @media screen and (max-width: 767px) {
-  .banner {
-    height: 200px;
+  .banner .banner-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: -10;
+    height: 25%;
   }
 }
-.banner div img {
-  -o-object-position: 25% 50%;
-     object-position: 25% 50%;
-}
-
-h1, .h1 {
-  text-shadow: 0 0 5px #FC5201;
-}
-h1.shadow-none, .shadow-none.h1 {
-  text-shadow: none;
+@media screen and (min-width: 768px) {
+  .banner .banner-image {
+    position: relative;
+    width: 50% !important;
+    height: 100%;
+  }
 }
 
 /* =====================================================================================================================
                                                                                 BEFORE LI
 ==================================================================================================================== */
+.info-list {
+  padding-inline-start: 2rem;
+}
+.info-list ul {
+  padding-inline-start: 2rem;
+}
+
+.info-list li {
+  position: relative;
+}
+.info-list li::before {
+  content: "-";
+  margin-left: 1em;
+  text-align: left;
+  position: absolute;
+  top: 0;
+  left: -2rem;
+}
+
 .participant {
   bottom: 1em;
   right: 1em;
