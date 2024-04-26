@@ -1,7 +1,5 @@
 {% extends 'base.html.twig' %}
-{% block back %}
 
-{% endblock %}
 {% block mainTitle %}
   Connexion
 {% endblock %}
@@ -10,7 +8,7 @@
   <section class="text-center form-signin my-3 my-md-5">
     <div class="container">
       <div class="row align-items-center d-flex-col">
-        <form method="post" class="d-flex-col col-md-6 m-auto justify-content-center align-items-center text-start">
+        <form method="post" class="d-flex-col col-md-8 col-lg-6 m-auto justify-content-center align-items-center text-start">
           <img class="w-25" src="{{ asset('assets/images/blablabike.webp') }}" alt="logo de Blabla Vélo" />
           <div class="m-3 text-start">
             <label for="inputUser_name">Nom d'utilisateur</label>
@@ -22,10 +20,11 @@
           </div>
 
           <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}" />
-
-          <button class="btn btn-primary text-white px-4 py-2 mx-2 mt-md-3" type="submit">Se connecter</button>
-          <a class="btn bg-white border border-primary text-primary px-4 py-2 mx-2 mt-md-3" href="{{ path('app_pwd_forgot') }}">Mot de passe oublié</a>
-          <a class="btn text-primary mx-2 mt-xl-3 my-0" href="{{ path('app_register') }}">Pas encore inscrit ?</a>
+          <div class="text-center">
+            <button class="btn btn-primary text-white px-4 mx-1 py-2 mx-2 my-2 mt-md-3" type="submit">Se connecter</button>
+            <a class="btn bg-white border border-primary text-primary px-4 mx-1 py-2 my-2 mx-2 mt-md-3" href="{{ path('app_pwd_forgot') }}">Mot de passe oublié</a>
+            <a class="btn text-primary mx-2 my-0" href="{{ path('app_register') }}">Pas encore inscrit ?</a>
+          </div>
         </form>
       </div>
     </div>
