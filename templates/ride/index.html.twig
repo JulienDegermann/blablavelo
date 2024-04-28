@@ -1,33 +1,19 @@
 {% extends 'base.html.twig' %}
-  {% block back %}
-  {% endblock %}
+{% block back %}
+
+{% endblock %}
 {% block main %}
   {% block titleSection %}
 
   {% endblock %}
 
-  <div class="row p-3 my-5">
-    <div class="col-md-4 px-5">
-      <section class="bg-white rounded-1 px-4 py-5 my-5">
-        <h2 class="text-center mb-3 fs-4">{{ user.nameNumber }}</h2>
-        <h3 class="fs-6">Bilan {{ 'now'|date('Y') }}</h3>
-        <p>
-          {{ my_rides|length }} sorties créées<br />
-          {{ all_my_rides|length }} sorties participées
-        </p>
-        <ul>
-          <li>
-            <a class="text-dark fs-6" href="{{ path('app_profile') }}" title="ajouter une sortie">Mon profil</a>
-          </li>
-          <li>
-            <a class="text-dark fs-6" href="{{ path('app_new_ride') }}" title="ajouter une sortie">Créer ma sortie</a>
-          </li>
-          <li>
-            <a class="text-dark fs-6" href="{{ path('app_logout') }}" title="ajouter une sortie">Me déconnecter</a>
-          </li>
-        </ul>
+  <div class="row p-3 my-2 my-md-5 w-100 mx-0">
+    <button id="filter-toggler" class="w-auto border-0 btn bg-none d-xl-none text-primary">Afficher les filtres</button>
+    <div class="col-12 col-lg-4 px-3 px-md-5">
+      <section class="bg-white rounded-1 px-4 py-2 py-md-5 my-2 my-md-5 d-lg-block d-none">
+        {% include '/_partials/_profile_menu.html.twig' %}
       </section>
-      <section class="bg-white rounded-1 px-4 py-5 my-5">
+      <section id="filter" class="bg-white rounded-1 px-4 py-2 py-md-5 my-2 my-md-5 d-lg-block d-none">
         <h2 class="text-center mb-3 fs-4">Filtrer les sorties</h2>
 
         {{ form_start(filter_form) }}
@@ -39,12 +25,12 @@
         {{ form_row(filter_form.ascent) }}
         {{ form_row(filter_form.average_speed) }}
         {{ form_row(filter_form.submit) }}
-        <a class="px-2 py-2" href="{{ path('app_rides') }}">Réinitialiser les filtres</a> 
+        <a class="px-2 py-2" href="{{ path('app_rides') }}">Réinitialiser les filtres</a>
         {{ form_end(filter_form) }}
       </section>
     </div>
 
-    <div class="col-md-8 px-5">
+    <div class="col-12 col-lg-8 px-3 px-md-5">
       <section class="rounded-1 my-5">
         <h2 class="text-center mb-3 fs-3">Mes prochaines sorties</h2>
         {% for ride in all_my_rides %}

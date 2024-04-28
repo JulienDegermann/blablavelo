@@ -23,7 +23,8 @@ class UserController extends AbstractController
         RideRepository $rideRepo,
         Request $request,
         MailerInterface $mail,
-        MailSendService $mailSendService
+        MailSendService $mailSendService,
+        RideRepository $rideRepository
         ): Response {
         
             
@@ -57,11 +58,15 @@ class UserController extends AbstractController
             return $this->redirectToRoute('app_home');
         }
 
+        $myCreatedRides = $rideRepository->findBy(['author' => $user], ['date' => 'ASC']);
+        $myParticipatedRides = $rideRepository->rideOfUser($user);
+
         return $this->render('user/index.html.twig', [
             'user' => $user,
             'form' => $form->createView(),
             'user_rides' => $rides,
-
+            'my_rides' => $myCreatedRides,
+            'all_my_rides' => $myParticipatedRides,
         ]);
     }
 }
