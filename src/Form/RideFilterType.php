@@ -6,16 +6,16 @@ use App\Entity\Mind;
 use App\Entity\Ride;
 use App\Entity\User;
 use App\Entity\Department;
-use Imagine\Image\Histogram\Range;
+use Imagine\Image\Histogram\Hidden;
 use Symfony\Component\Form\Button;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\RangeType;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
 class RideFilterType extends AbstractType
 {
@@ -28,10 +28,10 @@ class RideFilterType extends AbstractType
       ->add('mind', EntityType::class, [
         'class' => Mind::class,
         'attr' => [
-          'class' => 'form-control mb-3 border border-dark'
+          'class' => 'form-control mb-3 border border-dark',
         ],
         'label' => 'Objectif',
-        'mapped' => false
+        'mapped' => false,
       ])
       ->add('department', EntityType::class, [
         'class' => Department::class,
@@ -51,45 +51,83 @@ class RideFilterType extends AbstractType
         'mapped' => false,
         'required' => false
       ])
-      ->add('distance', RangeType::class, [
+      ->add('distance_min', HiddenType::class, [
         'attr' => [
-          'class' => 'form-control mb-3',
+          'class' => 'form-control mb-3 min',
           'min' => 0,
           'max' => 300,
-          'step' => 5
+        ],
+        'label' => 'Distance (kms)',
+        'mapped' => false,
+        'data' => '20'
+      ])
+      ->add('distance_max', HiddenType::class, [
+        'attr' => [
+          'class' => 'form-control mb-3 max',
+          'min' => 0,
+          'max' => 300
         ],
         'label' => 'Distance (kms)',
         'mapped' => false
       ])
-      ->add('participants', RangeType::class, [
+      ->add('participants_min', HiddenType::class, [
         'attr' => [
-          'class' => 'form-control mb-3',
+          'class' => 'form-control mb-3 min',
           'min' => 1,
           'max' => 10,
-          'step' => 1
+        ],
+        'label' => 'Nombre de participants',
+        'mapped' => false,
+        'data' => '3'
+      ])
+      ->add('participants_max', HiddenType::class, [
+        'attr' => [
+          'class' => 'form-control mb-3 max',
+          'min' => 1,
+          'max' => 10,
         ],
         'label' => 'Nombre de participants',
         'mapped' => false
       ])
-      ->add('ascent', RangeType::class, [
+      ->add('ascent_min', HiddenType::class, [
         'attr' => [
-          'class' => 'form-control mb-3',
+          'class' => 'form-control mb-3 min',
           'min' => 0,
           'max' => 3000,
-          'step' => 50
+        ],
+        'label' => 'Dénivelé (m)',
+        'mapped' => false,
+        'data' => '500'
+      ])
+      ->add('ascent_max', HiddenType::class, [
+        'attr' => [
+          'class' => 'form-control mb-3 max',
+          'min' => 0,
+          'max' => 3000,
         ],
         'label' => 'Dénivelé (m)',
         'mapped' => false
       ])
-      ->add('average_speed', RangeType::class, [
+      ->add('average_speed_min', HiddenType::class, [
         'attr' => [
-          'class' => 'form-control mb-3',
+          'class' => 'form-control mb-3 min',
           'min' => 0,
           'max' => 50,
           'step' => 1
         ],
         'label' => 'Vitesse moyenne (km/h)',
-        'mapped' => false
+        'mapped' => false,
+        'data' => '15'
+      ])
+      ->add('average_speed_max', HiddenType::class, [
+        'attr' => [
+          'class' => 'form-control mb-3 max',
+          'min' => 0,
+          'max' => 50,
+          'step' => 1
+        ],
+        'label' => 'Vitesse moyenne (km/h)',
+        'mapped' => false,
       ])
       ->add('submit', SubmitType::class, [
         'attr' => [

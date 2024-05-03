@@ -20,10 +20,26 @@
         {{ form_row(filter_form.mind) }}
         {{ form_row(filter_form.department) }}
         {{ form_row(filter_form.date) }}
-        {{ form_row(filter_form.distance) }}
-        {{ form_row(filter_form.participants) }}
-        {{ form_row(filter_form.ascent) }}
-        {{ form_row(filter_form.average_speed) }}
+        <div class="range my-5">
+          <p class="my-1">Distance (kms)</p>
+          {{ form_row(filter_form.distance_min) }}
+          {{ form_row(filter_form.distance_max) }}
+          </div>
+          <div class="range my-5">
+            <p class="my-1">Nombre de participants</p>
+            {{ form_row(filter_form.participants_min) }}
+            {{ form_row(filter_form.participants_max) }}
+            </div>
+            <div class="range my-5">
+          <p class="my-1">Dénivelé positif (m)</p>
+          {{ form_row(filter_form.ascent_min) }}
+          {{ form_row(filter_form.ascent_max) }}
+          </div>
+          <div class="range my-5">
+          <p class="my-1">Vitesse moyenne (km/h)</p>
+          {{ form_row(filter_form.average_speed_min) }}
+          {{ form_row(filter_form.average_speed_max) }}
+        </div>
         {{ form_row(filter_form.submit) }}
         <a class="px-2 py-2" href="{{ path('app_rides') }}">Réinitialiser les filtres</a>
         {{ form_end(filter_form) }}

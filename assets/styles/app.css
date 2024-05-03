@@ -12294,4 +12294,24 @@ form ul {
 .pagination .page-item .page-link:focus {
   background: none;
   box-shadow: none;
+}
+
+.slider {
+  width: 100%;
+  height: 2px;
+  background-color: #FFF6F2;
+  position: relative;
+}
+.slider .slider-min,
+.slider .slider-max {
+  position: absolute;
+  top: 50%;
+  height: 100%;
+  width: 0;
+  background-color: #FC5201;
+  width: 10px;
+  height: 10px;
+  transform: translateY(-50%);
+  border-radius: 50%;
+  cursor: pointer;
 }/*# sourceMappingURL=app.css.map */
