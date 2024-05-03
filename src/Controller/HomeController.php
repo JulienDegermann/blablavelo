@@ -13,28 +13,15 @@ class HomeController extends AbstractController
     #[Route('/', name: 'app_home')]
     public function index(
         RideRepository $rideRepository
-        ): Response
-    {
-        
-        $allRides = $rideRepository->findAll();
+    ): Response {
 
-        $user = null;
-        $userdepartment = null;
+
         if ($this->getUser()) {
-            /** @var User $user */
-            $user = $this->getUser();
-        
-            if ($user->getDepartment() != null) {
-            	$userdepartment = $user->getDepartment();
-            } else {
-            }
+            
+            return $this->redirectToRoute('app_rides');
         }
-        
-        $rides = $rideRepository->rideList($userdepartment, 3);
-        
-        return $this->render('home/index.html.twig', [
-            'user' => $user,
-            'all_rides' => $rides,
-        ]);
+
+
+        return $this->render('home/index.html.twig');
     }
 }

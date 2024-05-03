@@ -8,7 +8,6 @@ use App\Form\NewRideType;
 use App\Form\RideFilterType;
 use App\Service\MailSendService;
 use App\Repository\RideRepository;
-use App\Repository\UserRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,26 +23,22 @@ class RideController extends AbstractController
         PaginatorInterface $paginator,
     ): Response {
 
-        $user = null;
-        $userdepartment = null;
-        if ($this->getUser()) {
-            /** @var User $user */
-            $user = $this->getUser();
+        /** @var User $user */
+        $user = $this->getUser();
 
-            if ($user->getDepartment() != null) {
-                $userdepartment = $user->getDepartment();
-            } else {
-            }
+        if (!$user) {
+            return $this->redirectToRoute('app_home');
         }
+        
+        $userdepartment = $user->getDepartment() ? $user->getDepartment() : null;
 
         $myCreatedRides = $rideRepository->findBy(['author' => $user], ['date' => 'ASC']);
         $myParticipatedRides = $rideRepository->rideOfUser($user);
+        
+        // get all rides of user's department
+        $allRides = $rideRepository->rideFilter(null, $user->getDepartment(), null, null, null, null, null);
 
-        $allRides = $rideRepository->findBy([], ['date' => 'ASC']);
-
-
-
-        $form = $this->createForm(RideFilterType::class, null,['user' => $user]);
+        $form = $this->createForm(RideFilterType::class, null, ['user' => $user]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             // get all datas from form
@@ -54,8 +49,8 @@ class RideController extends AbstractController
             $participants = $request->request->all()['ride_filter']['participants'];
             $averageSpeed = $request->request->all()['ride_filter']['average_speed'];
             $ascent = $request->request->all()['ride_filter']['ascent'];
-            
-            $allRides = $rideRepository->rideFilter($mind, $department, $date, $distance, $participants, $averageSpeed, $ascent);   
+
+            $allRides = $rideRepository->rideFilter($mind, $department, $date, $distance, $participants, $averageSpeed, $ascent);
         }
 
         $pagination = $paginator->paginate(
@@ -63,6 +58,7 @@ class RideController extends AbstractController
             $request->query->getInt('page', 1),
             10
         );
+
         return $this->render('ride/index.html.twig', [
             'user' => $user,
             'all_rides' => $pagination,
@@ -75,10 +71,8 @@ class RideController extends AbstractController
     #[Route('/sortie/{id}', name: 'app_ride', methods: ['GET', 'POST'])]
     public function showRide(
         RideRepository $rideRepository,
-        Request $request
+        Request $request,
     ): Response {
-
-        $allRides = $rideRepository->findAll();
 
         $id = $request->attributes->get('id');
         $rides = $rideRepository->findBy(['id' => $id]);
@@ -96,9 +90,15 @@ class RideController extends AbstractController
             Pas de mail ? <a class="px-2 text-primary fw-bold" title="demander un nouveau lien de validation" href=" ' . $this->generateUrl("app_new_token") . '">Générer un lien</a>');
             return $this->redirectToRoute('app_rides');
         }
+
+        $myCreatedRides = $rideRepository->findBy(['author' => $user], ['date' => 'ASC']);
+        $myParticipatedRides = $rideRepository->rideOfUser($user);
+
         return $this->render('ride/show_ride.html.twig', [
             'user' => $user,
             'ride' => $ride,
+            'my_rides' => $myCreatedRides,
+            'all_my_rides' => $myParticipatedRides,
         ]);
     }
 
@@ -106,7 +106,6 @@ class RideController extends AbstractController
     #[Route('/sortie/supprimer-la-sortie/{id}', name: 'app_ride_delete', methods: ['GET', 'POST'])]
     public function deleteRide(
         RideRepository $rideRepository,
-        UserRepository $userRepository,
         Request $request,
         MailSendService $mailSendService,
     ): Response {
@@ -135,7 +134,7 @@ class RideController extends AbstractController
         }
 
         $participants = $ride->getParticipants();
-        $mail = $mailSendService->deleteRideEmail($participants, $user);
+        $mail = $mailSendService->deleteRideEmail($participants, $user, $ride);
 
         $rideRepository->remove($ride);
 
@@ -143,11 +142,11 @@ class RideController extends AbstractController
         return $this->redirectToRoute('app_home');
     }
 
-
     #[Route('/sortie/{id}/participer', name: 'app_ride_connect', methods: ['GET', 'POST'])]
     public function addToRide(
         RideRepository $rideRepository,
-        Request $request
+        Request $request,
+        MailSendService $mailSendService,
     ): Response {
 
         $user = null;
@@ -208,8 +207,11 @@ class RideController extends AbstractController
     #[Route('/nouvelle-sortie', name: 'app_new_ride', methods: ['GET', 'POST'])]
     public function newRide(
         RideRepository $repo,
-        Request $request
+        Request $request,
+        RideRepository $rideRepository
     ): Response {
+
+      
 
         if (!$this->getUser()) {
             $this->addFlash('danger', 'Vous devez être connecté utiliser l\'application.');
@@ -218,6 +220,9 @@ class RideController extends AbstractController
 
         /** @var User $user */
         $user = $this->getUser();
+
+        $myCreatedRides = $rideRepository->findBy(['author' => $user], ['date' => 'ASC']);
+        $myParticipatedRides = $rideRepository->rideOfUser($user);
 
         if ($user->getDepartment() == null) {
             $this->addFlash('warning', 'Veuillez renseigner votre département pour créer une sortie.');
@@ -247,6 +252,8 @@ class RideController extends AbstractController
         return $this->render('ride/new_ride.html.twig', [
             'form' => $form->createView(),
             'user' => $user,
+            'my_rides' => $myCreatedRides,
+            'all_my_rides' => $myParticipatedRides,
         ]);
     }
 }

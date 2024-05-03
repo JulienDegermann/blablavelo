@@ -1,29 +1,34 @@
 {% extends 'base.html.twig' %}
 
-  {% block titleSection %}
-  {% endblock %}
+{% block back %}
 
-  {% block main %}
+{% endblock %}
+{% block header %}
+
+{% endblock %}
+{% block titleSection %}
+
+{% endblock %}
+
+{% block main %}
   <section class="banner position-relative h-100">
-    <div class="d-flex justify-content-between h-100 w-100">
-      <img class="w-50 h-100 object-fit-cover m-0 p-0" src="{{ asset('assets/images/banner.webp') }}" alt="photo cyclisme route" title="photo cyclisme route" />
+    <div class="d-flex flex-column flex-md-row justify-content-between h-100 w-100">
+      <img 
+        class="banner-image object-fit-cover m-0 p-0" 
+        src="{{ asset('assets/images/banner.webp') }}" alt="photo cyclisme route" title="photo cyclisme route" />
       <div class="d-flex flex-column justify-content-center py-5 px-5 w-100 h-100 m-auto">
         <img class="w-50 mx-auto" src="{{ asset('assets/images/blablabike.webp') }}" alt="Logo Blabla Vélo" />
         <h2 class="text-dark w-100 fs-1 mb-2">Tu veux partager et découvrir de nouveaux parcours ?</h2>
-          <p class="text-dark">
-            Bla Bla Vélo, c’est l’appli où tu peux partager et/ou découvrir des itinéraires avec des partenaires 
-            ayant des objectifs similaires aux tiens.
-          </p>
-          <div class="d-flex justify-content-end w-100 my-5">
-            <a class="w-auto fs-6 px-4 py-5 fw-bold px-md-5 py-md-2 mx-2 btn bg-white border border-1 border-primary text-primary" 
-              href="{{ path('app_login') }}">Me connecter</a>
-            <a 
-              href="{{ path('app_register') }}"
-              class="w-auto fs-6 px-4 py-5 fw-bold px-md-5 py-md-2 mx-2 btn btn-primary text-white" 
-            >M'inscrire
-            </a>
-          </div>
+        <p class="text-dark">Bla Bla Vélo, c’est l’appli où tu peux partager et/ou découvrir des itinéraires avec des partenaires ayant des objectifs similaires aux tiens.</p>
+        <div class="d-flex flex-column flex-lg-row justify-content-end w-auto my-5">
+          <a class="w-auto fs-6 px-4 fw-bold px-md-5 py-2 mx-2 btn bg-white border border-1 border-primary text-primary mb-2" href="{{ path('app_login') }}">Me connecter</a>
+          <a class="w-auto fs-6 px-4 fw-bold px-md-5 py-2 mx-2 btn btn-primary text-white mb-2" href="{{ path('app_register') }}">M'inscrire</a>
+        </div>
       </div>
     </div>
   </section>
+{% endblock %}
+
+{% block footer %}
+
 {% endblock %}

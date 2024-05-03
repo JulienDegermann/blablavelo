@@ -1,166 +1,45 @@
-<!DOCTYPE html>
-<html lang="fr">
-  <head>
-    <meta charset="UTF-8" />
-    <title>
-      {% block title %}
-        Blabla Vélo
-      {% endblock %}
-    </title>
-    <meta name="viewport" content="initial-scale=1.0, maximum-scale=5.0" />
+{% include '/_partials/_head.html.twig' %}
 
-    <meta name="title" content="Blabla Vélo" />
-    <meta name="description" content="Tu cherches des partenaires pour rouler ? des personnes qui ont une pratique et un niveau similaires au tien ? NE CHERCHE PLUS ! 
-    Blabla Vélo propose aux sportifs de proposer des sorties en précisant allure et pratique !" />
-    <meta name="author" content="Julien Degermann" />
-    <meta name="keywords" content="blabla, vélo, randonnée, rando, sortie, VTT, cyclisme, route, gravel, groupe, passion, partage" />
+{% block header %}
+  {% include '/_partials/_header.html.twig' %}
+{% endblock %}
 
-    <meta property="og:title" content="Blabla Vélo" />
-    <meta property="og:author" content="Julien DEGERMANN" />
-    <meta property="og:description" content="Tu cherches des partenaires pour rouler ? des personnes qui ont une pratique et un niveau similaires au tien ? NE CHERCHE PLUS ! 
-    Blabla Vélo propose aux sportifs de proposer des sorties en précisant allure et pratique ! De quoi partager la passion du vélo " />
-    <meta property="og:keywords" content="blabla, vélo, randonnée, rando, sortie, VTT, cyclisme, route, gravel, groupe, passion, partage" />
-    <meta property="og:image" content="{{ asset('assets/images/blablabike.webp') }}" />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://blablabike.julien-degermann.fr" />
+<main class="position-relative z-0">
+  {% if app.user %}
+    <div id="profile-menu" class="">
+      <div class="bg-white w-auto h-100 p-5 text-start">
+        {% include '/_partials/_profile_menu.html.twig' %}
+      </div>
+    </div>
+  {% endif %}
 
-    <link rel="icon" href="{{ asset('assets/images/favicon.ico') }}" />
-    {% block stylesheets %}
-      {{ encore_entry_link_tags('app') }}
-    {% endblock %}
-    {% block javascripts %}
-      {{ encore_entry_script_tags('app') }}
-    {% endblock %}
-  </head>
+  {% block back %}
+    <section>
+      <div class="container">
+        <a id="return" class="btn bg-secondary border-primary px-3 py-2 text-primary m-2" href="{{ app.request.headers.get('referer') }}">
+          <svg class="me-1 mb-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />
+          </svg>Retour
+        </a>
+      </div>
+    </section>
+  {% endblock %}
+  {% block titleSection %}
+    <section class="my-3 my-md-5">
+      <div class="container">
+        <h2 class="text-center mb-5 fs-1">
+          {% block mainTitle %}
+            Change this title in your page template
+          {% endblock %}
+        </h2>
+      </div>
+    </section>
+  {% endblock %}
 
-  <body class="bg-secondary">
-    {% block body %}
-      {% block header %}
-        {# only display if user is logged ? #}
-        {# {% if app.user %} #}
-        <header class="navbar navbar-expand-lg navbar-dark bg-white py-2 position-relative z-1">
-          <div class="container p-0 p-md-auto position-relative">
-            <div class="d-flex align-items-center position-relative">
-              <button class="navbar-toggler outline-none border-none d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-              <a href=" {{ path('app_home') }}" class="d-md-inline-flex link-body-emphasis text-decoration-none p-3"><img src="{{ asset('assets/images/blablabike.webp') }}" alt="Logo Blabla Vélo" /></a>
-            </div>
+  {% include '/_partials/_addflash.html.twig' %}
 
-            {% include '/_partials/nav_partial.html.twig' %}
-
-            <div class="w-auto text-center connected">
-              {% if app.user is not empty %}
-                <div class="profile">
-                  <a class="btn btn-primary text-white rounded d-inline-block fs-6 px-4 py-2 me-3" href=" {{ path('app_new_ride') }}" title="ajouter une sortie">Ajouter une sortie</a>
-                </div>
-                <div class="profile text-start">
-                  {% if user.profileImage is not null %}
-                    <img class="rounded-circle mx-2 border border-2 border-primary" src="{{ asset('uploads/images/users/' ~ user.profileImage.getFileName) }}" alt="photo de profil" />
-                  {% else %}
-                    <div class="mx-2 account rounded-circle border border-2 border-primary d-flex justify-content-center align-item-center">
-                      {% include '_partials/avatar_partial.html.twig' %}
-                    </div>
-                  {% endif %}
-                </div>
-                <div class="profile-menu w-auto">
-                  <div class="bg-white w-auto p-2 text-primary text-start">
-                    <p class="fw-bold border-bottom border-primary mt-1 mb-3 text-center">{{ user.getNameNumber }}</p>
-                    <a class="my-0 fw-normal text-primary" href="{{ path('app_profile') }}">Mon profil</a> <br />
-                    <a class="my-0 fw-normal text-primary" href="{{ path('app_logout') }}">Déconnexion</a>
-                  </div>
-                </div>
-              {% else %}
-                {% if app.request.attributes.get('_route') is not same as('app_login') and app.request.attributes.get('_route') is not same as('app_register') %}
-                  <a class="btn px-1 px-md-3 mx-2 h-auto fs-6 fs-md-4 col btn-primary border-secondary text-white" href="{{ path('app_login') }}">CONNEXION</a>
-                {% endif %}
-              {% endif %}
-            </div>
-          </div>
-        </header>
-        {# {% endif %} #}
-      {% endblock %}
-      <main class="position-relative z-0">
-        {# include mainTitle on pages #}
-        {% block titleSection %}
-          <section class="my-3 my-md-5">
-            <div class="container">
-              <h2 class="text-center mb-5 fs-1">
-                {% block mainTitle %}
-                  coucou
-                {% endblock %}
-              </h2>
-            </div>
-          </section>
-        {% endblock %}
-
-        {% include '/_partials/flash_partial.html.twig' %}
-
-        {% block main %}
-          {# here is the content of page #}
-        {% endblock %}
-      </main>
-      {% block footer %}
-        <footer class="py-5 border-top bg-primary text-dark bg-white">
-          <div class="container">
-            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-5">
-              <div class="col-12 col-md-4 mb-3 text-center">
-                <div class="mb-2">
-                  <a href="{{ path('app_home') }}" class="d-inline-flex text-center w-auto text-dark link-body-emphasis text-decoration-none"><img src="{{ asset('assets/images/blablabike.webp') }}" alt="Logo Blabla Vélo" /></a>
-                  <p class="fs-6 text-dark">
-                    © 2023 - Blabla Vélo <br />
-                    <span class="copyrights text-dark">
-                      Designed et developed by <br />
-                      <a class="text-dark" href="https://julien-degermann.fr/">Julien DEGERMANN</a>
-                    </span>
-                  </p>
-                </div>
-              </div>
-
-              {# <div class="col-12 col-md-3"></div> #}
-
-              <div class="col-12 col-md-4 mb-3">
-                <h3 class="fs-4 text-dark">Informations légales</h3>
-                <ul class="nav flex-column">
-                  {% if is_granted('ROLE_ADMIN') %}
-                    <li>
-                      <a href="{{ path('app_legal_notice') }}" class="nav-link mx-1 py-1 px-4 text-dark">Mentions légales</a>
-                    </li>
-                    <li>
-                      <a href="{{ path('app_pricacy_policy') }}" class="nav-link mx-1 py-1 px-4 text-dark">Politique de confidentialité</a>
-                    </li>
-                  {% endif %}
-                  <li>
-                    <a href="{{ path('app_info') }}" class="nav-link mx-1 py-1 px-4 text-dark">Comment ça marche ?</a>
-                  </li>
-                  <li>
-                    <a href="{{ path('app_contact') }}" class="nav-link mx-1 py-1 px-4 text-dark">Un bug ? <br /> Une suggestion ?</a>
-                  </li>
-                </ul>
-              </div>
-
-              <div class="col-12 col-md-4 mb-3">
-                <h3 class="fs-4 text-dark">Nous contacter</h3>
-                <a class="text-dark" href="mailto:no-reply.blablavelo@julien-degermann.fr">no-reply.blablavelo@julien-degermann.fr</a>
-                <nav>
-                  <ul class="social ps-0 d-flex justify-content-start">
-                    <li class="mx-1">
-                      <a href="https://www.linkedin.com/in/julien-degermann/" target="_blank" class="nav-link my-0 p-0 text-white">{% include '_partials/linkedin_svg_partial.html.twig' %}</a>
-                    </li>
-                    <li class="mx-1">
-                      <a href="https://github.com/JulienDegermann" target="_blank" class="nav-link my-0 p-0 text-white">{% include '_partials/github_svg_partial.html.twig' %}</a>
-                    </li>
-                    <li class="mx-1">
-                      <a href="https://github.com/JulienDegermann" target="_blank" class="nav-link my-0 p-0 text-white">{% include '_partials/strava_svg_partial.html.twig' %}</a>
-                    </li>
-                    <li class="mx-1">
-                      <a href="https://github.com/JulienDegermann" target="_blank" class="nav-link my-0 p-0 text-white">{% include '_partials/facebook_svg_partial.html.twig' %}</a>
-                    </li>
-                  </ul>
-                </nav>
-              </div>
-            </div>
-          </div>
-        </footer>
-      {% endblock %}
-    {% endblock %}
-  </body>
-</html>
+  {% block main %}
+    {# here is the content of page #}
+  {% endblock %}
+</main>
+{% include '/_partials/_footer.html.twig' %}

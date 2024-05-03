@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Entity\Message;
 use App\Form\MessageType;
+use App\Repository\RideRepository;
 use App\Repository\MessageRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,7 +17,8 @@ class ContactController extends AbstractController
     #[Route('/contact', name: 'app_contact')]
     public function contact(
         Request $request,
-        MessageRepository $repo
+        MessageRepository $repo,
+        RideRepository $rideRepository
     ): Response {
         
         $user = null;
@@ -36,9 +38,15 @@ class ContactController extends AbstractController
             $this->addFlash('success', 'Votre message a bien été envoyé');
             return $this->redirectToRoute('app_contact');
         }
+
+        $myCreatedRides = $rideRepository->findBy(['author' => $user], ['date' => 'ASC']);
+        $myParticipatedRides = $rideRepository->rideOfUser($user);
+
         return $this->render('contact/index.html.twig', [
             'messageForm' => $form->createView(),
             'user' => $user,
+            'my_rides' => $myCreatedRides,
+            'all_my_rides' => $myParticipatedRides
         ]);
     }
 }

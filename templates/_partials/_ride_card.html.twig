@@ -1,0 +1,19 @@
+<div class="rounded-1 border p-3 d-block bg-light my-4 my-md-3 d-flex align-items-center justify-content-between">
+  <div class="d-flex align-items-center flex-column flex-md-row justify-content-between w-100">
+    <div class="d-md-flex w-auto">
+      <div class="img-container my-2">
+        {% include '/_partials/_practice_img.html.twig' %}
+      </div>
+
+      <div class="mx-3 w-auto">
+        <h3 class="text-primary fs-5 m-0">{{ ride.getTitle }}</h3>
+        <p class="p-0 m-0">
+          📆 : {{ ride.getDate|date('D d F Y') }}, {{ ride.getDate|date('H:i') }} <br />
+          📍 : {{ ride.getCity|capitalize }} <br />
+          🚲 : {{ ride.getPractice }} ({{ ride.getDistance }} kms, {{ ride.getAscent }} m de D+)
+        </p>
+      </div>
+    </div>
+    <a class="btn btn-primary w-auto px-4 py-2 mt-4 mb-2 my-md-0 h-auto rounded-1 text-white" href="{{ path('app_ride', { id: ride.getId }) }}">Plus d'infos</a>
+  </div>
+</div>

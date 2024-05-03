@@ -2,11 +2,13 @@
 
 namespace App\Controller;
 
+use App\Entity\Ride;
 use App\Entity\User;
 use App\Form\PasswordResetType;
 use App\Form\PasswordForgotType;
-use App\Repository\UserRepository;
 use App\Service\MailSendService;
+use App\Repository\RideRepository;
+use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -83,7 +85,11 @@ class SecurityController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $user = $repo->findOneBy(['email' => $form->getData()->getEmail()]);
+            // get data from form without link
+            $data = $request->request->all();
+            // $user = $repo->findOneBy(['email' => $form->getData()->getEmail()]);
+            $user = $repo->findOneBy(['email' => $data['password_forgot']['email']]);
+
             
             if ($user) {
                 $mail = $mailSendService->forgotPasswordEmail($user);
@@ -105,7 +111,8 @@ class SecurityController extends AbstractController
         Request $request,
         string $token,
         UserRepository $repo,
-        UserPasswordHasherInterface $pwdhash
+        UserPasswordHasherInterface $pwdhash,
+        RideRepository $rideRepository
     ): Response {
     
         $user = $repo->findOneBy(['token' => $token]);
@@ -117,6 +124,9 @@ class SecurityController extends AbstractController
         
         $form = $this->createForm(PasswordResetType::class, $user);
         $form->handleRequest($request);
+
+        $myCreatedRides = $rideRepository->findBy(['author' => $user], ['date' => 'ASC']);
+        $myParticipatedRides = $rideRepository->rideOfUser($user);
 
         if ($form->isSubmitted()) {
             if ($form->isValid()) {
@@ -133,14 +143,18 @@ class SecurityController extends AbstractController
                 $this->addFlash('error', 'Une erreur est survenue.');
                 return $this->render('security/pwd_reset.html.twig', [
                     'form' => $form->createView(),
-                    'user' => $user
+                    'user' => $user,
+                    'my_rides' => $myCreatedRides,
+                    'all_my_rides' => $myParticipatedRides,
                 ]);
             }
         }
 
         return $this->render('security/pwd_reset.html.twig', [
             'form' => $form->createView(),
-            'user' => $user
+            'user' => $user,
+            'my_rides' => $myCreatedRides,
+            'all_my_rides' => $myParticipatedRides,
         ]);
     }
 }

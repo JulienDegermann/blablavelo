@@ -1,0 +1,62 @@
+{% block footer %}
+  <footer class="py-5 border-top bg-primary text-dark bg-white">
+    <div class="container">
+      <div class="d-flex flex-md-row flex-column-reverse w-100 justify-content-between">
+        <div class="my-3 text-center">
+          <div class="mb-2">
+            <a href="{{ path('app_home') }}" class="d-inline-flex text-center w-auto text-dark link-body-emphasis text-decoration-none"><img src="{{ asset('assets/images/blablabike.webp') }}" alt="Logo Blabla Vélo" /></a>
+            <p class="fs-6 text-dark">
+              © 2023 - Blabla Vélo <br />
+              <span class="copyrights text-dark">
+                Designed et developed by <br />
+                <a class="text-dark" href="https://julien-degermann.fr/">Julien DEGERMANN</a>
+              </span>
+            </p>
+          </div>
+        </div>
+        <div class="my-3">
+          <h3 class="fs-4 text-dark">Informations légales</h3>
+          <ul>
+            <li>
+              <a href="{{ path('app_info') }}" class="nav-link mx-1 py-1 text-dark">Comment ça marche ?</a>
+            </li>
+            <li>
+              <a href="{{ path('app_legal_notice') }}" class="nav-link mx-1 py-1 text-dark">Mentions légales</a>
+            </li>
+            <li>
+              <a href="{{ path('app_pricacy_policy') }}" class="nav-link mx-1 py-1 text-dark">Politique de confidentialité</a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="my-3">
+          <h3 class="fs-4 text-dark">Nous contacter</h3>
+          <ul>
+            <li>
+              <a href="{{ path('app_contact') }}" class="nav-link mx-1 py-1 text-dark">Une question ? Une remarque ?</a>
+            </li>
+            <li>
+              <a class="nav-link mx-1 py-1 text-dark" href="mailto:no-reply.blablavelo@julien-degermann.fr">no-reply.blablavelo@julien-degermann.fr</a>
+            </li>
+          </ul>
+          <nav>
+            <ul class="social ps-0 d-flex justify-content-start">
+              <li class="mx-1">
+                <a href="https://www.linkedin.com/in/julien-degermann/" target="_blank" class="nav-link my-0 p-0 text-white">{% include '_partials/svg/_linkedin.html.twig' %}</a>
+              </li>
+              <li class="mx-1">
+                <a href="https://github.com/JulienDegermann" target="_blank" class="nav-link my-0 p-0 text-white">{% include '_partials/svg/_github.html.twig' %}</a>
+              </li>
+              <li class="mx-1">
+                <a href="https://github.com/JulienDegermann" target="_blank" class="nav-link my-0 p-0 text-white">{% include '_partials/svg/_strava.html.twig' %}</a>
+              </li>
+              <li class="mx-1">
+                <a href="https://github.com/JulienDegermann" target="_blank" class="nav-link my-0 p-0 text-white">{% include '_partials/svg/_facebook.html.twig' %}</a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </footer>
+{% endblock %}

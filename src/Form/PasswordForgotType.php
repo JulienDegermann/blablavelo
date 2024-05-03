@@ -21,18 +21,20 @@ class PasswordForgotType extends AbstractType
         $builder
             ->add('email', EmailType::class, [
                 'label' => 'E-mail',
+                'required' => true,
+                'mapped' => false,
                 'attr' => [
                     'class' => 'form-control mb-3 border border-dark'
                 ],
-                'required' => true,
                 'invalid_message' => 'L\'adresse e-mail n\'est pas valide.',
+
             ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => User::class,
+            'data_class' => null,
         ]);
     }
 }
