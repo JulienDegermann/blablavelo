@@ -12309,9 +12309,16 @@ form ul {
   height: 100%;
   width: 0;
   background-color: #FC5201;
-  width: 10px;
+  width: 5px;
   height: 10px;
   transform: translateY(-50%);
-  border-radius: 50%;
+  border-radius: 5px;
   cursor: pointer;
+}
+.slider .slider-min div,
+.slider .slider-max div {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translate(-50%, 0);
 }/*# sourceMappingURL=app.css.map */

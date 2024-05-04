@@ -8,12 +8,12 @@
   {% endblock %}
 
   <div class="row p-3 my-2 my-md-5 w-100 mx-0">
-    <button id="filter-toggler" class="w-auto border-0 btn bg-none d-xl-none text-primary">Afficher les filtres</button>
+    <button id="filter-toggler" class="w-auto border-0 btn bg-none d-xl-none text-primary">Masquer les filtres</button>
     <div class="col-12 col-lg-4 px-3 px-md-5">
       <section class="bg-white rounded-1 px-4 py-2 py-md-5 my-2 my-md-5 d-lg-block d-none">
         {% include '/_partials/_profile_menu.html.twig' %}
       </section>
-      <section id="filter" class="bg-white rounded-1 px-4 py-2 py-md-5 my-2 my-md-5 d-lg-block d-none">
+      <section id="filter" class="bg-white rounded-1 px-4 py-2 py-md-5 my-2 my-md-5 d-lg-block">
         <h2 class="text-center mb-3 fs-4">Filtrer les sorties</h2>
 
         {{ form_start(filter_form) }}
@@ -49,8 +49,10 @@
     <div class="col-12 col-lg-8 px-3 px-md-5">
       <section class="rounded-1 my-5">
         <h2 class="text-center mb-3 fs-3">Mes prochaines sorties</h2>
-        {% for ride in all_my_rides %}
-          {% include '/_partials/_ride_card.html.twig' %}
+        {% for ride in all_rides %}
+          {% if ride.date | date('Y-m-d') > 'now' | date('Y-m-d')  %}
+            {% include '/_partials/_ride_card.html.twig' %}
+          {% endif %}
         {% endfor %}
       </section>
       <section class="rounded-1 my-5">

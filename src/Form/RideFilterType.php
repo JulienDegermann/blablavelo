@@ -55,20 +55,21 @@ class RideFilterType extends AbstractType
         'attr' => [
           'class' => 'form-control mb-3 min',
           'min' => 0,
-          'max' => 300,
+          'max' => 100,
         ],
         'label' => 'Distance (kms)',
         'mapped' => false,
-        'data' => '20'
+        'data' => '15'
       ])
       ->add('distance_max', HiddenType::class, [
         'attr' => [
           'class' => 'form-control mb-3 max',
           'min' => 0,
-          'max' => 300
+          'max' => 100
         ],
         'label' => 'Distance (kms)',
-        'mapped' => false
+        'mapped' => false,
+        'data' => '60'
       ])
       ->add('participants_min', HiddenType::class, [
         'attr' => [
@@ -78,7 +79,7 @@ class RideFilterType extends AbstractType
         ],
         'label' => 'Nombre de participants',
         'mapped' => false,
-        'data' => '3'
+        'data' => '4'
       ])
       ->add('participants_max', HiddenType::class, [
         'attr' => [
@@ -87,47 +88,50 @@ class RideFilterType extends AbstractType
           'max' => 10,
         ],
         'label' => 'Nombre de participants',
-        'mapped' => false
+        'mapped' => false,
+        'data' => '8'
       ])
       ->add('ascent_min', HiddenType::class, [
         'attr' => [
           'class' => 'form-control mb-3 min',
           'min' => 0,
-          'max' => 3000,
+          'max' => 2000,
         ],
         'label' => 'Dénivelé (m)',
         'mapped' => false,
-        'data' => '500'
+        'data' => '200'
       ])
       ->add('ascent_max', HiddenType::class, [
         'attr' => [
           'class' => 'form-control mb-3 max',
           'min' => 0,
-          'max' => 3000,
+          'max' => 2000,
         ],
         'label' => 'Dénivelé (m)',
-        'mapped' => false
+        'mapped' => false,
+        'data' => '1000'
       ])
       ->add('average_speed_min', HiddenType::class, [
         'attr' => [
           'class' => 'form-control mb-3 min',
           'min' => 0,
-          'max' => 50,
+          'max' => 40,
           'step' => 1
         ],
         'label' => 'Vitesse moyenne (km/h)',
         'mapped' => false,
-        'data' => '15'
+        'data' => '10'
       ])
       ->add('average_speed_max', HiddenType::class, [
         'attr' => [
           'class' => 'form-control mb-3 max',
           'min' => 0,
-          'max' => 50,
+          'max' => 40,
           'step' => 1
         ],
         'label' => 'Vitesse moyenne (km/h)',
         'mapped' => false,
+        'data' => '30'
       ])
       ->add('submit', SubmitType::class, [
         'attr' => [

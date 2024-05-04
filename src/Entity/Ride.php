@@ -34,7 +34,7 @@ class Ride
             message: 'La distance doit être supérieure à 0 kms.'
         ),
         new Assert\LessThanOrEqual(
-            value: 400,
+            value: 100,
             message: 'La distance doit être supérieure à {{ compared_value }} kms.'
         ),
     ])]
@@ -57,7 +57,7 @@ class Ride
             message: 'Le dénivelé positif doit être supérieur ou égal à {{ compared_value }} m.'
         ),
         new Assert\LessThanOrEqual(
-            value: 5000,
+            value: 2000,
             message: 'Le dénivelé positif doit être indérieur ou égal à {{ compared_value }} m.'
         )
     ])]
@@ -100,7 +100,7 @@ class Ride
             message: 'La vitesse moyenne doit être supérieure à {{ compared_value }} km/h.'
         ),
         new Assert\LessThanOrEqual(
-            value: 50,
+            value: 40,
             message: 'La vitesse moyenne doit être inférieure à {{ compared_value }} km/h.'
         )
     ])]

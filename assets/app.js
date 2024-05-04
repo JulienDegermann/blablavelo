@@ -24,6 +24,7 @@ filterToggler.addEventListener('click', () => {
     filter.classList.toggle('d-none');
     filter.classList.toggle('h-100');
     filter.classList.contains('d-none') ? filterToggler.textContent = 'Afficher les filtres' : filterToggler.textContent = 'Masquer les filtres';
+
 })
 
 
@@ -45,6 +46,8 @@ ranges.forEach(range => {
     const showMax = document.createElement('div');
     sliderMin.append(showMin);
     sliderMax.append(showMax);
+    showMin.innerText = inputMin.value
+    showMax.innerText = inputMax.value
 
     // for each range, create a slider with 2 cursors and set the cursors position
     range.append(slider);
@@ -52,56 +55,44 @@ ranges.forEach(range => {
     sliderMin.style.left = inputMin.value / inputMin.max * 100 + '%';
     sliderMax.style.left = inputMax.value / inputMax.max * 100 + '%';
 
-
-
     // position x min & max of the slider + slider width
     const start = slider.getBoundingClientRect().left;
     const end = slider.getBoundingClientRect().right;
     const sliderWidth = slider.getBoundingClientRect().width;
 
 
-
-    // move slider
-    const mouseTrack = (e) => {
-        // mouse position
-        mouseX = e.clientX;
-
-        // offset mouse vs left border of slider
-        const xPos = (mouseX - start);
-
-        // block the slider within the slider
-        let newPos;
-        if (mouseX < start) {
-            newPos = start;
-        }
-        else if (mouseX > end) {
-            newPos = end;
-        }
-        else {
-            newPos = mouseX;
-        }
-
-        // e.target.style.left = newPos * 100 / sliderWidth + '%';
-
-        return newPos;
-    }
-
     // function for track mouse then move MIN cursor and set minValue to input
     const moveMin = (e) => {
-
         // get back newPos
-        const mouseX = e.clientX
+        const touch = e.touches
+        const mouseX = e.touches ? e.touches[0].clientX : e.clientX
+        const maxPos = sliderMax.getBoundingClientRect().left
 
         let newPos;
-        if (mouseX < start) {
+        if (mouseX >= maxPos) {
+            console.log('un')
+            newPos = maxPos;
+        }
+        else if (mouseX < start) {
+            console.log('deux')
             newPos = start;
         }
         else if (mouseX > end) {
+            console.log('trois')
             newPos = end;
         }
         else {
+            console.log('quatre')
             newPos = mouseX;
         }
+
+        console.log(
+            `curseur : ${mouseX}
+            start : ${start}
+            end : ${end}
+            newPos : ${newPos}
+            width : ${sliderWidth}`
+        )
 
         sliderMin.style.left = (newPos - start) * 100 / sliderWidth + '%';
         const newValue = parseInt(inputMin.min) + ((newPos - start) / (end - start)) * (inputMin.max - inputMin.min);
@@ -113,10 +104,16 @@ ranges.forEach(range => {
     const moveMax = (e) => {
 
         // get back newPos
-        const mouseX = e.clientX
+        const touch = e.touches
+
+        const mouseX = e.touches ? e.touches[0].clientX : e.clientX
+        const minPos = sliderMin.getBoundingClientRect().left
 
         let newPos;
-        if (mouseX < start) {
+        if (mouseX <= minPos) {
+            newPos = minPos;
+        }
+        else if (mouseX < start) {
             newPos = start;
         }
         else if (mouseX > end) {
@@ -136,13 +133,33 @@ ranges.forEach(range => {
     sliderMin.addEventListener('mousedown', () => {
         document.addEventListener('mousemove', moveMin)
     });
+    sliderMin.addEventListener('touchstart', () => {
+        document.addEventListener('touchmove', moveMin)
+    });
 
     sliderMax.addEventListener('mousedown', (e) => {
-        newPos = document.addEventListener('mousemove', moveMax);
+        document.addEventListener('mousemove', moveMax);
+    });
+    sliderMax.addEventListener('touchstart', (e) => {
+        document.addEventListener('touchmove', moveMax);
     });
 
     document.addEventListener('mouseup', () => {
         document.removeEventListener('mousemove', moveMin);
         document.removeEventListener('mousemove', moveMax);
     });
+
+    document.addEventListener('touchend', () => {
+        document.removeEventListener('touchmove', moveMin);
+        document.removeEventListener('touchmove', moveMax);
+    });
+
+
 })
+
+// ONLY ON MOBILE : load page with filters, then "click" on hide filter (used to enable slide working)
+if (window.screen.width < 1000) {
+    document.addEventListener('DOMContentLoaded', () => {
+        filterToggler.click()
+    })
+}

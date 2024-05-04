@@ -45,12 +45,16 @@ class RideController extends AbstractController
             $mind = $request->request->all()['ride_filter']['mind'];
             $department = $request->request->all()['ride_filter']['department'];
             $date = $request->request->all()['ride_filter']['date'];
-            $distance = $request->request->all()['ride_filter']['distance'];
-            $participants = $request->request->all()['ride_filter']['participants'];
-            $averageSpeed = $request->request->all()['ride_filter']['average_speed'];
-            $ascent = $request->request->all()['ride_filter']['ascent'];
+            $distance_min = $request->request->all()['ride_filter']['distance_min'];
+            $distance_max = $request->request->all()['ride_filter']['distance_max'];
+            $participants_min = $request->request->all()['ride_filter']['participants_min'];
+            $participants_max = $request->request->all()['ride_filter']['participants_max'];
+            $averageSpeed_min = $request->request->all()['ride_filter']['average_speed_min'];
+            $averageSpeed_max = $request->request->all()['ride_filter']['average_speed_max'];
+            $ascent_min = $request->request->all()['ride_filter']['ascent_min'];
+            $ascent_max = $request->request->all()['ride_filter']['ascent_max'];
 
-            $allRides = $rideRepository->rideFilter($mind, $department, $date, $distance, $participants, $averageSpeed, $ascent);
+            $allRides = $rideRepository->rideFilter($mind, $department, $date, $distance_min, $distance_max, $participants_min, $participants_max, $averageSpeed_min, $averageSpeed_max, $ascent_min, $ascent_max);
         }
 
         $pagination = $paginator->paginate(

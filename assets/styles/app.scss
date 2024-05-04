@@ -375,10 +375,17 @@ form ul {
     height: 100%;
     width: 0;
     background-color: $primary;
-    width: 10px;
+    width: 5px;
     height: 10px;
     transform: translateY(-50%);
-    border-radius: 50%;
+    border-radius: 5px;
     cursor: pointer;
+
+    div {
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translate(-50%, 0);
+    }
   }
 }
