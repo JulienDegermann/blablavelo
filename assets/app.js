@@ -20,13 +20,14 @@ menuButton.addEventListener('click', () => {
 
 const filterToggler = document.querySelector('#filter-toggler');
 const filter = document.querySelector('#filter');
-filterToggler.addEventListener('click', () => {
-    filter.classList.toggle('d-none');
-    filter.classList.toggle('h-100');
-    filter.classList.contains('d-none') ? filterToggler.textContent = 'Afficher les filtres' : filterToggler.textContent = 'Masquer les filtres';
 
-})
-
+if (filterToggler) {
+    filterToggler.addEventListener('click', () => {
+        filter.classList.toggle('d-none');
+        filter.classList.toggle('h-100');
+        filter.classList.contains('d-none') ? filterToggler.textContent = 'Afficher les filtres' : filterToggler.textContent = 'Masquer les filtres';
+    })
+}
 
 ranges.forEach(range => {
     // get min and max input of each range
@@ -163,3 +164,15 @@ if (window.screen.width < 1000) {
         filterToggler.click()
     })
 }
+
+
+const popups = document.querySelectorAll('.alert')
+
+
+
+popups.forEach((popup) => {
+    setTimeout((e) => {
+        const close = Array.from(popup.children).find(child => child.classList.contains('close'))
+        close.click()
+    }, 3000)
+})

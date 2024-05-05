@@ -143,10 +143,11 @@ ul {
 #menu-button {
   cursor: pointer;
   transition: all .5s ease;
+
   @media screen and (min-width: 768px) {
     &:hover {
-     box-shadow: 0 0 15px $primary;
-  }
+      box-shadow: 0 0 15px $primary;
+    }
   }
 }
 
@@ -362,6 +363,7 @@ form ul {
   background: none;
   box-shadow: none;
 }
+
 .slider {
   width: 100%;
   height: 2px;
@@ -389,3 +391,34 @@ form ul {
     }
   }
 }
+
+@keyframes hide {
+  to {
+    width: 0;
+  }
+}
+.alert {
+  position: relative;
+}
+.alert::before {
+  content: "";
+  position: absolute;
+  // top: calc(100% + 3px);
+  top: 100%;
+  left: 0;
+  height: 3px;
+  width: 100%;
+  background: $primary;
+  animation: hide 3s forwards linear;
+}
+.alert.alert-danger::before {
+  background: $danger;
+}
+.alert.alert-success::before {
+  background: $success;
+}
+.alert.alert-warning::before {
+  background: $warning;
+}
+
+

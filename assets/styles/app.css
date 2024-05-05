@@ -12321,4 +12321,36 @@ form ul {
   top: 100%;
   left: 50%;
   transform: translate(-50%, 0);
+}
+
+@keyframes hide {
+  to {
+    width: 0;
+  }
+}
+.alert {
+  position: relative;
+}
+
+.alert::before {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 0;
+  height: 3px;
+  width: 100%;
+  background: #FC5201;
+  animation: hide 3s forwards linear;
+}
+
+.alert.alert-danger::before {
+  background: #dc3545;
+}
+
+.alert.alert-success::before {
+  background: #198754;
+}
+
+.alert.alert-warning::before {
+  background: #ffc107;
 }/*# sourceMappingURL=app.css.map */
