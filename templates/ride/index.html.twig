@@ -24,18 +24,18 @@
           <p class="my-1">Distance (kms)</p>
           {{ form_row(filter_form.distance_min) }}
           {{ form_row(filter_form.distance_max) }}
-          </div>
-          <div class="range my-5">
-            <p class="my-1">Nombre de participants</p>
-            {{ form_row(filter_form.participants_min) }}
-            {{ form_row(filter_form.participants_max) }}
-            </div>
-            <div class="range my-5">
+        </div>
+        <div class="range my-5">
+          <p class="my-1">Nombre de participants</p>
+          {{ form_row(filter_form.participants_min) }}
+          {{ form_row(filter_form.participants_max) }}
+        </div>
+        <div class="range my-5">
           <p class="my-1">Dénivelé positif (m)</p>
           {{ form_row(filter_form.ascent_min) }}
           {{ form_row(filter_form.ascent_max) }}
-          </div>
-          <div class="range my-5">
+        </div>
+        <div class="range my-5">
           <p class="my-1">Vitesse moyenne (km/h)</p>
           {{ form_row(filter_form.average_speed_min) }}
           {{ form_row(filter_form.average_speed_max) }}
@@ -49,14 +49,22 @@
     <div class="col-12 col-lg-8 px-3 px-md-5">
       <section class="rounded-1 my-5">
         <h2 class="text-center mb-3 fs-3">Mes prochaines sorties</h2>
-        {% for ride in all_rides %}
-          {% if ride.date | date('Y-m-d') > 'now' | date('Y-m-d')  %}
-            {% include '/_partials/_ride_card.html.twig' %}
-          {% endif %}
-        {% endfor %}
+        {# {% if all_my_rides|length is same as %} #}
+        {% if (my_next_rides|length) == 0 %}
+          <p>Vous n'avez pas de sortie prévue pour le moment.</p>
+        {% else %}
+          {% for ride in my_next_rides %}
+            {% if (ride.date|date('Y-m-d')) > ('now'|date('Y-m-d')) %}
+              {% include '/_partials/_ride_card.html.twig' %}
+            {% endif %}
+          {% endfor %}
+        {% endif %}
       </section>
       <section class="rounded-1 my-5">
         <h2 class="text-center mb-3 fs-3">Les sorties à venir</h2>
+        {% if (all_rides|length) == 0 %}
+<p>Aucune sortie n'a été trouvée. Veuillez élargir vos critères.</p>
+        {% endif %}
 
         {% for ride in all_rides %}
           {% if app.user not in ride.participants %}

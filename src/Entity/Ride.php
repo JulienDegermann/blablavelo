@@ -167,11 +167,18 @@ class Ride
     #[Assert\Valid]
     private ?City $city = null;
 
+    /**
+     * @var Collection<int, RideComment>
+     */
+    #[ORM\OneToMany(mappedBy: 'ride', targetEntity: RideComment::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    private Collection $rideComments;
+
     public function __construct()
     {
         $this->participants = new ArrayCollection();
         $this->setCreatedAt(new \DateTimeImmutable());
         $this->setUpdatedAt(new \DateTimeImmutable());
+        $this->rideComments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -336,6 +343,36 @@ class Ride
     public function setDescription(?string $description): static
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, RideComment>
+     */
+    public function getRideComments(): Collection
+    {
+        return $this->rideComments;
+    }
+
+    public function addRideComment(RideComment $rideComment): static
+    {
+        if (!$this->rideComments->contains($rideComment)) {
+            $this->rideComments->add($rideComment);
+            $rideComment->setRide($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRideComment(RideComment $rideComment): static
+    {
+        if ($this->rideComments->removeElement($rideComment)) {
+            // set the owning side to null (unless already changed)
+            if ($rideComment->getRide() === $this) {
+                $rideComment->setRide(null);
+            }
+        }
 
         return $this;
     }

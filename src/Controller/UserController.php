@@ -20,29 +20,39 @@ class UserController extends AbstractController
     #[Route('/profil', name: 'app_profile')]
     public function index(
         UserRepository $repo,
-        RideRepository $rideRepo,
         Request $request,
         MailerInterface $mail,
         MailSendService $mailSendService,
         RideRepository $rideRepository
-        ): Response {
-        
-            
+    ): Response {
+
+
         /** @var User $user */
         $user = $this->getUser();
-            
+
         if (!$this->getUser()) {
             $this->addFlash('warning', 'Vous devez être connecté pour utiliser l\'application');
             return $this->redirectToRoute('app_login');
         }
-        
-        $rides = $rideRepo->rideOfUser($user);
+
+
+        // check with uses => find PAST rides of user to count them (participated and created) => may get all times ?
+        $myPrevRides = $rideRepository->myPrevRides($user);
+        $myCreatedRides = [];
+        foreach ($myPrevRides as $ride) {
+            if ($ride->getAuthor() == $user) {
+                $myCreatedRides[] = $ride;
+            }
+        }
+
+        // find NEXT rides of user to display and count them
+        $myNextRides = $rideRepository->myNextRides($user);
 
         $form = $this->createForm(ProfileType::class, $user, ['user' => $user]);
         $form->handleRequest($request);
-            
+
         if ($form->isSubmitted() && $form->isValid()) {
-            
+
             // email confirmation if new email
             if ($form->get('email')->getData() !== $user->getEmail()) {
                 $user->setEmail($form->get('email')->getData());
@@ -57,16 +67,13 @@ class UserController extends AbstractController
             $this->addFlash('success', $message);
             return $this->redirectToRoute('app_home');
         }
-
-        $myCreatedRides = $rideRepository->findBy(['author' => $user], ['date' => 'ASC']);
-        $myParticipatedRides = $rideRepository->rideOfUser($user);
-
+        
         return $this->render('user/index.html.twig', [
             'user' => $user,
             'form' => $form->createView(),
-            'user_rides' => $rides,
             'my_rides' => $myCreatedRides,
-            'all_my_rides' => $myParticipatedRides,
+            'my_next_rides' => $myNextRides,
+            'my_prev_rides' => $myPrevRides,
         ]);
     }
 }

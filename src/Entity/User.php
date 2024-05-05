@@ -219,6 +219,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?ProfileImage $profileImage = null;
 
     /**
+     * @var Collection<int, RideComment>
+     */
+    #[ORM\OneToMany(mappedBy: 'author', targetEntity: RideComment::class)]
+    private Collection $rideComments;
+
+    /**
      * A visual identifier that represents this user.
      *
      * @see UserInterface
@@ -460,6 +466,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->setUpdatedAt(new DateTimeImmutable());
         $this->setIsVerified(false);
         $this->messages = new ArrayCollection();
+        $this->rideComments = new ArrayCollection();
     }
 
     public function __toString()
@@ -475,6 +482,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setProfileImage(?ProfileImage $profileImage): static
     {
         $this->profileImage = $profileImage;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, RideComment>
+     */
+    public function getRideComments(): Collection
+    {
+        return $this->rideComments;
+    }
+
+    public function addRideComment(RideComment $rideComment): static
+    {
+        if (!$this->rideComments->contains($rideComment)) {
+            $this->rideComments->add($rideComment);
+            $rideComment->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRideComment(RideComment $rideComment): static
+    {
+        if ($this->rideComments->removeElement($rideComment)) {
+            // set the owning side to null (unless already changed)
+            if ($rideComment->getAuthor() === $this) {
+                $rideComment->setAuthor(null);
+            }
+        }
 
         return $this;
     }

@@ -5,9 +5,12 @@ namespace App\Controller;
 use App\Entity\Ride;
 use App\Entity\User;
 use App\Form\NewRideType;
+use App\Entity\RideComment;
 use App\Form\RideFilterType;
+use App\Form\RideCommentType;
 use App\Service\MailSendService;
 use App\Repository\RideRepository;
+use App\Repository\RideCommentRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,7 +23,7 @@ class RideController extends AbstractController
     public function index(
         RideRepository $rideRepository,
         Request $request,
-        PaginatorInterface $paginator,
+        PaginatorInterface $paginator
     ): Response {
 
         /** @var User $user */
@@ -29,14 +32,36 @@ class RideController extends AbstractController
         if (!$user) {
             return $this->redirectToRoute('app_home');
         }
-        
-        $userdepartment = $user->getDepartment() ? $user->getDepartment() : null;
 
-        $myCreatedRides = $rideRepository->findBy(['author' => $user], ['date' => 'ASC']);
-        $myParticipatedRides = $rideRepository->rideOfUser($user);
-        
+        $userdepartment = $user->getDepartment() ? $user->getDepartment() : null;
+        $usermind = $user->getMind() ? $user->getMind() : null;
+
+        // check with uses => find PAST rides of user to count them (participated and created) => may get all times ?
+        $myPrevRides = $rideRepository->myPrevRides($user);
+        $myCreatedRides = [];
+        foreach ($myPrevRides as $ride) {
+            if ($ride->getAuthor() == $user) {
+                $myCreatedRides[] = $ride;
+            }
+        }
+
+        // find NEXT rides of user to display and count them
+        $myNextRides = $rideRepository->myNextRides($user);
+
         // get all rides of user's department
-        $allRides = $rideRepository->rideFilter(null, $user->getDepartment(), null, null, null, null, null);
+        $allRides = $rideRepository->rideFilter(
+            $usermind,
+            $userdepartment,
+            new \DateTime(),
+            15,
+            60,
+            4,
+            8,
+            10,
+            30,
+            200,
+            1000
+        );
 
         $form = $this->createForm(RideFilterType::class, null, ['user' => $user]);
         $form->handleRequest($request);
@@ -54,7 +79,19 @@ class RideController extends AbstractController
             $ascent_min = $request->request->all()['ride_filter']['ascent_min'];
             $ascent_max = $request->request->all()['ride_filter']['ascent_max'];
 
-            $allRides = $rideRepository->rideFilter($mind, $department, $date, $distance_min, $distance_max, $participants_min, $participants_max, $averageSpeed_min, $averageSpeed_max, $ascent_min, $ascent_max);
+            $allRides = $rideRepository->rideFilter(
+                $mind,
+                $department,
+                $date,
+                $distance_min,
+                $distance_max,
+                $participants_min,
+                $participants_max,
+                $averageSpeed_min,
+                $averageSpeed_max,
+                $ascent_min,
+                $ascent_max
+            );
         }
 
         $pagination = $paginator->paginate(
@@ -67,7 +104,8 @@ class RideController extends AbstractController
             'user' => $user,
             'all_rides' => $pagination,
             'my_rides' => $myCreatedRides,
-            'all_my_rides' => $myParticipatedRides,
+            'my_next_rides' => $myNextRides,
+            'my_prev_rides' => $myPrevRides,
             'filter_form' => $form->createView(),
         ]);
     }
@@ -75,6 +113,7 @@ class RideController extends AbstractController
     #[Route('/sortie/{id}', name: 'app_ride', methods: ['GET', 'POST'])]
     public function showRide(
         RideRepository $rideRepository,
+        RideCommentRepository $rideCommentRepository,
         Request $request,
     ): Response {
 
@@ -95,17 +134,45 @@ class RideController extends AbstractController
             return $this->redirectToRoute('app_rides');
         }
 
-        $myCreatedRides = $rideRepository->findBy(['author' => $user], ['date' => 'ASC']);
-        $myParticipatedRides = $rideRepository->rideOfUser($user);
+        // check with uses => find PAST rides of user to count them (participated and created) => may get all times ?
+        $myPrevRides = $rideRepository->myPrevRides($user);
+        $myCreatedRides = [];
+        foreach ($myPrevRides as $ride) {
+            if ($ride->getAuthor() == $user) {
+                $myCreatedRides[] = $ride;
+            }
+        }
+
+        // find NEXT rides of user to display and count them
+        $myNextRides = $rideRepository->myNextRides($user);
+
+        $rideComment = new RideComment();
+        $form = $this->createForm(RideCommentType::class, $rideComment);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $rideComment = $form->getData();
+            $rideComment->setAuthor($user);
+            $rideComment->setRide($ride);
+
+            $rideCommentRepository->save($rideComment);
+
+            $ride->addRideComment($rideComment);
+            $rideRepository->save($ride);
+
+            $this->addFlash('success', 'Votre commentaire a bien été ajouté.');
+            return $this->redirectToRoute('app_ride', ['id' => $ride->getId()]);
+        }
 
         return $this->render('ride/show_ride.html.twig', [
             'user' => $user,
             'ride' => $ride,
             'my_rides' => $myCreatedRides,
-            'all_my_rides' => $myParticipatedRides,
+            'my_next_rides' => $myNextRides,
+            'my_prev_rides' => $myPrevRides,
+            'form' => $form->createView(),
         ]);
     }
-
 
     #[Route('/sortie/supprimer-la-sortie/{id}', name: 'app_ride_delete', methods: ['GET', 'POST'])]
     public function deleteRide(
@@ -214,9 +281,6 @@ class RideController extends AbstractController
         Request $request,
         RideRepository $rideRepository
     ): Response {
-
-      
-
         if (!$this->getUser()) {
             $this->addFlash('danger', 'Vous devez être connecté utiliser l\'application.');
             return $this->redirectToRoute('app_login');
@@ -225,8 +289,17 @@ class RideController extends AbstractController
         /** @var User $user */
         $user = $this->getUser();
 
-        $myCreatedRides = $rideRepository->findBy(['author' => $user], ['date' => 'ASC']);
-        $myParticipatedRides = $rideRepository->rideOfUser($user);
+        // check with uses => find PAST rides of user to count them (participated and created) => may get all times ?
+        $myPrevRides = $rideRepository->myPrevRides($user);
+        $myCreatedRides = [];
+        foreach ($myPrevRides as $ride) {
+            if ($ride->getAuthor() == $user) {
+                $myCreatedRides[] = $ride;
+            }
+        }
+
+        // find NEXT rides of user to display and count them
+        $myNextRides = $rideRepository->myNextRides($user);
 
         if ($user->getDepartment() == null) {
             $this->addFlash('warning', 'Veuillez renseigner votre département pour créer une sortie.');
@@ -247,6 +320,7 @@ class RideController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $ride = $form->getData();
+            
             $repo->save($ride);
 
             $this->addFlash('success', 'Votre sortie a bien été créée.');
@@ -257,7 +331,8 @@ class RideController extends AbstractController
             'form' => $form->createView(),
             'user' => $user,
             'my_rides' => $myCreatedRides,
-            'all_my_rides' => $myParticipatedRides,
+            'my_next_rides' => $myNextRides,
+            'my_prev_rides' => $myPrevRides,
         ]);
     }
 }

@@ -32,6 +32,7 @@ class RideFilterType extends AbstractType
         ],
         'label' => 'Objectif',
         'mapped' => false,
+        'data' => $user->getMind()
       ])
       ->add('department', EntityType::class, [
         'class' => Department::class,

@@ -37,7 +37,7 @@
             📈 : {{ ride.getAscent }} m <br />
             🏎️ : {{ ride.getAverageSpeed }} km/h <br />
             📍 : {{ ride.getCity|capitalize }} <br />
-            📆 : {{ ride.getDate|date('d/m/Y') }}<br />
+            📆 : {{ ride.getDate|date('D d F Y') }}, {{ ride.getDate|date('H:i') }} <br />
             🕗 : {{ ride.getDate|date('H:i') }} <br />
             👤 : {{ ride.getParticipants|length }} / {{ ride.getMaxRider }}
           </p>
@@ -58,6 +58,19 @@
           {% endif %}
         </div>
       </div>
+    </div>
+  </section>
+
+  <section class="my-5">
+    <div class="container">
+      <h3>Commentaires</h3>
+      <div class="d-flex flex-column-reverse">
+        {% for comment in ride.getRideComments%}
+        <p><span class="fw-bold">{% if comment.getAuthor is same as user %} Moi {% else %} {{ comment.getAuthor.getNameNumber }} {% endif %}</span> : {{ comment.getText }} </p>
+        {% endfor %}
+      </div>
+      {{ form_start(form) }}
+      {{ form_end(form) }}
     </div>
   </section>
 {% endblock %}

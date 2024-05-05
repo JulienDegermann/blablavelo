@@ -52,7 +52,21 @@ class RideRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
-    public function rideOfUser($user)
+    public function myNextRides($user)
+    {
+        $qb = $this->createQueryBuilder('r')
+            ->join('r.participants', 'u')
+            ->andWhere(':user MEMBER OF r.participants')
+            ->andWhere('r.date >= :now')
+            ->setParameter(':user', $user)
+            ->setParameter(':now', new \DateTime())
+            ->orderBy('r.date', 'ASC')
+            ->getQuery();
+
+        return $qb->getResult();
+    }
+
+    public function myPrevRides($user)
     {
         $qb = $this->createQueryBuilder('r')
             ->join('r.participants', 'u')
@@ -65,7 +79,6 @@ class RideRepository extends ServiceEntityRepository
 
         return $qb->getResult();
     }
-
 
     public function ridePaginated($userdepartment = null)
     {
