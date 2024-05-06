@@ -14,21 +14,41 @@ const ranges = document.querySelectorAll('.range');
 const menuButton = document.querySelector('#menu-button');
 const profileMenu = document.querySelector('#profile-menu')
 
-menuButton.addEventListener('click', () => {
-    profileMenu.classList.toggle('active');
-})
+if (menuButton) {
+    menuButton.addEventListener('click', () => {
+        profileMenu.classList.toggle('active');
+    })
+}
 
 const filterToggler = document.querySelector('#filter-toggler');
 const filter = document.querySelector('#filter');
 
+
+const expandMore = document.createElement('div');
+expandMore.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
+<path d="M480-345 240-585l56-56 184 184 184-184 56 56-240 240Z" />
+</svg>`
+
+const expandLess = document.createElement('div');
+expandLess.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
+<path d="m296-345-56-56 240-240 240 240-56 56-184-184-184 184Z" />
+</svg>
+`;
+
+
 if (filterToggler) {
     filterToggler.addEventListener('click', () => {
-        filter.classList.toggle('d-none');
+        filter.style.height = 0;
         filter.classList.toggle('h-100');
-        filter.classList.contains('d-none') ? filterToggler.textContent = 'Afficher les filtres' : filterToggler.textContent = 'Masquer les filtres';
+        filter.classList.toggle('py-2');
+        filter.parentElement.classList.toggle('mb-5');
+        filter.classList.contains('h-100') ? filterToggler.textContent = 'Masquer les filtres' : filterToggler.textContent = 'Afficher les filtres';
+        filter.classList.contains('h-100') ? filterToggler.append(expandMore) : filterToggler.append(expandLess);
     })
 }
 
+
+// range filters (sliders and cursors)
 ranges.forEach(range => {
     // get min and max input of each range
     const inputMin = Array.from(range.children).find(child => child.classList.contains('min'));
@@ -158,17 +178,9 @@ ranges.forEach(range => {
 
 })
 
-// ONLY ON MOBILE : load page with filters, then "click" on hide filter (used to enable slide working)
-if (window.screen.width < 1000) {
-    document.addEventListener('DOMContentLoaded', () => {
-        filterToggler.click()
-    })
-}
 
-
+// alert popup auto remove
 const popups = document.querySelectorAll('.alert')
-
-
 
 popups.forEach((popup) => {
     setTimeout((e) => {

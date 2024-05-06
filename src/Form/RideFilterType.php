@@ -3,19 +3,16 @@
 namespace App\Form;
 
 use App\Entity\Mind;
-use App\Entity\Ride;
 use App\Entity\User;
+use App\Entity\Practice;
 use App\Entity\Department;
-use Imagine\Image\Histogram\Hidden;
-use Symfony\Component\Form\Button;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\ButtonType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
 class RideFilterType extends AbstractType
 {
@@ -25,6 +22,15 @@ class RideFilterType extends AbstractType
     $user = $options['user'];
 
     $builder
+      ->add('practice', EntityType::class, [
+        'class' => Practice::class,
+        'attr' => [
+          'class' => 'form-control mb-3 border border-dark',
+        ],
+        'label' => 'Pratique',
+        'mapped' => false,
+        'data' => $user->getPractice()
+      ])
       ->add('mind', EntityType::class, [
         'class' => Mind::class,
         'attr' => [

@@ -33,25 +33,6 @@ class RideRepository extends ServiceEntityRepository
         $this->_em->flush();
     }
 
-
-    public function rideList($userdepartment = null, int $limit = null)
-    {
-        $qb = $this->createQueryBuilder('r')
-            ->orderBy('r.id', 'DESC')
-            ->andWhere('r.date <= :now')
-            ->setParameter(':now', new \DateTime());
-        if ($userdepartment) {
-            $qb->join('r.city', 'c')
-                ->andWhere('c.department = :department')
-                ->setParameter(':department', $userdepartment);
-        }
-        if ($limit) {
-            $qb->setMaxResults($limit);
-        }
-        $qb->andWhere('SIZE(r.participants) < r.max_rider');
-        return $qb->getQuery()->getResult();
-    }
-
     public function myNextRides($user)
     {
         $qb = $this->createQueryBuilder('r')
@@ -66,14 +47,28 @@ class RideRepository extends ServiceEntityRepository
         return $qb->getResult();
     }
 
+    public function myCreatedRides($user)
+    {
+        $qb = $this->createQueryBuilder('r')
+            ->join('r.participants', 'u')
+            ->andWhere(':user = r.author')
+            ->andWhere('r.date >= :lastyear')
+            ->setParameter(':user', $user)
+            ->setParameter(':lastyear', new \DateTime('- 1 year'))
+            ->orderBy('r.date', 'ASC')
+            ->getQuery();
+
+        return $qb->getResult();
+    }
     public function myPrevRides($user)
     {
         $qb = $this->createQueryBuilder('r')
             ->join('r.participants', 'u')
             ->andWhere(':user MEMBER OF r.participants')
-            ->andWhere('r.date <= :now')
+            ->andWhere('r.date BETWEEN :lastyear AND :now')
             ->setParameter(':user', $user)
             ->setParameter(':now', new \DateTime())
+            ->setParameter(':lastyear', new \DateTime('- 1 year'))
             ->orderBy('r.date', 'ASC')
             ->getQuery();
 
@@ -95,6 +90,7 @@ class RideRepository extends ServiceEntityRepository
     }
 
     public function rideFilter(
+        $practice = null,
         $mind = null,
         $department = null,
         $date = null,
@@ -108,9 +104,10 @@ class RideRepository extends ServiceEntityRepository
         $ascent_max = null
     ) {
         $qb = $this->createQueryBuilder('r')->orderBy('r.date', 'ASC');
+        $practice ? $qb->andWhere('r.practice = :practice')->setParameter(':practice', $practice) : null;
         $mind ? $qb->andWhere('r.mind = :mind')->setParameter(':mind', $mind) : null;
         $department ? $qb->join('r.city', 'c')->andWhere('c.department = :department')->setParameter(':department', $department) : null;
-        $date ? $qb->andWhere('r.date >= :date')->setParameter(':date', $date) : null;
+        $date ? $qb->andWhere('r.date >= :date')->setParameter(':date', $date) : $qb->andWhere('r.date >= :date')->setParameter(':date', new \DateTime());
         $distance_min ? $qb->andWhere('r.distance >= :distance_min')->setParameter(':distance_min', $distance_min) : null;
         $distance_max ? $qb->andWhere('r.distance <= :distance_max')->setParameter(':distance_max', $distance_max) : null;
         $participants_min ? $qb->andWhere('r.max_rider >= :participants_min')->setParameter(':participants_min', $participants_min) : null;

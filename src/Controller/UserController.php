@@ -35,18 +35,9 @@ class UserController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
 
-
         // check with uses => find PAST rides of user to count them (participated and created) => may get all times ?
         $myPrevRides = $rideRepository->myPrevRides($user);
-        $myCreatedRides = [];
-        foreach ($myPrevRides as $ride) {
-            if ($ride->getAuthor() == $user) {
-                $myCreatedRides[] = $ride;
-            }
-        }
-
-        // find NEXT rides of user to display and count them
-        $myNextRides = $rideRepository->myNextRides($user);
+        $myCreatedRides = $rideRepository->myCreatedRides($user);
 
         $form = $this->createForm(ProfileType::class, $user, ['user' => $user]);
         $form->handleRequest($request);
@@ -72,7 +63,6 @@ class UserController extends AbstractController
             'user' => $user,
             'form' => $form->createView(),
             'my_rides' => $myCreatedRides,
-            'my_next_rides' => $myNextRides,
             'my_prev_rides' => $myPrevRides,
         ]);
     }

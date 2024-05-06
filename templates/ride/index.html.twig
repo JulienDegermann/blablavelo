@@ -8,15 +8,16 @@
   {% endblock %}
 
   <div class="row p-3 my-2 my-md-5 w-100 mx-0">
-    <button id="filter-toggler" class="w-auto border-0 btn bg-none d-xl-none text-primary">Masquer les filtres</button>
-    <div class="col-12 col-lg-4 px-3 px-md-5">
-      <section class="bg-white rounded-1 px-4 py-2 py-md-5 my-2 my-md-5 d-lg-block d-none">
+    <button id="filter-toggler" class="w-auto border-0 btn bg-none d-xl-none text-primary d-flex align-items-center">Afficher les filtres{% include '/_partials/svg/_expand_more.html.twig' %}</button>
+    <div class="col-12 col-xl-4 px-3 px-md-5 mb-xl-0">
+      <section class="bg-white rounded-1 px-4 py-2 py-lg-5 my-2 my-md-5 d-xl-block d-none">
         {% include '/_partials/_profile_menu.html.twig' %}
       </section>
-      <section id="filter" class="bg-white rounded-1 px-4 py-2 py-md-5 my-2 my-md-5 d-lg-block">
+      <section id="filter" class="bg-white rounded-1 px-4 py-xl-5 my-2 my-md-5 d-lg-block">
         <h2 class="text-center mb-3 fs-4">Filtrer les sorties</h2>
 
         {{ form_start(filter_form) }}
+        {{ form_row(filter_form.practice) }}
         {{ form_row(filter_form.mind) }}
         {{ form_row(filter_form.department) }}
         {{ form_row(filter_form.date) }}
@@ -46,7 +47,7 @@
       </section>
     </div>
 
-    <div class="col-12 col-lg-8 px-3 px-md-5">
+    <div class="col-12 col-xl-8 px-3 px-md-5">
       <section class="rounded-1 my-5">
         <h2 class="text-center mb-3 fs-3">Mes prochaines sorties</h2>
         {# {% if all_my_rides|length is same as %} #}
@@ -63,13 +64,13 @@
       <section class="rounded-1 my-5">
         <h2 class="text-center mb-3 fs-3">Les sorties à venir</h2>
         {% if (all_rides|length) == 0 %}
-<p>Aucune sortie n'a été trouvée. Veuillez élargir vos critères.</p>
+          <p>Aucune sortie n'a été trouvée. Veuillez élargir vos critères.</p>
         {% endif %}
 
         {% for ride in all_rides %}
-          {% if app.user not in ride.participants %}
-            {% include '/_partials/_ride_card.html.twig' %}
-          {% endif %}
+          {# {% if app.user not in ride.participants %} #}
+          {% include '/_partials/_ride_card.html.twig' %}
+          {# {% endif %} #}
         {% endfor %}
       </section>
       <div class="container">{{ knp_pagination_render(all_rides, '/_partials/_pagination.html.twig') }}</div>

@@ -34,23 +34,20 @@ class RideController extends AbstractController
         }
 
         $userdepartment = $user->getDepartment() ? $user->getDepartment() : null;
-        $usermind = $user->getMind() ? $user->getMind() : null;
+        $userMind = $user->getMind() ? $user->getMind() : null;
+        $userPractice = $user->getPractice() ? $user->getPractice() : null;
 
         // check with uses => find PAST rides of user to count them (participated and created) => may get all times ?
         $myPrevRides = $rideRepository->myPrevRides($user);
-        $myCreatedRides = [];
-        foreach ($myPrevRides as $ride) {
-            if ($ride->getAuthor() == $user) {
-                $myCreatedRides[] = $ride;
-            }
-        }
+        $myCreatedRides = $rideRepository->myCreatedRides($user);
 
         // find NEXT rides of user to display and count them
         $myNextRides = $rideRepository->myNextRides($user);
 
         // get all rides of user's department
         $allRides = $rideRepository->rideFilter(
-            $usermind,
+            $userPractice,
+            $userMind,
             $userdepartment,
             new \DateTime(),
             15,
@@ -67,6 +64,7 @@ class RideController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             // get all datas from form
+            $practice = $request->request->all()['ride_filter']['practice'];
             $mind = $request->request->all()['ride_filter']['mind'];
             $department = $request->request->all()['ride_filter']['department'];
             $date = $request->request->all()['ride_filter']['date'];
@@ -80,6 +78,7 @@ class RideController extends AbstractController
             $ascent_max = $request->request->all()['ride_filter']['ascent_max'];
 
             $allRides = $rideRepository->rideFilter(
+                $practice,
                 $mind,
                 $department,
                 $date,
@@ -136,12 +135,7 @@ class RideController extends AbstractController
 
         // check with uses => find PAST rides of user to count them (participated and created) => may get all times ?
         $myPrevRides = $rideRepository->myPrevRides($user);
-        $myCreatedRides = [];
-        foreach ($myPrevRides as $ride) {
-            if ($ride->getAuthor() == $user) {
-                $myCreatedRides[] = $ride;
-            }
-        }
+        $myCreatedRides = $rideRepository->myCreatedRides($user);
 
         // find NEXT rides of user to display and count them
         $myNextRides = $rideRepository->myNextRides($user);
@@ -217,7 +211,6 @@ class RideController extends AbstractController
     public function addToRide(
         RideRepository $rideRepository,
         Request $request,
-        MailSendService $mailSendService,
     ): Response {
 
         $user = null;
@@ -290,16 +283,9 @@ class RideController extends AbstractController
         $user = $this->getUser();
 
         // check with uses => find PAST rides of user to count them (participated and created) => may get all times ?
+        // check with uses => find PAST rides of user to count them (participated and created) => may get all times ?
         $myPrevRides = $rideRepository->myPrevRides($user);
-        $myCreatedRides = [];
-        foreach ($myPrevRides as $ride) {
-            if ($ride->getAuthor() == $user) {
-                $myCreatedRides[] = $ride;
-            }
-        }
-
-        // find NEXT rides of user to display and count them
-        $myNextRides = $rideRepository->myNextRides($user);
+        $myCreatedRides = $rideRepository->myCreatedRides($user);
 
         if ($user->getDepartment() == null) {
             $this->addFlash('warning', 'Veuillez renseigner votre département pour créer une sortie.');
@@ -320,7 +306,7 @@ class RideController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $ride = $form->getData();
-            
+
             $repo->save($ride);
 
             $this->addFlash('success', 'Votre sortie a bien été créée.');
@@ -331,7 +317,6 @@ class RideController extends AbstractController
             'form' => $form->createView(),
             'user' => $user,
             'my_rides' => $myCreatedRides,
-            'my_next_rides' => $myNextRides,
             'my_prev_rides' => $myPrevRides,
         ]);
     }

@@ -397,9 +397,11 @@ form ul {
     width: 0;
   }
 }
+
 .alert {
   position: relative;
 }
+
 .alert::before {
   content: "";
   position: absolute;
@@ -411,14 +413,49 @@ form ul {
   background: $primary;
   animation: hide 3s forwards linear;
 }
+
 .alert.alert-danger::before {
   background: $danger;
 }
+
 .alert.alert-success::before {
   background: $success;
 }
+
 .alert.alert-warning::before {
   background: $warning;
 }
 
 
+
+#filter {
+  overflow: hidden;
+  transition: height 1s ease, padding 1s ease;
+
+  @media screen and (max-width: 1199px) {
+    height: 0;
+  }
+
+  @media screen and (min-width: 1200px) {
+    height: auto!important;
+  }
+}
+
+.trophy,
+.medal {
+  width: 30px;
+  height: 30px;
+
+
+  &.gold {
+    fill: goldenrod;
+  }
+
+  &.silver {
+    fill: silver;
+  }
+
+  &.bronze {
+    fill: brown;
+  }
+}

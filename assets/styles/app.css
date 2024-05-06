@@ -12353,4 +12353,37 @@ form ul {
 
 .alert.alert-warning::before {
   background: #ffc107;
+}
+
+#filter {
+  overflow: hidden;
+  transition: height 1s ease, padding 1s ease;
+}
+@media screen and (max-width: 1199px) {
+  #filter {
+    height: 0;
+  }
+}
+@media screen and (min-width: 1200px) {
+  #filter {
+    height: auto !important;
+  }
+}
+
+.trophy,
+.medal {
+  width: 30px;
+  height: 30px;
+}
+.trophy.gold,
+.medal.gold {
+  fill: goldenrod;
+}
+.trophy.silver,
+.medal.silver {
+  fill: silver;
+}
+.trophy.bronze,
+.medal.bronze {
+  fill: brown;
 }/*# sourceMappingURL=app.css.map */

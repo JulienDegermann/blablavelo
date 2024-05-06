@@ -1,5 +1,8 @@
-<h2 class="text-center mb-3 fs-4">{{ user.nameNumber }}</h2>
-<h3 class="fs-6">Bilan {{ 'now'|date('Y') }}</h3>
+<h2 class="text-center mb-3 fs-4 d-flex align-items-center justify-content-center">{{ user.nameNumber }}
+  <span title="médaille de participation">{% include '/_partials/svg/_medal.html.twig'%} </span>
+  <span title="trophée de partage">{% include '/_partials/svg/_trophy.html.twig'%}</span>
+   </h2>
+<h3 class="fs-6">Bilan des 12 derniers mois :</h3>
 <p>
   {{ my_rides|length }} sorties créées<br />
   {{ my_prev_rides|length }} sorties participées
