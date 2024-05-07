@@ -96,12 +96,12 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
 
 
     $admin = (new User())
-      ->setNameNumber('SuperAdmin56')
+      ->setNameNumber('Admin')
       ->setEmail('admin@admin.com')
-      ->setFirstName('Super')
+      ->setFirstName('Admin')
       ->setLastName('Admin')
       ->setRoles(['ROLE_ADMIN', 'ROLE_USER']);
-    $admin->setPassword($this->userPasswordHasherInterface->hashPassword($admin, 'superAdmin56'));
+    $admin->setPassword($this->userPasswordHasherInterface->hashPassword($admin, 'admin'));
     $manager->persist($admin);
 
 
@@ -118,7 +118,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
 
       // $current->setBirthDate(new DateTimeImmutable());
       // $current->setBike($this->getReference('model-' . rand(0, 20)));
-      $current->setPractice($this->getReference('practice-' . rand(0, 4)));
+      $current->setPractice($this->getReference('practice-' . rand(0, 3)));
       $current->setMind($this->getReference('mind-' . rand(0, 2)));
       // $current->setDepartment($this->getReference('department-' . rand(0, 90)));
       $this->addReference('user' . $key, $current);

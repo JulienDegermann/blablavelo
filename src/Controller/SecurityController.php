@@ -31,8 +31,7 @@ class SecurityController extends AbstractController
             $user = $this->getUser();
             if ($this->isGranted('ROLE_ADMIN', $user)) {
                 return $this->redirectToRoute('admin');
-            }
-            elseif ($this->isGranted('ROLE_USER', $user)) {
+            } elseif ($this->isGranted('ROLE_USER', $user)) {
                 return $this->redirectToRoute('app_home');
             }
         }
@@ -43,7 +42,7 @@ class SecurityController extends AbstractController
         $error = $authenticationUtils->getLastAuthenticationError();
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
-        if($error != '' || $error !== null) {
+        if ($error != '' || $error !== null) {
             $this->addFlash('danger', 'Identifiants incorrects');
         }
         return $this->render('security/login.html.twig', [
@@ -67,17 +66,17 @@ class SecurityController extends AbstractController
         MailerInterface $mail,
         MailSendService $mailSendService
     ): Response {
-        
+
         $user = null;
 
-        if($this->getUser()) {
+        if ($this->getUser()) {
             /** @var User $user */
             $user = $this->getUser();
 
             $token = $tokenGenerator->generateToken();
             $user->setToken($token);
             $repo->save($user);
-            
+
             return $this->redirectToRoute('app_pwd_reset', ['token' => $token]);
         }
 
@@ -90,7 +89,7 @@ class SecurityController extends AbstractController
             // $user = $repo->findOneBy(['email' => $form->getData()->getEmail()]);
             $user = $repo->findOneBy(['email' => $data['password_forgot']['email']]);
 
-            
+
             if ($user) {
                 $mail = $mailSendService->forgotPasswordEmail($user);
                 $this->addFlash('success', $mail);
@@ -114,19 +113,20 @@ class SecurityController extends AbstractController
         UserPasswordHasherInterface $pwdhash,
         RideRepository $rideRepository
     ): Response {
-    
+
         $user = $repo->findOneBy(['token' => $token]);
 
         if (!$user) {
             $this->addFlash('error', 'Oups ! Ce lien n\'est plus valide.');
             return $this->redirectToRoute('app_login');
         }
-        
+
         $form = $this->createForm(PasswordResetType::class, $user);
         $form->handleRequest($request);
 
-        $myCreatedRides = $rideRepository->findBy(['author' => $user], ['date' => 'ASC']);
-        $myParticipatedRides = $rideRepository->rideOfUser($user);
+        // check with uses => find PAST rides of user to count them (participated and created) => may get all times ?
+        $myPrevRides = $rideRepository->myPrevRides($user);
+        $myCreatedRides = $rideRepository->myCreatedRides($user);
 
         if ($form->isSubmitted()) {
             if ($form->isValid()) {
@@ -145,7 +145,7 @@ class SecurityController extends AbstractController
                     'form' => $form->createView(),
                     'user' => $user,
                     'my_rides' => $myCreatedRides,
-                    'all_my_rides' => $myParticipatedRides,
+                    'my_prev_rides' => $myPrevRides
                 ]);
             }
         }
@@ -154,7 +154,7 @@ class SecurityController extends AbstractController
             'form' => $form->createView(),
             'user' => $user,
             'my_rides' => $myCreatedRides,
-            'all_my_rides' => $myParticipatedRides,
+            'my_prev_rides' => $myPrevRides
         ]);
     }
 }

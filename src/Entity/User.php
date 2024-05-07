@@ -221,7 +221,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var Collection<int, RideComment>
      */
-    #[ORM\OneToMany(mappedBy: 'author', targetEntity: RideComment::class)]
+    #[ORM\OneToMany(mappedBy: 'author', targetEntity: RideComment::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $rideComments;
 
     /**

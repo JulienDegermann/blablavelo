@@ -18,13 +18,14 @@ class LegalNoticeController extends AbstractController
         /** @var User $user */
         $user = $this->getUser();
 
-        $myCreatedRides = $rideRepository->findBy(['author' => $user], ['date' => 'ASC']);
-        $myParticipatedRides = $rideRepository->rideOfUser($user);
+        // check with uses => find PAST rides of user to count them (participated and created) => may get all times ?
+        $myPrevRides = $rideRepository->myPrevRides($user);
+        $myCreatedRides = $rideRepository->myCreatedRides($user);
 
         return $this->render('legal_notice/index.html.twig', [
             'user' => $user,
             'my_rides' => $myCreatedRides,
-            'all_my_rides' => $myParticipatedRides
+            'my_prev_rides' => $myPrevRides
         ]);
     }
 }

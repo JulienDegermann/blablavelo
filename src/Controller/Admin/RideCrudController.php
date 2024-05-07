@@ -16,6 +16,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 
@@ -41,6 +42,7 @@ class RideCrudController extends AbstractCrudController
     public function configureActions(Actions $actions): Actions
     {
         $actions = $this->configureDefaultActions($actions);
+        $actions->remove(Crud::PAGE_INDEX, 'new');
 
         return $actions;
     }
@@ -79,5 +81,6 @@ class RideCrudController extends AbstractCrudController
         yield IntegerField::new('max_rider', 'Nombre max');
         yield IntegerField::new('average_speed', 'V.moy (km/h)');
         yield TextareaField::new('description', 'Description');
+        yield CollectionField::new('rideComments', 'Commentaires')->renderExpanded()->setEntryIsComplex()->useEntryCrudForm();
     }
 }
