@@ -69,15 +69,15 @@ class DashboardController extends AbstractDashboardController
     public function configureMenuItems(): iterable
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa-solid fa-house');
-        yield MenuItem::linkToCrud('Membres', 'fa-solid fa-users', User::class);
-        yield MenuItem::linkToCrud('Rides', 'fa-solid fa-route', Ride::class);
-        // yield MenuItem::linkToCrud('Départements', 'fa-solid fa-map', Department::class);
-        yield MenuItem::linkToCrud('Villes', 'fa-solid fa-city', City::class); 
-        yield MenuItem::linkToCrud('Marques', 'fa-solid fa-copyright', Brand::class);
-        // yield MenuItem::linkToCrud('Modèles', 'fa-solid fa-bicycle', Model::class);
-        yield MenuItem::linkToCrud('Objectifs', 'fa-solid fa-bullseye', Mind::class);
-        yield MenuItem::linkToCrud('Pratiques', 'fa-solid fa-person-biking', Practice::class);
         yield MenuItem::linkToCrud('Messages', 'fa-solid fa-envelope', Message::class);
-        yield MenuItem::linkToCrud('Messages', 'fa-solid fa-envelope', ProfileImage::class);
+        yield MenuItem::linkToCrud('Rides', 'fa-solid fa-route', Ride::class);
+        yield MenuItem::linkToCrud('Membres', 'fa-solid fa-users', User::class);
+        yield MenuItem::linkToCrud('Pratiques', 'fa-solid fa-person-biking', Practice::class);
+        yield MenuItem::linkToCrud('Objectifs', 'fa-solid fa-bullseye', Mind::class);
+        // yield MenuItem::linkToCrud('Départements', 'fa-solid fa-map', Department::class);
+        // yield MenuItem::linkToCrud('Marques', 'fa-solid fa-copyright', Brand::class);
+        // yield MenuItem::linkToCrud('Modèles', 'fa-solid fa-bicycle', Model::class);
+        // yield MenuItem::linkToCrud('Villes', 'fa-solid fa-city', City::class); 
+        // yield MenuItem::linkToCrud('Messages', 'fa-solid fa-envelope', ProfileImage::class);
     }
 }

@@ -33,20 +33,21 @@ class ContactController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $message = $form->getData();
+            $message->setAuthor($user);
             $repo->save($message);
             
             $this->addFlash('success', 'Votre message a bien été envoyé');
-            return $this->redirectToRoute('app_contact');
+            return $this->redirectToRoute('app_home');
         }
 
-        $myCreatedRides = $rideRepository->findBy(['author' => $user], ['date' => 'ASC']);
-        $myParticipatedRides = $rideRepository->rideOfUser($user);
+        $myPrevRides = $rideRepository->myPrevRides($user);
+        $myCreatedRides = $rideRepository->myCreatedRides($user);
 
         return $this->render('contact/index.html.twig', [
             'messageForm' => $form->createView(),
             'user' => $user,
             'my_rides' => $myCreatedRides,
-            'all_my_rides' => $myParticipatedRides
+            'my_prev_rides' => $myPrevRides
         ]);
     }
 }

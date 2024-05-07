@@ -18,6 +18,10 @@ body {
   flex-direction: column;
   overflow-x: hidden;
 
+  &.no-scroll {
+    overflow: hidden;
+  }
+
   main {
     flex: 1;
     position: relative;
@@ -200,7 +204,10 @@ footer a {
     align-items: center;
     color: $secondary;
     border: $primary solid 1px !important;
-    box-shadow: $primary 0 0 5px;
+
+    &.shadow {
+      border: 3px solid $primary!important;
+    }
   }
 
   img,

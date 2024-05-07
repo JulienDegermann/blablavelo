@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\User;
 use App\Entity\Message;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -27,12 +28,12 @@ class MessageType extends AbstractType
                 'label' => 'Contenu du message',
                 'required' => true,
                 'attr' => ['class' => 'form-control mb-3 border border-dark', 'rows' => 10]
-            ])
-            ->add('author', AuthorType::class, [
-                'label' => 'E-mail',
-                'required' => true,
-                'attr' => ['class' => 'form-control mb-3 border border-dark']
             ]);
+            // ->add('author', AuthorType::class, [
+            //     'label' => 'E-mail',
+            //     'required' => true,
+            //     'attr' => ['class' => 'form-control mb-3 border border-dark']
+            // ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

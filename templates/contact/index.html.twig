@@ -12,9 +12,6 @@
           {{ form_start(messageForm) }}
           {{ form_row(messageForm.title) }}
           {{ form_row(messageForm.text) }}
-
-          {{ form_row(messageForm.author.email, { value: user ? user.getEmail : '' }) }}
-          {{ form_row(messageForm.author.nameNumber, { value: user ? user.getNameNumber : '' }) }}
           <input class="w-auto px-4 py-2 m-2 mt-4 form-control btn btn-primary text-white" type="submit" name="send_message" value="Envoyer le message" />
           {{ form_end(messageForm) }}
         </div>

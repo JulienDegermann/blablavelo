@@ -1,17 +1,28 @@
+{% set trans_day_hash = { 
+        "Monday": "Lundi", 
+        "Tuesday": "Mardi", 
+        "Wednesday": "Mercredi", 
+        "Thursday": "Jeudi", 
+        "Friday": "Vendredi", 
+        "Saturday": "Samedi", 
+        "Sunday": "Dimanche" 
+    } 
+%}
+
 <div class="rounded-1 border p-3 d-block bg-light my-4 my-md-3 d-flex align-items-center position-relative justify-content-between">
-  {% if user in ride.participants %}
-    <div class="position-absolute top-0 end-0 p-1 text-primary fst-italic fs-6">Déjà inscrit</div>
-  {% endif %}
   <div class="d-flex align-items-center flex-column flex-md-row justify-content-between w-100">
     <div class="d-md-flex w-auto">
       {# <div class="img-container my-2">
+        here we will display the trace .gpx ?
         {% include '/_partials/_practice_img.html.twig' %}
       </div> #}
 
       <div class="mx-3 w-auto">
         <h3 class="text-primary fs-5 m-0">{{ ride.getTitle }}</h3>
         <p class="p-0 m-0">
-          📆 : {{ ride.getDate|date('D d F Y') }}, {{ ride.getDate|date('H:i') }} <br />
+          📆 : {{ ride.getDate|format_datetime('full', 'short', locale='fr') }} <br>
+
+          {# 📆 : {{ ride.getDate|localizeddate('none', 'none', null, null, 'EEEE')}}<br /> #}
           📍 : {{ ride.getCity|capitalize }} <br />
           🚲 : {{ ride.getPractice }} ({{ ride.getDistance }} kms, {{ ride.getAscent }} m de D+)
         </p>

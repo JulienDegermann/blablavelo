@@ -11996,6 +11996,9 @@ body {
   flex-direction: column;
   overflow-x: hidden;
 }
+body.no-scroll {
+  overflow: hidden;
+}
 body main {
   flex: 1;
   position: relative;
@@ -12147,7 +12150,9 @@ footer a:hover {
   align-items: center;
   color: #FFF6F2;
   border: #FC5201 solid 1px !important;
-  box-shadow: #FC5201 0 0 5px;
+}
+.profile .rounded-circle.shadow {
+  border: 3px solid #FC5201 !important;
 }
 .profile img,
 .profile svg {

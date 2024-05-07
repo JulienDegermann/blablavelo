@@ -19,7 +19,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class RideController extends AbstractController
 {
-    #[Route('/sorties', name: 'app_rides')]
+    #[Route('/dashboard', name: 'app_rides')]
     public function index(
         RideRepository $rideRepository,
         Request $request,

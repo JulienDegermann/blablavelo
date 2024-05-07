@@ -9,6 +9,7 @@
 import 'bootstrap/dist/js/bootstrap.bundle';
 import './styles/app.scss';
 
+const body = document.querySelector('body');
 const ranges = document.querySelectorAll('.range');
 
 const menuButton = document.querySelector('#menu-button');
@@ -17,6 +18,9 @@ const profileMenu = document.querySelector('#profile-menu')
 if (menuButton) {
     menuButton.addEventListener('click', () => {
         profileMenu.classList.toggle('active');
+        body.classList.toggle('no-scroll');
+        
+
     })
 }
 
