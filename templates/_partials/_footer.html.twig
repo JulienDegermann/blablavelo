@@ -32,26 +32,31 @@
         <div class="my-3">
           <h3 class="fs-4 text-dark">Nous contacter</h3>
           <ul>
-            <li>
-              <a href="{{ path('app_contact') }}" class="nav-link mx-1 py-1 text-dark">Une question ? Une remarque ?</a>
-            </li>
+            {% if user is defined %}
+              <li>
+                <a href="{{ path('app_contact') }}" class="nav-link mx-1 py-1 text-dark">Une question ? Une remarque ?</a>
+              </li>
+            {% endif %}
+
             <li>
               <a class="nav-link mx-1 py-1 text-dark" href="mailto:contact.blablavelo@julien-degermann.fr">contact.blablavelo@julien-degermann.fr</a>
             </li>
           </ul>
           <nav>
             <ul class="social ps-0 d-flex justify-content-start">
+              {% if user is defined and 'ROLE_ADMIN' in user.getRoles %}
+                <li class="mx-1">
+                  <a href="https://www.linkedin.com/in/julien-degermann/" target="_blank" class="nav-link my-0 p-0 text-white">{% include '_partials/svg/_linkedin.html.twig' %}</a>
+                </li>
+                <li class="mx-1">
+                  <a href="https://github.com/JulienDegermann" target="_blank" class="nav-link my-0 p-0 text-white">{% include '_partials/svg/_github.html.twig' %}</a>
+                </li>
+                <li class="mx-1">
+                  <a href="https://github.com/JulienDegermann" target="_blank" class="nav-link my-0 p-0 text-white">{% include '_partials/svg/_strava.html.twig' %}</a>
+                </li>
+              {% endif %}
               <li class="mx-1">
-                <a href="https://www.linkedin.com/in/julien-degermann/" target="_blank" class="nav-link my-0 p-0 text-white">{% include '_partials/svg/_linkedin.html.twig' %}</a>
-              </li>
-              <li class="mx-1">
-                <a href="https://github.com/JulienDegermann" target="_blank" class="nav-link my-0 p-0 text-white">{% include '_partials/svg/_github.html.twig' %}</a>
-              </li>
-              <li class="mx-1">
-                <a href="https://github.com/JulienDegermann" target="_blank" class="nav-link my-0 p-0 text-white">{% include '_partials/svg/_strava.html.twig' %}</a>
-              </li>
-              <li class="mx-1">
-                <a href="https://github.com/JulienDegermann" target="_blank" class="nav-link my-0 p-0 text-white">{% include '_partials/svg/_facebook.html.twig' %}</a>
+                <a href="https://www.facebook.com/profile.php?id=61559601053542" target="_blank" class="nav-link my-0 p-0 text-white">{% include '_partials/svg/_facebook.html.twig' %}</a>
               </li>
             </ul>
           </nav>

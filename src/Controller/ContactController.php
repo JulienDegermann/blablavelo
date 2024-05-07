@@ -21,10 +21,12 @@ class ContactController extends AbstractController
         RideRepository $rideRepository
     ): Response {
         
-        $user = null;
-        if ($this->getUser()) {
-            /** @var User $user */
-            $user = $this->getUser();
+        /** @var User $user */
+        $user = $this->getUser();
+
+        if (!$user) {
+            $this->addFlash('warning', 'Vous devez être connecté pour accéder à cette page');
+            return $this->redirectToRoute('app_home');
         }
 
         $message = new Message();
