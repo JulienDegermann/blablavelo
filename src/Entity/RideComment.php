@@ -97,6 +97,6 @@ class RideComment
 
     public function __toString(): string
     {
-        return $this->text;
+        return $this->author . " : " . $this->text;
     }
 }

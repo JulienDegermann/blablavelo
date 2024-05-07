@@ -13,19 +13,19 @@ class PricacyPolicyController extends AbstractController
     #[Route('/politique-de-confidentialite', name: 'app_pricacy_policy')]
     public function index(
         RideRepository $rideRepository
-    ): Response
-    {
+    ): Response {
 
         /** @var User $user */
         $user = $this->getUser();
 
-        $myCreatedRides = $rideRepository->findBy(['author' => $user], ['date' => 'ASC']);
-        $myParticipatedRides = $rideRepository->rideOfUser($user);
+        // check with uses => find PAST rides of user to count them (participated and created) => may get all times ?
+        $myPrevRides = $rideRepository->myPrevRides($user);
+        $myCreatedRides = $rideRepository->myCreatedRides($user);
 
         return $this->render('pricacy_policy/index.html.twig', [
             'user' => $user,
             'my_rides' => $myCreatedRides,
-            'all_my_rides' => $myParticipatedRides
+            'my_prev_rides' => $myPrevRides
         ]);
     }
 }

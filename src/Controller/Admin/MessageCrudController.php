@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Message;
 use App\Traits\EasyAdmin\ActionsTrait;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
@@ -22,6 +23,7 @@ class MessageCrudController extends AbstractCrudController
     public function configureActions(Actions $actions): Actions
     {
         $actions = $this->configureDefaultActions($actions);
+        $actions->remove(Crud::PAGE_INDEX, 'new');
 
         return $actions;
     }
