@@ -4,7 +4,7 @@ namespace App\Entity;
 
 use App\Entity\Ride;
 use App\Entity\User;
-use App\Entity\Traits\IdTrait;
+use App\Traits\Entity\IdTrait;
 use App\Traits\Entity\NameTrait;
 use Doctrine\ORM\Mapping as ORM;
 use App\Traits\Entity\DatesTrait;

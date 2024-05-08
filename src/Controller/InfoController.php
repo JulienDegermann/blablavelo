@@ -18,11 +18,9 @@ class InfoController extends AbstractController
     ): Response
     {
         
-        $user = null;
-        if ($this->getUser()) {
-            /** @var User $user */
-            $user = $this->getUser();
-        }
+        /** @var User $user */
+        $user = $this->getUser();
+
         
         // check with uses => find PAST rides of user to count them (participated and created) => may get all times ?
         $myPrevRides = $rideRepository->myPrevRides($user);

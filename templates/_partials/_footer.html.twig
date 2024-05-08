@@ -32,7 +32,7 @@
         <div class="my-3">
           <h3 class="fs-4 text-dark">Nous contacter</h3>
           <ul>
-            {% if user is defined %}
+            {% if user is defined and user is not null %}
               <li>
                 <a href="{{ path('app_contact') }}" class="nav-link mx-1 py-1 text-dark">Une question ? Une remarque ?</a>
               </li>
@@ -44,7 +44,7 @@
           </ul>
           <nav>
             <ul class="social ps-0 d-flex justify-content-start">
-              {% if user is defined and 'ROLE_ADMIN' in user.getRoles %}
+              {% if user is defined and user is not null and 'ROLE_ADMIN' in user.getRoles %}
                 <li class="mx-1">
                   <a href="https://www.linkedin.com/in/julien-degermann/" target="_blank" class="nav-link my-0 p-0 text-white">{% include '_partials/svg/_linkedin.html.twig' %}</a>
                 </li>

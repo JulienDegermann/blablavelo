@@ -213,10 +213,12 @@ class RideController extends AbstractController
         Request $request,
     ): Response {
 
-        $user = null;
-        if ($this->getUser()) {
-            /** @var User $user */
-            $user = $this->getUser();
+
+        /** @var User $user */
+        $user = $this->getUser();
+        if (!$user) {
+            $this->addFlash('warning', 'Vous devez être connecté pour voir les annonces');
+            return $this->redirectToRoute('app_home');
         }
 
         if ($user->getIsVerified() == false) {

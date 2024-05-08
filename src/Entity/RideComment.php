@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-use App\Entity\Traits\IdTrait;
+use App\Traits\Entity\IdTrait;
 use App\Repository\RideCommentRepository;
 use App\Traits\Entity\DatesTrait;
 use App\Traits\Entity\TextTrait;
