@@ -3,7 +3,8 @@
 namespace App\Entity;
 
 use App\Entity\Model;
-use App\Entity\Traits\IdTrait;
+
+use App\Traits\Entity\IdTrait;
 use Doctrine\ORM\Mapping as ORM;
 use App\Traits\Entity\DatesTrait;
 use App\Repository\BrandRepository;

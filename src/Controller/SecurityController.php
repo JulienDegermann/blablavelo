@@ -25,18 +25,15 @@ class SecurityController extends AbstractController
     #[Route(path: '/connexion', name: 'app_login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
-
-        if ($this->getUser()) {
-            /** @var User $user */
-            $user = $this->getUser();
+        
+        $user = $this->getUser();
+        if ($user) {
             if ($this->isGranted('ROLE_ADMIN', $user)) {
                 return $this->redirectToRoute('admin');
             } elseif ($this->isGranted('ROLE_USER', $user)) {
                 return $this->redirectToRoute('app_home');
             }
         }
-
-        $user = null;
 
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
@@ -67,12 +64,10 @@ class SecurityController extends AbstractController
         MailSendService $mailSendService
     ): Response {
 
-        $user = null;
+        /** @var User $user */
+        $user = $this->getUser();
 
-        if ($this->getUser()) {
-            /** @var User $user */
-            $user = $this->getUser();
-
+        if ($user) {
             $token = $tokenGenerator->generateToken();
             $user->setToken($token);
             $repo->save($user);

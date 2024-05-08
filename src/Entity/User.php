@@ -6,7 +6,7 @@ use App\Entity\Ride;
 use DateTimeImmutable;
 use App\Entity\Message;
 use App\Entity\ProfileImage;
-use App\Entity\Traits\IdTrait;
+use App\Traits\Entity\IdTrait;
 use Doctrine\ORM\Mapping as ORM;
 use App\Traits\Entity\DatesTrait;
 use App\Repository\UserRepository;
