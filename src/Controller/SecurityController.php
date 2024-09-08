@@ -25,7 +25,7 @@ class SecurityController extends AbstractController
     #[Route(path: '/connexion', name: 'app_login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
-        
+
         $user = $this->getUser();
         if ($user) {
             if ($this->isGranted('ROLE_ADMIN', $user)) {
@@ -85,10 +85,10 @@ class SecurityController extends AbstractController
             $user = $repo->findOneBy(['email' => $data['password_forgot']['email']]);
 
 
-            if ($user) {
-                $mail = $mailSendService->forgotPasswordEmail($user);
-                $this->addFlash('success', $mail);
-            }
+            $mail = $mailSendService->forgotPasswordEmail($user);
+            $this->addFlash('success', $mail);
+            // if ($user) {
+            // }
 
             return $this->render('security/pwd_forgot.html.twig', [
                 'form' => $form->createView()

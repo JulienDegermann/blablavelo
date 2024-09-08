@@ -77,20 +77,22 @@ class MailSendService
   }
 
 
-  public function forgotPasswordEmail(User $user): string
+  public function forgotPasswordEmail(?User $user): string
   {
-    $token = $this->tokenGenerator->generateToken();
-    $user->setToken($token);
-    $this->userRepo->save($user);
-    $url = $this->urlGenerator->generate('app_pwd_reset', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
+    if ($user) {
+      $token = $this->tokenGenerator->generateToken();
+      $user->setToken($token);
+      $this->userRepo->save($user);
+      $url = $this->urlGenerator->generate('app_pwd_reset', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
 
-    $email = (new Email())
-      ->from($this->from)
-      ->to($user->getEmail())
-      ->subject('Réinitialisation de votre mot de passe Blabla Vélo')
-      ->html('<p>Vous pouvez réinitialiser votre mot de passe en cliquant sur le lien suivant :</p> <a href="' . $url . '">cliquez ici</a> <br> <p>Équipe Blabla Vélo</p>');
-    
-    $this->mailer->send($email);
+      $email = (new Email())
+        ->from($this->from)
+        ->to($user->getEmail())
+        ->subject('Réinitialisation de votre mot de passe Blabla Vélo')
+        ->html('<p>Vous pouvez réinitialiser votre mot de passe en cliquant sur le lien suivant :</p> <a href="' . $url . '">cliquez ici</a> <br> <p>Équipe Blabla Vélo</p>');
+
+      $this->mailer->send($email);
+    }
     $addFlash = 'Un e-mail a été envoyé à l\'adresse indiquée.';
     return $addFlash;
   }
