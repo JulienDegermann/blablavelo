@@ -6,7 +6,7 @@ use App\Domain\Ride\Ride;
 use App\Domain\User\User;
 use Symfony\Component\Mime\Email;
 
-interface RemovedParticipantNotifierServieInterface
+interface RemovedParticipantNotifierServiceInterface
 {
     public function __invoke(Ride $ride, User $participant): Email;
 }

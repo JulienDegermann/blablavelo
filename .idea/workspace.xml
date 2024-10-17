@@ -5,19 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6bf2a131-25c4-4dcb-93b9-df8ba4b524ad" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/Domain/Ride/Contrat/RemoveRideInterface.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Domain/Ride/Contrat/RemovedRideNotifierServiceInterface.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Domain/Ride/UseCase/RemoveRide/RemoveRide.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Domain/Ride/UseCase/RemoveRide/RemoveRideInput.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Infrastructure/Service/NotifierService/RemovedRideNotifierService.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Domain/Ride/Contrat/RemoveParticipantInterface.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Application/Controller/RegistrationController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Application/Controller/RegistrationController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Domain/Ride/Contrat/CreateNewRideInterface.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Domain/Ride/Contrat/CreateNewRideInterface.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Domain/Ride/Contrat/UserRepositoryInterface.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Domain/Ride/Contrat/RideRepositoryInterface.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Domain/Ride/UseCase/CreateNewRide.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Domain/Ride/UseCase/CreateRide/CreateNewRide.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Domain/Ride/UseCase/NewRideInput.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Domain/Ride/UseCase/CreateRide/NewRideInput.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Domain/Ride/UseCase/RideOutput.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Domain/Ride/UseCase/CreateRide/RideOutput.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Security/UserAuthAuthenticator.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Application/Security/UserAuthAuthenticator.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Domain/Ride/Contrat/RemoveRideInterface.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Domain/Ride/Contrat/RemoveRideInterface.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Domain/Ride/Contrat/RemovedParticipantNotifierServieInterface.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Domain/Ride/Contrat/RemovedParticipantNotifierServiceInterface.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Domain/Ride/Ride.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Domain/Ride/Ride.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Domain/Ride/UseCase/AddParticipant/AddParticipant.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Domain/Ride/UseCase/AddParticipant/AddParticipant.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Domain/Ride/UseCase/CreateRide/NewRideInput.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Domain/Ride/UseCase/CreateRide/NewRideInput.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Domain/Ride/UseCase/RemoveParticipant/RemoveParticipant.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Domain/Ride/UseCase/RemoveParticipant/RemoveParticipant.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Domain/Ride/UseCase/RemoveParticipant/RemoveParticipantInput.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Domain/Ride/UseCase/RemoveParticipant/RemoveParticipantInput.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Domain/Ride/UseCase/RemoveRide/RemoveRide.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Domain/Ride/UseCase/RemoveRide/RemoveRide.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -201,6 +198,11 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/Domain/Ride/UseCase" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration name="Main" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
       <TestRunner configuration_file="$PROJECT_DIR$/phpunit.xml.dist" scope="XML" use_alternative_configuration_file="true" />
@@ -231,6 +233,8 @@
       <workItem from="1729085499217" duration="13313000" />
       <workItem from="1729111554001" duration="186000" />
       <workItem from="1729148940936" duration="5034000" />
+      <workItem from="1729154201649" duration="15913000" />
+      <workItem from="1729178414861" duration="1216000" />
     </task>
     <servers />
   </component>

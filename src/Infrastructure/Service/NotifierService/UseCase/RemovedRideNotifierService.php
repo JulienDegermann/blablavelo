@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Infrastructure\Service\NotifierService;
+namespace App\Infrastructure\Service\NotifierService\UseCase;
 
 use App\Domain\Ride\Contrat\RemovedRideNotifierServiceInterface;
 use App\Domain\Ride\Ride;

@@ -1,14 +1,15 @@
 <?php
 
-namespace App\Infrastructure\Service\NotifierService;
+namespace App\Infrastructure\Service\NotifierService\UseCase;
 
-use App\Domain\Ride\Contrat\RemovedParticipantNotifierServieInterface;
+use App\Domain\Ride\Contrat\RemovedParticipantNotifierServiceInterface;
 use App\Domain\Ride\Ride;
 use App\Domain\User\User;
+use App\Infrastructure\Service\NotifierService\NotifierConfigInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 
-class RemovedParticipantNotifierService implements RemovedParticipantNotifierServieInterface
+class RemovedParticipantNotifierService implements RemovedParticipantNotifierServiceInterface
 {
     public function __construct(
         private readonly MailerInterface         $mailer,

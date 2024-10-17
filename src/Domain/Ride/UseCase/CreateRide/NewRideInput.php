@@ -25,10 +25,6 @@ final class NewRideInput
 
     private DateTimeImmutable $startDate;
 
-    private DateTimeImmutable $createdAt;
-
-    private DateTimeImmutable $updatedAt;
-
     private Mind $mind;
 
     private Practice $practice;
@@ -38,8 +34,6 @@ final class NewRideInput
     private Collection $participants;
 
     private City $startCity;
-
-    private Collection $rideComments;
 
     public function getTitle(): string
     {
@@ -125,30 +119,6 @@ final class NewRideInput
         return $this;
     }
 
-    public function getCreatedAt(): DateTimeImmutable
-    {
-        return $this->createdAt;
-    }
-
-    public function setCreatedAt(DateTimeImmutable $createdAt): self
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    public function getUpdatedAt(): DateTimeImmutable
-    {
-        return $this->updatedAt;
-    }
-
-    public function setUpdatedAt(DateTimeImmutable $updatedAt): self
-    {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
-    }
-
     public function getMind(): Mind
     {
         return $this->mind;
@@ -193,23 +163,6 @@ final class NewRideInput
     public function setSartCity(City $startCity): self
     {
         $this->startCity = $startCity;
-
-        return $this;
-    }
-
-    public function getParticipants(): array
-    {
-        return $this->participants;
-    }
-
-    public function addParticipant(User $participant): self
-    {
-        if (!$this->participants->contains($participant)) {
-            $this->participants->add($participant);
-            if (!$participant->getRides->contains($this)) {
-                $participant->addRide($this);
-            }
-        }
 
         return $this;
     }

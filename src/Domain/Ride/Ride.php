@@ -193,11 +193,12 @@ class Ride
         City $startCity,
     )
     {
-        $this->participants = new ArrayCollection();
         $this->createdAt = new DateTimeImmutable();
         $this->updatedAt = new DateTimeImmutable();
+        $this->participants = new ArrayCollection();
         $this->rideComments = new ArrayCollection();
         $this->creator = $creator;
+        $this->addParticipant($creator);
         $this->startDate = $startDate;
         $this->description = $description;
         $this->maxParticipants = $maxParticipants;
@@ -207,7 +208,6 @@ class Ride
         $this->averageSpeed = $averageSpeed;
         $this->practice = $practice;
         $this->mind = $mind;
-        $this->addParticipant($creator);
         $this->startCity = $startCity;
     }
 

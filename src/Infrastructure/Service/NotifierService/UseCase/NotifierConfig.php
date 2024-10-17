@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Infrastructure\Service\NotifierService;
+namespace App\Infrastructure\Service\NotifierService\UseCase;
+
+use App\Infrastructure\Service\NotifierService\NotifierConfigInterface;
 
 class NotifierConfig implements NotifierConfigInterface
 {
