@@ -1,7 +1,12 @@
 <?php
 
-namespace App\Domain\Ride\UseCase;
+namespace App\Domain\Ride\UseCase\CreateRide;
 
+use App\Application\Location\City;
+use App\Domain\Ride\UseCase\Collection;
+use App\Domain\PracticeDetail\Mind;
+use App\Domain\PracticeDetail\Practice;
+use App\Domain\User\User;
 use DateTimeImmutable;
 
 final class NewRideInput
@@ -176,6 +181,18 @@ final class NewRideInput
     public function setCreator(User $creator): self
     {
         $this->creator = $creator;
+
+        return $this;
+    }
+
+    public function getSartCity(): City
+    {
+        return $this->startCity;
+    }
+
+    public function setSartCity(City $startCity): self
+    {
+        $this->startCity = $startCity;
 
         return $this;
     }

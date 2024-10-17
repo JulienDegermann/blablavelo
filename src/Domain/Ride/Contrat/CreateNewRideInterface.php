@@ -2,9 +2,10 @@
 
 namespace App\Domain\Ride\Contrat;
 
-use App\Domain\Ride\UseCase\NewRideInput;
-use App\Domain\Ride\UseCase\RideOutput;
+use App\Domain\Ride\Ride;
+use App\Domain\Ride\UseCase\CreateRide\NewRideInput;
+use App\Domain\Ride\UseCase\CreateRide\RideOutput;
 
 interface CreateNewRideInterface{
-    public function __invoke(NewRideInput $input): RideOutput;
+    public function __invoke(NewRideInput $input): Ride;
 }

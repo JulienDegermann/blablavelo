@@ -1,17 +1,19 @@
 <?php
 
-namespace App\Domain\Ride\UseCase;
+namespace App\Domain\Ride\UseCase\CreateRide;
 
 use App\Domain\Ride\Contrat\CreateNewRideInterface;
-use App\Infrastructure\Repository\RideRepository;
+use App\Domain\Ride\Contrat\RideRepositoryInterface;
+use App\Domain\Ride\Ride;
 
 final class CreateNewRide implements CreateNewRideInterface
 {
-    public function __construct(private readonly RideRepository $rideRepo) {}
-    public function __invoke(NewRideInput $input): RideOutput
+    public function __construct(private readonly RideRepositoryInterface $rideRepo)
     {
-        $output = new RideOutput();
+    }
 
+    public function __invoke(NewRideInput $input): Ride
+    {
         $ride = new Ride(
             $input->getCreator(),
             $input->getTitle(),
@@ -23,10 +25,11 @@ final class CreateNewRide implements CreateNewRideInterface
             $input->getAverageSpeed(),
             $input->getPractice(),
             $input->getMind(),
+            $input->getSartCity()
         );
 
-        $this->RideRepo->save($ride);
+        $this->rideRepo->save($ride);
 
-        return $output->setData($ride);
+        return $ride;
     }
 }

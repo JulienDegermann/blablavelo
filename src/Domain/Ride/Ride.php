@@ -42,7 +42,7 @@ class Ride
             message: 'La distance doit être supérieure à {{ compared_value }} kms.'
         ),
     ])]
-    private ?int $distance = null;
+    private ?int $distance;
 
     #[ORM\Column]
     #[Assert\Sequentially([
@@ -65,7 +65,7 @@ class Ride
             message: 'Le dénivelé positif doit être indérieur ou égal à {{ compared_value }} m.'
         ),
     ])]
-    private ?int $ascent = null;
+    private ?int $ascent;
 
     #[ORM\Column]
     #[Assert\Sequentially([
@@ -80,12 +80,12 @@ class Ride
             message: 'Le nombre de participants doit être supérieur à 0.'
         ),
         new Assert\Range(
+            notInRangeMessage: 'Le nombre de participants doit être compris entre {{ min }} et {{ max }}.',
             min: 1,
-            max: 10,
-            notInRangeMessage: 'Le nombre de participants doit être compris entre {{ min }} et {{ max }}.'
+            max: 10
         ),
     ])]
-    private ?int $maxParticipants = null;
+    private ?int $maxParticipants;
 
     #[ORM\Column]
     #[Assert\Sequentially([
@@ -124,22 +124,22 @@ class Ride
             message: 'La date doit être postérieure à la date du jour.'
         ),
     ])]
-    private ?DateTimeImmutable $startDate = null;
+    private ?DateTimeImmutable $startDate;
 
     #[ORM\ManyToOne(inversedBy: 'rides')]
     #[ORM\JoinColumn(nullable: false)]
     #[Assert\Valid]
-    private ?Mind $mind = null;
+    private ?Mind $mind;
 
     #[ORM\ManyToOne(inversedBy: 'rides')]
     #[ORM\JoinColumn(nullable: false)]
     #[Assert\Valid]
-    private ?Practice $practice = null;
+    private ?Practice $practice;
 
     #[ORM\ManyToOne(inversedBy: 'ridesCreated')]
-    #[ORM\JoinColumn(nullable: false, referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\JoinColumn(referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     #[Assert\Valid]
-    private ?User $creator = null;
+    private ?User $creator;
 
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'ridesParticipated')]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
@@ -164,18 +164,20 @@ class Ride
             message: 'Les caractères autorisés : lettres (minuscules et majuscules, accentuées ou non), chiffres, espaces, parenthèses, tirets et caractères de ponctuation'
         ),
     ])]
-    private ?string $description = null;
+    private ?string $description;
 
     #[ORM\ManyToOne(inversedBy: 'users')]
     #[ORM\JoinColumn(nullable: false)]
     #[Assert\Valid]
-    private ?City $city = null;
+    private ?City $startCity;
 
     /**
      * @var Collection<int, RideComment>
      */
     #[ORM\OneToMany(mappedBy: 'ride', targetEntity: RideComment::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $rideComments;
+
+    private int $averageSpeed;
 
     public function __construct(
         User $creator,
@@ -188,6 +190,7 @@ class Ride
         int $averageSpeed,
         Practice $practice,
         Mind $mind,
+        City $startCity,
     )
     {
         $this->participants = new ArrayCollection();
@@ -205,6 +208,7 @@ class Ride
         $this->practice = $practice;
         $this->mind = $mind;
         $this->addParticipant($creator);
+        $this->startCity = $startCity;
     }
 
     public function getId(): ?int
@@ -272,9 +276,9 @@ class Ride
         return $this;
     }
 
-    public function getStartDate(): ?\DateTimeImmutable
+    public function getStartDate(): ?DateTimeImmutable
     {
-        return $this->date;
+        return $this->startDate;
     }
 
     public function setStartDate(?DateTimeImmutable $startDate): static
@@ -320,14 +324,14 @@ class Ride
         return $this;
     }
 
-    public function getCity(): ?City
+    public function getStartCity(): ?City
     {
-        return $this->city;
+        return $this->startCity;
     }
 
-    public function setCity(?City $city): static
+    public function setStartCity(?City $startCity): static
     {
-        $this->city = $city;
+        $this->startCity = $startCity;
 
         return $this;
     }

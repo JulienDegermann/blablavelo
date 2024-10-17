@@ -3,10 +3,10 @@
 namespace App\Application\Controller;
 
 use App\Application\Form\RegistrationFormType;
+use App\Application\Security\UserAuthAuthenticator;
 use App\Domain\User\User;
 use App\Infrastructure\Repository\UserRepository;
 use App\Infrastructure\Service\MailSendService;
-use App\Security\UserAuthAuthenticator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,14 +20,14 @@ class RegistrationController extends AbstractController
 {
     #[Route('/inscription', name: 'app_register')]
     public function register(
-        Request $request, 
-        UserPasswordHasherInterface $userPasswordHasher, 
-        UserAuthenticatorInterface $userAuthenticator, 
-        UserAuthAuthenticator $authenticator, 
-        MailerInterface $mail,
-        UserRepository $userRepo,
-        MailSendService $mailSendService
-        ): Response
+        Request                     $request,
+        UserPasswordHasherInterface $userPasswordHasher,
+        UserAuthenticatorInterface  $userAuthenticator,
+        UserAuthAuthenticator       $authenticator,
+        MailerInterface             $mail,
+        UserRepository              $userRepo,
+        MailSendService             $mailSendService
+    ): Response
     {
         if ($this->getUser()) {
             return $this->redirectToRoute('app_home');
@@ -41,8 +41,9 @@ class RegistrationController extends AbstractController
             $plain_email = $form->get('email')->getData();
             $plain_user_name = $form->get('nameNumber')->getData();
 
-            if($userRepo->findBy(['email' => $plain_email]) || $userRepo->findBy(['nameNumber' => $plain_user_name])) {
+            if ($userRepo->findBy(['email' => $plain_email]) || $userRepo->findBy(['nameNumber' => $plain_user_name])) {
                 $this->addFlash('danger', 'Impossible de créer le compte avec les informations fournies. Veuillez recommencer.');
+
                 return $this->redirectToRoute('app_register');
             };
 
@@ -54,14 +55,15 @@ class RegistrationController extends AbstractController
                 )
             )
                 ->setRoles(['ROLE_USER']);
-                // ->setToken($token);            
+            // ->setToken($token);
 
             $userRepo->save($user);
-            
+
             // mail sending
             $mail = $mailSendService->emailConfirmation($user);
-                            
+
             $this->addFlash('success', $mail);
+
             return $userAuthenticator->authenticateUser(
                 $user,
                 $authenticator,
@@ -71,22 +73,22 @@ class RegistrationController extends AbstractController
 
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form->createView(),
-            'user' => $user
+            'user' => $user,
         ]);
     }
 
     #[Route('/supprimer-mon-compte', name: 'app_delete')]
     public function unregister(
-        UserRepository $repo     
-        ): Response
+        UserRepository $repo
+    ): Response
     {
-        if(!$this->getUser()) {
+        if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');
         }
 
         /** @var User $user */
         $user = $this->getUser();
-        
+
         // disconnect $user and destroy session
         $session = new Session();
         $session->invalidate();
@@ -96,10 +98,12 @@ class RegistrationController extends AbstractController
 
         if ($repo->findBy(['email' => $user->getEmail()])) {
             $this->addFlash('danger', 'Une erreur est survenue, veuillez réessayer ultérieurement');
+
             return $this->redirectToRoute('app_profile');
         }
-        
+
         $this->addFlash('success', 'Votre compte a été supprimé avec succès.');
+
         return $this->redirectToRoute('app_home');
     }
 
@@ -107,31 +111,35 @@ class RegistrationController extends AbstractController
     #[Route('/nouveau-code', name: 'app_new_token')]
     public function newCode(
         MailSendService $mailSendService
-    ) {
-        
+    )
+    {
         /** @var User $user */
         $user = $this->getUser();
-        
-        if(!$user) {
+
+        if (!$user) {
             $this->addFlash('danger', 'Vous devez être connecté pour utiliser l\'application.');
+
             return $this->redirectToRoute('app_login');
         }
 
         $mail = $mailSendService->emailConfirmation($user);
 
         $this->addFlash('success', $mail);
+
         return $this->redirectToRoute('app_home');
     }
 
     #[Route('/verification-email/{token}', name: 'app_email_verify')]
     public function emailVerify(
-        string $token,
+        string         $token,
         UserRepository $repo,
-    ) {
+    )
+    {
         $user = $repo->findOneBy(['token' => $token]);
-        
+
         if (!$user) {
             $this->addFlash('danger', 'Oups ! Ce lien n\'est plus valide.');
+
             return $this->redirectToRoute('app_home');
         }
 
@@ -140,7 +148,7 @@ class RegistrationController extends AbstractController
         $repo->save($user);
 
         $this->addFlash('success', 'Votre compte a été vérifé.');
+
         return $this->redirectToRoute('app_home');
     }
-
 }
