@@ -2,7 +2,7 @@
 
 namespace App\Application\Form;
 
-use App\Application\Message\Message;
+use App\Domain\Message\Message;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;

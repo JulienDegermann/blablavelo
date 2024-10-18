@@ -2,8 +2,8 @@
 
 namespace App\Application\Controller\Admin;
 
-use App\Application\Message\Message;
 use App\Application\Traits\EasyAdmin\ActionsTrait;
+use App\Domain\Message\Message;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;

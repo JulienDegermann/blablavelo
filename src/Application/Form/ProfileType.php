@@ -2,7 +2,7 @@
 
 namespace App\Application\Form;
 
-use App\Application\Location\Department;
+use App\Domain\Location\Department;
 use App\Domain\PracticeDetail\Mind;
 use App\Domain\PracticeDetail\Practice;
 use App\Domain\User\User;

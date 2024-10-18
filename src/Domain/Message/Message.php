@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Application\Message;
+namespace App\Domain\Message;
 
 use App\Application\Traits\Entity\DatesTrait;
 use App\Application\Traits\Entity\IdTrait;

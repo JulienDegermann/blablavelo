@@ -2,10 +2,10 @@
 
 namespace App\Domain\Ride;
 
-use App\Application\Location\City;
 use App\Application\Traits\Entity\DatesTrait;
 use App\Application\Traits\Entity\IdTrait;
 use App\Application\Traits\Entity\TitleTrait;
+use App\Domain\Location\City;
 use App\Domain\PracticeDetail\Mind;
 use App\Domain\PracticeDetail\Practice;
 use App\Domain\User\User;
@@ -108,7 +108,7 @@ class Ride
             message: 'La vitesse moyenne doit être inférieure à {{ compared_value }} km/h.'
         ),
     ])]
-    private ?int $average_speed = null;
+    private ?int $averageSpeed = null;
 
     #[ORM\Column]
     #[Assert\Sequentially([
@@ -139,7 +139,7 @@ class Ride
     #[ORM\ManyToOne(inversedBy: 'ridesCreated')]
     #[ORM\JoinColumn(referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     #[Assert\Valid]
-    private ?User $creator;
+    private User $creator;
 
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'ridesParticipated')]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
@@ -177,20 +177,18 @@ class Ride
     #[ORM\OneToMany(mappedBy: 'ride', targetEntity: RideComment::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $rideComments;
 
-    private int $averageSpeed;
-
     public function __construct(
-        User $creator,
-        string $title,
-        string $description,
+        User              $creator,
+        string            $title,
+        string            $description,
         DateTimeImmutable $startDate,
-        int $maxParticipants,
-        int $ascent,
-        int $distance,
-        int $averageSpeed,
-        Practice $practice,
-        Mind $mind,
-        City $startCity,
+        int               $maxParticipants,
+        int               $ascent,
+        int               $distance,
+        int               $averageSpeed,
+        Practice          $practice,
+        Mind              $mind,
+        City              $startCity,
     )
     {
         $this->createdAt = new DateTimeImmutable();
@@ -266,12 +264,12 @@ class Ride
 
     public function getAverageSpeed(): ?int
     {
-        return $this->average_speed;
+        return $this->averageSpeed;
     }
 
-    public function setAverageSpeed(int $average_speed): static
+    public function setAverageSpeed(int $averageSpeed): static
     {
-        $this->average_speed = $average_speed;
+        $this->averageSpeed = $averageSpeed;
 
         return $this;
     }
@@ -312,12 +310,12 @@ class Ride
         return $this;
     }
 
-    public function getcreator(): ?User
+    public function getcreator(): User
     {
         return $this->creator;
     }
 
-    public function setcreator(?User $creator): static
+    public function setcreator(User $creator): static
     {
         $this->creator = $creator;
 

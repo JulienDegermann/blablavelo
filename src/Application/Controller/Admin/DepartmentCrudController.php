@@ -2,8 +2,8 @@
 
 namespace App\Application\Controller\Admin;
 
-use App\Application\Location\Department;
 use App\Application\Traits\EasyAdmin\ActionsTrait;
+use App\Domain\Location\Department;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 

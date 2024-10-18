@@ -2,12 +2,12 @@
 
 namespace App\Domain\User;
 
-use App\Application\Location\Department;
-use App\Application\Message\Message;
 use App\Application\Traits\Entity\DatesTrait;
 use App\Application\Traits\Entity\IdTrait;
 use App\Application\Traits\Entity\NameNumberTrait;
 use App\Domain\Bike\Model;
+use App\Domain\Location\Department;
+use App\Domain\Message\Message;
 use App\Domain\PracticeDetail\Mind;
 use App\Domain\PracticeDetail\Practice;
 use App\Domain\Ride\Ride;

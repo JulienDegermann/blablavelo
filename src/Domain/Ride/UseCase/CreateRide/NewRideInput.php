@@ -2,10 +2,10 @@
 
 namespace App\Domain\Ride\UseCase\CreateRide;
 
-use App\Application\Location\City;
-use App\Domain\Ride\UseCase\Collection;
+use App\Domain\Location\City;
 use App\Domain\PracticeDetail\Mind;
 use App\Domain\PracticeDetail\Practice;
+use App\Domain\Ride\UseCase\Collection;
 use App\Domain\User\User;
 use DateTimeImmutable;
 
@@ -155,15 +155,22 @@ final class NewRideInput
         return $this;
     }
 
-    public function getSartCity(): City
+    public function getStartCity(): City
     {
         return $this->startCity;
     }
 
-    public function setSartCity(City $startCity): self
+    public function setStartCity(City $startCity): self
     {
         $this->startCity = $startCity;
 
         return $this;
+    }
+
+    public function __construct(
+        User $creator,
+    )
+    {
+        $this->creator = $creator;
     }
 }

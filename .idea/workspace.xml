@@ -5,16 +5,48 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6bf2a131-25c4-4dcb-93b9-df8ba4b524ad" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/Domain/Ride/Contrat/RemoveParticipantInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Domain/Ride/Contrat/FindMyRidesInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Domain/Ride/Contrat/FindRidesInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Domain/Ride/UseCase/FindMyRides/FindMyRides.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Domain/Ride/UseCase/FindRides/FindRides.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Domain/Ride/UseCase/FindRides/FindRidesInput.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/packages/security.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/config/packages/security.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/migrations/Version20240507123718.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Application/Controller/Admin/CityCrudController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Application/Controller/Admin/CityCrudController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Application/Controller/Admin/DashboardController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Application/Controller/Admin/DashboardController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Application/Controller/Admin/DepartmentCrudController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Application/Controller/Admin/DepartmentCrudController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Application/Controller/Admin/MessageCrudController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Application/Controller/Admin/MessageCrudController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Application/Controller/Admin/RideCrudController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Application/Controller/Admin/RideCrudController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Application/Controller/ContactController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Application/Controller/ContactController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Application/Controller/HomeController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Application/Controller/HomeController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Application/Controller/RideController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Application/Controller/RideController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Application/Controller/SecurityController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Application/Controller/SecurityController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Application/Form/MessageType.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Application/Form/MessageType.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Application/Form/NewRideType.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Application/Form/NewRideType.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Application/Form/ProfileType.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Application/Form/ProfileType.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Application/Form/RideFilterType.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Application/Form/RideFilterType.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Application/Location/City.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Domain/Location/City.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Application/Location/Department.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Domain/Location/Department.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Application/Message/Message.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Domain/Message/Message.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Application/Security/UserAuthAuthenticator.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Application/Security/UserAuthAuthenticator.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Domain/Ride/Contrat/RemoveRideInterface.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Domain/Ride/Contrat/RemoveRideInterface.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Domain/Ride/Contrat/RemovedParticipantNotifierServieInterface.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Domain/Ride/Contrat/RemovedParticipantNotifierServiceInterface.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Domain/Ride/Contrat/RideRepositoryInterface.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Domain/Ride/Contrat/RideRepositoryInterface.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Domain/Ride/Ride.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Domain/Ride/Ride.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Domain/Ride/UseCase/AddParticipant/AddParticipant.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Domain/Ride/UseCase/AddParticipant/AddParticipant.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Domain/Ride/UseCase/CreateRide/CreateNewRide.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Domain/Ride/UseCase/CreateRide/CreateNewRide.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Domain/Ride/UseCase/CreateRide/NewRideInput.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Domain/Ride/UseCase/CreateRide/NewRideInput.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Domain/Ride/UseCase/RemoveParticipant/RemoveParticipant.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Domain/Ride/UseCase/RemoveParticipant/RemoveParticipant.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Domain/Ride/UseCase/RemoveParticipant/RemoveParticipantInput.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Domain/Ride/UseCase/RemoveParticipant/RemoveParticipantInput.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Domain/Ride/UseCase/RemoveRide/RemoveRide.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Domain/Ride/UseCase/RemoveRide/RemoveRide.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Domain/User/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Domain/User/User.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Infrastructure/Repository/CityRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Infrastructure/Repository/CityRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Infrastructure/Repository/DepartmentRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Infrastructure/Repository/DepartmentRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Infrastructure/Repository/MessageRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Infrastructure/Repository/MessageRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Infrastructure/Repository/RideRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Infrastructure/Repository/RideRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Infrastructure/Service/ImportCitiesService.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Infrastructure/Service/ImportCitiesService.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/_partials/_profile_menu.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/_partials/_profile_menu.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/_partials/_ride_card.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/_partials/_ride_card.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/_partials/svg/_trophy.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/_partials/svg/_trophy.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/ride/index.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/ride/index.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/ride/new_ride.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/ride/new_ride.html.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -234,7 +266,8 @@
       <workItem from="1729111554001" duration="186000" />
       <workItem from="1729148940936" duration="5034000" />
       <workItem from="1729154201649" duration="15913000" />
-      <workItem from="1729178414861" duration="1216000" />
+      <workItem from="1729178414861" duration="30110000" />
+      <workItem from="1729266427876" duration="797000" />
     </task>
     <servers />
   </component>

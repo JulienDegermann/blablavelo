@@ -12,14 +12,11 @@ class HomeController extends AbstractController
     #[Route('/', name: 'app_home')]
     public function index(
         RideRepository $rideRepository
-    ): Response {
-
-
+    ): Response
+    {
         if ($this->getUser()) {
-            
             return $this->redirectToRoute('app_rides');
         }
-
 
         return $this->render('home/index.html.twig');
     }

@@ -2,8 +2,8 @@
 
 namespace App\Infrastructure\Service;
 
-use App\Application\Location\City;
-use App\Application\Location\Department;
+use App\Domain\Location\City;
+use App\Domain\Location\Department;
 use App\Infrastructure\Repository\CityRepository;
 use App\Infrastructure\Repository\DepartmentRepository;
 use Doctrine\ORM\EntityManagerInterface;

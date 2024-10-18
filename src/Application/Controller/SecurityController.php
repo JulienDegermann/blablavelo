@@ -22,7 +22,6 @@ class SecurityController extends AbstractController
     #[Route(path: '/connexion', name: 'app_login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
-
         $user = $this->getUser();
         if ($user) {
             if ($this->isGranted('ROLE_ADMIN', $user)) {
@@ -39,10 +38,11 @@ class SecurityController extends AbstractController
         if ($error != '' || $error !== null) {
             $this->addFlash('danger', 'Identifiants incorrects');
         }
+
         return $this->render('security/login.html.twig', [
             'last_username' => $lastUsername,
             'error' => $error,
-            'user' => $user
+            'user' => $user,
         ]);
     }
 
@@ -54,13 +54,13 @@ class SecurityController extends AbstractController
 
     #[Route(path: '/mot-de-passe-oublie', name: 'app_pwd_forgot')]
     public function pwdForgot(
-        UserRepository $repo,
-        Request $request,
+        UserRepository          $repo,
+        Request                 $request,
         TokenGeneratorInterface $tokenGenerator,
-        MailerInterface $mail,
-        MailSendService $mailSendService
-    ): Response {
-
+        MailerInterface         $mail,
+        MailSendService         $mailSendService
+    ): Response
+    {
         /** @var User $user */
         $user = $this->getUser();
 
@@ -81,33 +81,33 @@ class SecurityController extends AbstractController
             // $user = $repo->findOneBy(['email' => $form->getData()->getEmail()]);
             $user = $repo->findOneBy(['email' => $data['password_forgot']['email']]);
 
-
             $mail = $mailSendService->forgotPasswordEmail($user);
             $this->addFlash('success', $mail);
 
             return $this->render('security/pwd_forgot.html.twig', [
-                'form' => $form->createView()
+                'form' => $form->createView(),
             ]);
         }
 
         return $this->render('security/pwd_forgot.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
         ]);
     }
 
     #[Route(path: '/reinitialiser-mot-de-passe/{token}', name: 'app_pwd_reset')]
     public function pwdReset(
-        Request $request,
-        string $token,
-        UserRepository $repo,
+        Request                     $request,
+        string                      $token,
+        UserRepository              $repo,
         UserPasswordHasherInterface $pwdhash,
-        RideRepository $rideRepository
-    ): Response {
-
+        RideRepository              $rideRepository
+    ): Response
+    {
         $user = $repo->findOneBy(['token' => $token]);
 
         if (!$user) {
             $this->addFlash('error', 'Oups ! Ce lien n\'est plus valide.');
+
             return $this->redirectToRoute('app_login');
         }
 
@@ -131,11 +131,12 @@ class SecurityController extends AbstractController
                 $this->addFlash('success', 'Mot de passe mis à jour');
             } else {
                 $this->addFlash('error', 'Une erreur est survenue.');
+
                 return $this->render('security/pwd_reset.html.twig', [
                     'form' => $form->createView(),
                     'user' => $user,
                     'my_rides' => $myCreatedRides,
-                    'my_prev_rides' => $myPrevRides
+                    'my_prev_rides' => $myPrevRides,
                 ]);
             }
         }
@@ -144,7 +145,7 @@ class SecurityController extends AbstractController
             'form' => $form->createView(),
             'user' => $user,
             'my_rides' => $myCreatedRides,
-            'my_prev_rides' => $myPrevRides
+            'my_prev_rides' => $myPrevRides,
         ]);
     }
 }

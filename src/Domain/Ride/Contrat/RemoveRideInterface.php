@@ -7,5 +7,5 @@ use App\Domain\Ride\UseCase\RemoveRide\RemoveRideInput;
 
 interface RemoveRideInterface
 {
-    public function __invoke(RemoveRideInput $input): Ride;
+    public function __invoke(RemoveRideInput $input): void;
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Application\Location;
+namespace App\Domain\Location;
 
 use App\Application\Traits\Entity\DatesTrait;
 use App\Application\Traits\Entity\IdTrait;

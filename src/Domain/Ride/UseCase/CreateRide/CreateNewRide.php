@@ -25,7 +25,7 @@ final class CreateNewRide implements CreateNewRideInterface
             $input->getAverageSpeed(),
             $input->getPractice(),
             $input->getMind(),
-            $input->getSartCity()
+            $input->getStartCity()
         );
 
         $this->rideRepo->save($ride);

@@ -20,26 +20,26 @@
           {{ form_row(filter_form.practice) }}
           {{ form_row(filter_form.mind) }}
           {{ form_row(filter_form.department) }}
-          {{ form_row(filter_form.date) }}
+          {{ form_row(filter_form.startDate) }}
           <div class="range my-5">
             <p class="my-1">Distance (kms)</p>
-            {{ form_row(filter_form.distance_min) }}
-            {{ form_row(filter_form.distance_max) }}
+            {{ form_row(filter_form.minDistance) }}
+            {{ form_row(filter_form.maxDistance) }}
           </div>
           <div class="range my-5">
             <p class="my-1">Nombre de participants</p>
-            {{ form_row(filter_form.participants_min) }}
-            {{ form_row(filter_form.participants_max) }}
+            {{ form_row(filter_form.minParticipants) }}
+            {{ form_row(filter_form.maxParticipants) }}
           </div>
           <div class="range my-5">
             <p class="my-1">Dénivelé positif (m)</p>
-            {{ form_row(filter_form.ascent_min) }}
-            {{ form_row(filter_form.ascent_max) }}
+            {{ form_row(filter_form.minAscent) }}
+            {{ form_row(filter_form.maxAscent) }}
           </div>
           <div class="range my-5">
             <p class="my-1">Vitesse moyenne (km/h)</p>
-            {{ form_row(filter_form.average_speed_min) }}
-            {{ form_row(filter_form.average_speed_max) }}
+            {{ form_row(filter_form.minAverageSpeed) }}
+            {{ form_row(filter_form.maxAverageSpeed) }}
           </div>
           {{ form_row(filter_form.submit) }}
           <a class="px-2 py-2" href="{{ path('app_rides') }}">Réinitialiser les filtres</a>
@@ -54,7 +54,7 @@
             <p>Vous n'avez pas de sortie prévue pour le moment.</p>
           {% else %}
             {% for ride in my_next_rides %}
-              {% if (ride.date|date('Y-m-d')) > ('now'|date('Y-m-d')) %}
+              {% if (ride.startDate('Y-m-d')) > ('now'|date('Y-m-d')) %}
                 {% include '/_partials/_ride_card.html.twig' %}
               {% endif %}
             {% endfor %}

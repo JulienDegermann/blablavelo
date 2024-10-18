@@ -2,8 +2,8 @@
 
 namespace App\Application\Controller\Admin;
 
-use App\Application\Location\City;
 use App\Application\Traits\EasyAdmin\ActionsTrait;
+use App\Domain\Location\City;
 use App\Domain\Ride\Ride;
 use App\Infrastructure\Repository\CityRepository;
 use Doctrine\ORM\QueryBuilder;
@@ -32,7 +32,7 @@ class RideCrudController extends AbstractCrudController
             ->setEntityLabelInSingular('Sortie')
             ->setEntityLabelInPlural('Sorties')
             ->setSearchFields(['title', 'description', 'date', 'distance', 'ascent', 'max_rider', 'average_speed', 'createdAt', 'updatedAt'])
-            ->setDefaultSort(['date' => 'DESC']);
+            ->setDefaultSort(['startDate' => 'DESC']);
     }
 
     public function configureActions(Actions $actions): Actions
@@ -54,9 +54,9 @@ class RideCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
-        yield DateTimeField::new('date', 'Date');
+        yield DateTimeField::new('startDate', 'Date');
         yield TextField::new('title', 'Titre');
-        yield AssociationField::new('city', 'Ville')
+        yield AssociationField::new('startCity', 'Ville')
             ->setQueryBuilder(
                 function (QueryBuilder $qb) {
                     return $qb
@@ -66,7 +66,7 @@ class RideCrudController extends AbstractCrudController
                         ->setParameter('id', '56000');
                 }
             );
-        yield AssociationField::new('author', 'Organisateur');
+        yield AssociationField::new('creator', 'Organisateur');
         yield AssociationField::new('participants', 'Participants');
         yield AssociationField::new('practice', 'Pratique');
         yield AssociationField::new('mind', 'Objectif');
@@ -74,8 +74,8 @@ class RideCrudController extends AbstractCrudController
         // yield DateTimeField::new('updated_at', 'Modifié le')->hideOnForm();
         yield IntegerField::new('distance', 'Distance');
         yield IntegerField::new('ascent', 'D+ (m)');
-        yield IntegerField::new('max_rider', 'Nombre max');
-        yield IntegerField::new('average_speed', 'V.moy (km/h)');
+        yield IntegerField::new('maxParticipants', 'Nombre max');
+        yield IntegerField::new('averageSpeed', 'V.moy (km/h)');
         yield TextareaField::new('description', 'Description');
         yield CollectionField::new('rideComments', 'Commentaires')->renderExpanded()->setEntryIsComplex()->useEntryCrudForm();
     }

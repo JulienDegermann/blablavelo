@@ -16,9 +16,8 @@ class RemoveRide implements RemoveRideInterface
     {
     }
 
-    public function __invoke(RemoveRideInput $input): Email
+    public function __invoke(RemoveRideInput $input): void
     {
-        $email = new Email();
         $ride = $this->rideRepository->find($input->getId());
 
         foreach ($ride->getParticipants() as $participant) {
@@ -28,7 +27,5 @@ class RemoveRide implements RemoveRideInterface
         }
 
         $this->rideRepository->remove($ride);
-
-        return $email;
     }
 }

@@ -2,7 +2,7 @@
 
 namespace App\Application\Controller\Admin;
 
-use App\Application\Message\Message;
+use App\Domain\Message\Message;
 use App\Domain\PracticeDetail\Mind;
 use App\Domain\PracticeDetail\Practice;
 use App\Domain\Ride\Ride;

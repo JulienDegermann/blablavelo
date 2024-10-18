@@ -3,7 +3,7 @@
 namespace App\Application\Controller;
 
 use App\Application\Form\MessageType;
-use App\Application\Message\Message;
+use App\Domain\Message\Message;
 use App\Domain\User\User;
 use App\Infrastructure\Repository\MessageRepository;
 use App\Infrastructure\Repository\RideRepository;

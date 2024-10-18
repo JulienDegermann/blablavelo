@@ -2,8 +2,8 @@
 
 namespace App\Application\Controller\Admin;
 
-use App\Application\Location\City;
 use App\Application\Traits\EasyAdmin\ActionsTrait;
+use App\Domain\Location\City;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;

@@ -2,6 +2,7 @@
 
 namespace App\Infrastructure\Repository;
 
+use App\Domain\Ride\Contrat\RideRepositoryInterface;
 use App\Domain\Ride\Ride;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -14,62 +15,32 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Ride[]    findAll()
  * @method Ride[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class RideRepository extends ServiceEntityRepository
+class RideRepository extends ServiceEntityRepository implements RideRepositoryInterface
 {
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Ride::class);
     }
 
-    public function save(Ride $ride)
+    public function save(Ride $ride): void
     {
         $this->_em->persist($ride);
         $this->_em->flush();
     }
 
-    public function remove(Ride $ride)
+    public function remove(Ride $ride): void
     {
         $this->_em->remove($ride);
         $this->_em->flush();
     }
 
-    public function myNextRides($user)
+    public function myRides($user)
     {
         $qb = $this->createQueryBuilder('r')
             ->join('r.participants', 'u')
             ->andWhere(':user MEMBER OF r.participants')
-            ->andWhere('r.date >= :now')
             ->setParameter(':user', $user)
-            ->setParameter(':now', new \DateTime())
-            ->orderBy('r.date', 'ASC')
-            ->getQuery();
-
-        return $qb->getResult();
-    }
-
-    public function myCreatedRides($user)
-    {
-        $qb = $this->createQueryBuilder('r')
-            ->join('r.participants', 'u')
-            ->andWhere(':user = r.author')
-            ->andWhere('r.date >= :lastyear')
-            ->setParameter(':user', $user)
-            ->setParameter(':lastyear', new \DateTime('- 1 year'))
-            ->orderBy('r.date', 'ASC')
-            ->getQuery();
-
-        return $qb->getResult();
-    }
-    public function myPrevRides($user)
-    {
-        $qb = $this->createQueryBuilder('r')
-            ->join('r.participants', 'u')
-            ->andWhere(':user MEMBER OF r.participants')
-            ->andWhere('r.date BETWEEN :lastyear AND :now')
-            ->setParameter(':user', $user)
-            ->setParameter(':now', new \DateTime())
-            ->setParameter(':lastyear', new \DateTime('- 1 year'))
-            ->orderBy('r.date', 'ASC')
+            ->orderBy('r.startDate', 'ASC')
             ->getQuery();
 
         return $qb->getResult();
@@ -85,6 +56,7 @@ class RideRepository extends ServiceEntityRepository
                 ->setParameter(':department', $userdepartment);
         }
         $qb->andWhere('SIZE(r.participants) < r.max_rider');
+
         // ->setParameter(':r.max_rider', 'r.max_rider');
         return $qb->getQuery();
     }
@@ -93,29 +65,31 @@ class RideRepository extends ServiceEntityRepository
         $practice = null,
         $mind = null,
         $department = null,
-        $date = null,
-        $distance_min = null,
-        $distance_max = null,
-        $participants_min = null,
-        $participants_max = null,
-        $average_speed_min = null,
-        $average_speed_max = null,
-        $ascent_min = null,
-        $ascent_max = null
-    ) {
-        $qb = $this->createQueryBuilder('r')->orderBy('r.date', 'ASC');
+        $startDate = null,
+        $minDistance = null,
+        $maxDistance = null,
+        $minParticipants = null,
+        $maxParticipants = null,
+        $minAverageSpeed = null,
+        $maxAverageSpeed = null,
+        $minAscent = null,
+        $maxAscent = null
+    )
+    {
+        $qb = $this->createQueryBuilder('r')->orderBy('r.startDate', 'ASC');
         $practice ? $qb->andWhere('r.practice = :practice')->setParameter(':practice', $practice) : null;
         $mind ? $qb->andWhere('r.mind = :mind')->setParameter(':mind', $mind) : null;
-        $department ? $qb->join('r.city', 'c')->andWhere('c.department = :department')->setParameter(':department', $department) : null;
-        $date ? $qb->andWhere('r.date >= :date')->setParameter(':date', $date) : $qb->andWhere('r.date >= :date')->setParameter(':date', new \DateTime());
-        $distance_min ? $qb->andWhere('r.distance >= :distance_min')->setParameter(':distance_min', $distance_min) : null;
-        $distance_max ? $qb->andWhere('r.distance <= :distance_max')->setParameter(':distance_max', $distance_max) : null;
-        $participants_min ? $qb->andWhere('r.max_rider >= :participants_min')->setParameter(':participants_min', $participants_min) : null;
-        $participants_min ? $qb->andWhere('r.max_rider <= :participants_max')->setParameter(':participants_max', $participants_max) : null;
-        $average_speed_min ? $qb->andWhere('r.average_speed >= :average_speed_min')->setParameter(':average_speed_min', $average_speed_min) : null;
-        $average_speed_max ? $qb->andWhere('r.average_speed <= :average_speed_max')->setParameter(':average_speed_max', $average_speed_max) : null;
-        $ascent_min ? $qb->andWhere('r.ascent >= :ascent_min')->setParameter(':ascent_min', $ascent_min) : null;
-        $ascent_max ? $qb->andWhere('r.ascent <= :ascent_max')->setParameter(':ascent_max', $ascent_max) : null;
+        $department ? $qb->join('r.startCity', 'c')->andWhere('c.department = :department')->setParameter(':department', $department) : null;
+        $startDate ? $qb->andWhere('r.startDate >= :startDate')->setParameter(':startDate', $startDate) : $qb->andWhere('r.startDate >= :startDate')->setParameter(':startDate', new \DateTime());
+        $minDistance ? $qb->andWhere('r.distance >= :minDistance')->setParameter(':minDistance', $minDistance) : null;
+        $maxDistance ? $qb->andWhere('r.distance <= :maxDistance')->setParameter(':maxDistance', $maxDistance) : null;
+        $minParticipants ? $qb->andWhere('r.maxParticipants >= :minParticipants')->setParameter(':minParticipants', $minParticipants) : null;
+        $maxParticipants ? $qb->andWhere('r.maxParticipants <= :maxParticipants')->setParameter(':maxParticipants', $maxParticipants) : null;
+        $minAverageSpeed ? $qb->andWhere('r.averageSpeed >= :minAverageSpeed')->setParameter(':minAverageSpeed', $minAverageSpeed) : null;
+        $maxAverageSpeed ? $qb->andWhere('r.averageSpeed <= :maxAverageSpeed')->setParameter(':maxAverageSpeed', $maxAverageSpeed) : null;
+        $minAscent ? $qb->andWhere('r.ascent >= :minAscent')->setParameter(':minAscent', $minAscent) : null;
+        $maxAscent ? $qb->andWhere('r.ascent <= :maxAscent')->setParameter(':maxAscent', $maxAscent) : null;
+
         return $qb->getQuery()->getResult();
     }
     //    /**
