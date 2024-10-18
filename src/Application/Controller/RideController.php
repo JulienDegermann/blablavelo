@@ -8,8 +8,12 @@ use App\Application\Form\RideFilterType;
 use App\Domain\Ride\Contrat\CreateNewRideInterface;
 use App\Domain\Ride\Contrat\FindMyRidesInterface;
 use App\Domain\Ride\Contrat\FindRidesInterface;
+use App\Domain\Ride\Contrat\RideDetailsInterface;
+use App\Domain\Ride\Contrat\RideRepositoryInterface;
 use App\Domain\Ride\Ride;
 use App\Domain\Ride\RideComment;
+use App\Domain\Ride\UseCase\AddRideComment\AddRideComment;
+use App\Domain\Ride\UseCase\AddRideComment\AddRideCommentInput;
 use App\Domain\Ride\UseCase\CreateRide\NewRideInput;
 use App\Domain\Ride\UseCase\FindMyRides\FindMyRides;
 use App\Domain\Ride\UseCase\FindRides\FindRidesInput;
@@ -26,35 +30,31 @@ use Symfony\Component\Routing\Annotation\Route;
 class RideController extends AbstractController
 {
     public function __construct(
-        private readonly FindRidesInterface     $rides,
-        private readonly CreateNewRideInterface $createRide,
-        private readonly FindMyRidesInterface   $findMyRides,
+        private readonly FindRidesInterface      $rides,
+        private readonly CreateNewRideInterface  $createRide,
+        private readonly FindMyRidesInterface    $findMyRides,
+        private readonly RideDetailsInterface    $rideDetails,
+        private readonly AddRideComment  $addRideComment,
     )
     {
     }
 
     #[Route('/dashboard', name: 'app_rides')]
     public function index(
-        RideRepository     $rideRepository,
         Request            $request,
         PaginatorInterface $paginator,
-        FindRidesInterface $rides
     ): Response
     {
         /** @var User $user */
         $user = $this->getUser();
 
-        if (!$user) {
+        if (!$user || !($user instanceof User)) {
             return $this->redirectToRoute('app_home');
         }
 
         $myRides = ($this->findMyRides)($user);
 
-        $input = new FindRidesInput();
-        // externalize in useCase class
-        $input->setDepartment($user->getDepartment() ? $user->getDepartment() : null);
-        $input->setMind($user->getMind() ? $user->getMind() : null);
-        $input->setPractice($user->getPractice() ? $user->getPractice() : null);
+        $input = new FindRidesInput($user);
 
         $form = $this->createForm(RideFilterType::class, $input, ['user' => $user]);
         $form->handleRequest($request);
@@ -72,10 +72,10 @@ class RideController extends AbstractController
 
         return $this->render('ride/index.html.twig', [
             'user' => $user,
-            'all_rides' => $pagination,
             'my_next_rides' => $myRides['myNextRides'],
             'my_created_rides' => $myRides['myCreatedRides'],
             'my_prev_rides' => $myRides['allMyRides'],
+            'all_rides' => $pagination,
             'filter_form' => $form->createView(),
         ]);
     }
@@ -85,13 +85,10 @@ class RideController extends AbstractController
         RideRepository        $rideRepository,
         RideCommentRepository $rideCommentRepository,
         Request               $request,
+        int                   $id
     ): Response
     {
-        $id = $request->attributes->get('id');
-        $rides = $rideRepository->findBy(['id' === $id]);
-        $ride = $rides[0];
-
-        if (!$this->getUser()) {
+        if (!$this->getUser() || !($this->getUser() instanceof User)) {
             $this->addFlash('warning', 'Vous devez être connecté pour utiliser l\'application.');
 
             return $this->redirectToRoute('app_login');
@@ -99,33 +96,25 @@ class RideController extends AbstractController
 
         /** @var User $user */
         $user = $this->getUser();
-        if ($user->getIsVerified() == false) {
+
+        if ($user->getIsVerified() === false) {
             $this->addFlash('warning', 'Veuillez vérifier votre e-mail pour profiter de l\'application. 
             Pas de mail ? <a class="px-2 text-primary fw-bold" title="demander un nouveau lien de validation" href=" ' . $this->generateUrl("app_new_token") . '">Générer un lien</a>');
 
             return $this->redirectToRoute('app_rides');
         }
 
-        // check with uses => find PAST rides of user to count them (participated and created) => may get all times ?
-        $myPrevRides = $rideRepository->myPrevRides($user);
-        $myCreatedRides = $rideRepository->myCreatedRides($user);
+        $ride = ($this->rideDetails)($id);
+        $myRides = ($this->findMyRides)($user);
 
-        // find NEXT rides of user to display and count them
-        $myNextRides = $rideRepository->myNextRides($user);
 
-        $rideComment = new RideComment();
+        $rideComment = new AddRideCommentInput($ride, $user);
         $form = $this->createForm(RideCommentType::class, $rideComment);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $rideComment = $form->getData();
-            $rideComment->setAuthor($user);
-            $rideComment->setRide($ride);
-
-            $rideCommentRepository->save($rideComment);
-
-            $ride->addRideComment($rideComment);
-            $rideRepository->save($ride);
+            ($this->addRideComment)($rideComment);
 
             $this->addFlash('success', 'Votre commentaire a bien été ajouté.');
 
@@ -134,10 +123,10 @@ class RideController extends AbstractController
 
         return $this->render('ride/show_ride.html.twig', [
             'user' => $user,
+            'my_next_rides' => $myRides['myNextRides'],
+            'my_created_rides' => $myRides['myCreatedRides'],
+            'my_prev_rides' => $myRides['allMyRides'],
             'ride' => $ride,
-            'my_rides' => $myCreatedRides,
-            'my_next_rides' => $myNextRides,
-            'my_prev_rides' => $myPrevRides,
             'form' => $form->createView(),
         ]);
     }
@@ -268,6 +257,8 @@ class RideController extends AbstractController
         /** @var User $user */
         $user = $this->getUser();
 
+        $myRides = ($this->findMyRides)($user);
+
         // check with uses => find PAST rides of user to count them (participated and created) => may get all times ?
         // $myPrevRides = $rideRepository->myPrevRides($user);
         // $myCreatedRides = $rideRepository->myCreatedRides($user);
@@ -305,10 +296,11 @@ class RideController extends AbstractController
         }
 
         return $this->render('ride/new_ride.html.twig', [
-            'form' => $form->createView(),
             'user' => $user,
-            'my_rides' => $myCreatedRides = null,
-            'my_prev_rides' => $myPrevRides = null,
+            'my_next_rides' => $myRides['myNextRides'],
+            'my_created_rides' => $myRides['myCreatedRides'],
+            'my_prev_rides' => $myRides['allMyRides'],
+            'form' => $form->createView(),
         ]);
     }
 }

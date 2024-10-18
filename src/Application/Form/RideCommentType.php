@@ -3,6 +3,7 @@
 namespace App\Application\Form;
 
 use App\Domain\Ride\RideComment;
+use App\Domain\Ride\UseCase\AddRideComment\AddRideCommentInput;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -28,7 +29,7 @@ class RideCommentType extends AbstractType
   public function configureOptions(OptionsResolver $resolver): void
   {
     $resolver->setDefaults([
-      'data_class' => RideComment::class,
+      'data_class' => AddRideCommentInput::class,
     ]);
   }
 }

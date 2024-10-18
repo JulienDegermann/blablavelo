@@ -5,6 +5,7 @@ namespace App\Domain\Ride\UseCase\FindRides;
 use App\Domain\Location\Department;
 use App\Domain\PracticeDetail\Mind;
 use App\Domain\PracticeDetail\Practice;
+use App\Domain\User\User;
 use DateTimeImmutable;
 
 final class FindRidesInput
@@ -177,7 +178,7 @@ final class FindRidesInput
         return $this;
     }
 
-    public function __construct()
+    public function __construct(User $user)
     {
         $this->startDate = new DateTimeImmutable();
         $this->minDistance = 15;
@@ -186,5 +187,9 @@ final class FindRidesInput
         $this->maxParticipants = 8;
         $this->minAscent = 200;
         $this->maxAscent = 2000;
+        $this->mind = $user->getMind() ? $user->getMind() : null;
+        $this->practice = $user->getPractice() ? $user->getPractice() : null;
+        $this->department = $user->getDepartment() ? $user->getDepartment() : null;
+
     }
 }

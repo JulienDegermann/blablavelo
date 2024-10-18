@@ -15,14 +15,14 @@
         <div class="col-12 col-md-6 position-relative">
 
           <h3 class="fs-4">Informations générales</h3>
-          <p class="fst-italic m-0 text-primary">Guide : {{ ride.getAuthor }}</p>
+          <p class="fst-italic m-0 text-primary">Guide : {{ ride.getCreator }}</p>
           <div class="mb-4">
             <div class="profile participant d-flex">
               {% for currentuser in ride.getParticipants %}
                 {% if currentuser.profileImage is not null %}
                   <img class="rounded-circle border border-1 border-primary" src="{{ asset('uploads/images/users/' ~ user.profileImage.getFileName) }}" alt="photo de profil de {{ user.getNameNumber }}" title="{{ user.getNameNumber }}" />
                 {% else %}
-                  <div class="account rounded-circle {% if currentuser is same as ride.author %}shadow{% endif %} d-flex justify-content-center align-item-center" title="{{ currentuser.getNameNumber }}">
+                  <div class="account rounded-circle {% if currentuser is same as ride.creator %}shadow{% endif %} d-flex justify-content-center align-item-center" title="{{ currentuser.getNameNumber }}">
                       {% include '_partials/_avatar.html.twig' %}
                   </div>
                 {% endif %}
@@ -38,9 +38,9 @@
               🏎️ : {{ ride.getAverageSpeed }} km/h <br />
               </p>
               <p class="col-7">
-              📍 : {{ ride.getCity|capitalize }} <br />
-              📆 : {{ ride.getDate|format_datetime('full', 'none', locale='fr') }} <br>
-              🕗 : {{ ride.getDate|format_datetime('none', 'short', locale='fr') }} <br>
+              📍 : {{ ride.getStartCity|capitalize }} <br />
+              📆 : {{ ride.getStartDate|format_datetime('full', 'none', locale='fr') }} <br>
+              🕗 : {{ ride.getStartDate|format_datetime('none', 'short', locale='fr') }} <br>
               👤 : {{ ride.getParticipants|length }} / {{ ride.getMaxRider }}
               </p>
           </div>
@@ -48,7 +48,7 @@
           <h3 class="fs-6">Détails</h3>
           <p>{{ ride.getDescription }}</p>
 
-          {% if user != ride.getAuthor %}
+          {% if user != ride.getCreator %}
             {% if user in ride.getParticipants %}
               <a href="{{ path('app_ride_remove', { id: ride.getId() }) }}" class="btn btn-secondary text-primary py-2">Ne plus participer</a>
             {% else %}
