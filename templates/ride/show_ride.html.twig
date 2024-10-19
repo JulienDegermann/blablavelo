@@ -1,77 +1,86 @@
 {% extends 'base.html.twig' %}
 
 {% block mainTitle %}
-  {{ ride.getTitle }}
+    {{ ride.getTitle }}
 {% endblock %}
 
 {% block main %}
-  <section class="my-3 my-md-5">
-    <div class="container">
-      <div class="row position-relative">
-        {# <div class="col-12 col-md-6">
+    <section class="my-3 my-md-5">
+        <div class="container">
+            <div class="row position-relative">
+                {# <div class="col-12 col-md-6">
           here will be the trace .gpx
           {% include '/_partials/_practice_img.html.twig' %}
         </div> #}
-        <div class="col-12 col-md-6 position-relative">
+                <div class="col-12 col-md-6 position-relative">
 
-          <h3 class="fs-4">Informations générales</h3>
-          <p class="fst-italic m-0 text-primary">Guide : {{ ride.getCreator }}</p>
-          <div class="mb-4">
-            <div class="profile participant d-flex">
-              {% for currentuser in ride.getParticipants %}
-                {% if currentuser.profileImage is not null %}
-                  <img class="rounded-circle border border-1 border-primary" src="{{ asset('uploads/images/users/' ~ user.profileImage.getFileName) }}" alt="photo de profil de {{ user.getNameNumber }}" title="{{ user.getNameNumber }}" />
-                {% else %}
-                  <div class="account rounded-circle {% if currentuser is same as ride.creator %}shadow{% endif %} d-flex justify-content-center align-item-center" title="{{ currentuser.getNameNumber }}">
-                      {% include '_partials/_avatar.html.twig' %}
-                  </div>
-                {% endif %}
-              {% endfor %}
+                    <h3 class="fs-4">Informations générales</h3>
+                    <p class="fst-italic m-0 text-primary">Guide : {{ ride.getCreator }}</p>
+                    <div class="mb-4">
+                        <div class="profile participant d-flex">
+                            {% for currentuser in ride.getParticipants %}
+                                {% if currentuser.profileImage is not null %}
+                                    <img class="rounded-circle border border-1 border-primary"
+                                         src="{{ asset('uploads/images/users/' ~ user.profileImage.getFileName) }}"
+                                         alt="photo de profil de {{ user.getNameNumber }}"
+                                         title="{{ user.getNameNumber }}"/>
+                                {% else %}
+                                    <div class="account rounded-circle {% if currentuser is same as ride.creator %}shadow{% endif %} d-flex justify-content-center align-item-center"
+                                         title="{{ currentuser.getNameNumber }}">
+                                        {% include '_partials/_avatar.html.twig' %}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <p class="col-5">
+                            🚴 : {{ ride.getPractice }} <br/>
+                            🎯 : {{ ride.getMind }} <br/>
+                            🏁 : {{ ride.getDistance }} kms <br/>
+                            📈 : {{ ride.getAscent }} m <br/>
+                            🏎️ : {{ ride.getAverageSpeed }} km/h <br/>
+                        </p>
+                        <p class="col-7">
+                            📍 : {{ ride.getStartCity|capitalize }} <br/>
+                            📆 : {{ ride.getStartDate|format_datetime('full', 'none', locale='fr') }} <br>
+                            🕗 : {{ ride.getStartDate|format_datetime('none', 'short', locale='fr') }} <br>
+                            👤 : {{ ride.getParticipants|length }} / {{ ride.getMaxRider }}
+                        </p>
+                    </div>
+
+                    <h3 class="fs-6">Détails</h3>
+                    <p>{{ ride.getDescription }}</p>
+
+                    {% if user != ride.getCreator %}
+                        {% if user in ride.getParticipants %}
+                            <a href="{{ path('app_ride_remove', { id: ride.getId() }) }}"
+                               class="btn btn-secondary text-primary py-2">Ne plus participer</a>
+                        {% else %}
+                            {% if ride.getMaxRider > (ride.getParticipants|length) %}
+                                <a href="{{ path('app_ride_connect', { id: ride.getId() }) }}"
+                                   class="btn btn-primary text-white px-5 py-2">J'EN SUIS !</a>
+                            {% endif %}
+                        {% endif %}
+                    {% else %}
+                        <a href="{{ path('app_ride_delete', { id: ride.getId() }) }}"
+                           class="btn btn-secondary text-primary py-2">Supprimer la sortie</a>
+                    {% endif %}
+                </div>
+
+                <div class="col-12 col-md-6 mt-5 mt-md-0">
+                    <h3 class="fs-4 mb-4">Commentaires</h3>
+                    <div class="d-flex flex-column-reverse">
+                        {% for comment in ride.getRideComments %}
+                            <p>
+                                <span class="fw-bold">{% if comment.getAuthor is same as user %} Moi {% else %} {{ comment.getAuthor.getNameNumber }} {% endif %}</span>
+                                : {{ comment.getText }} </p>
+                        {% endfor %}
+                    </div>
+                    {{ form_start(form) }}
+                    {{ form_end(form) }}
+                </div>
             </div>
-          </div>
-          <div class="row">
-            <p class="col-5">
-              🚴 : {{ ride.getPractice }} <br />
-              🎯 : {{ ride.getMind }} <br />
-              🏁 : {{ ride.getDistance }} kms <br />
-              📈 : {{ ride.getAscent }} m <br />
-              🏎️ : {{ ride.getAverageSpeed }} km/h <br />
-              </p>
-              <p class="col-7">
-              📍 : {{ ride.getStartCity|capitalize }} <br />
-              📆 : {{ ride.getStartDate|format_datetime('full', 'none', locale='fr') }} <br>
-              🕗 : {{ ride.getStartDate|format_datetime('none', 'short', locale='fr') }} <br>
-              👤 : {{ ride.getParticipants|length }} / {{ ride.getMaxRider }}
-              </p>
-          </div>
-
-          <h3 class="fs-6">Détails</h3>
-          <p>{{ ride.getDescription }}</p>
-
-          {% if user != ride.getCreator %}
-            {% if user in ride.getParticipants %}
-              <a href="{{ path('app_ride_remove', { id: ride.getId() }) }}" class="btn btn-secondary text-primary py-2">Ne plus participer</a>
-            {% else %}
-              {% if ride.getMaxRider > (ride.getParticipants|length) %}
-                <a href="{{ path('app_ride_connect', { id: ride.getId() }) }}" class="btn btn-primary text-white px-5 py-2">J'EN SUIS !</a>
-              {% endif %}
-            {% endif %}
-          {% else %}
-            <a href="{{ path('app_ride_delete', { id: ride.getId() }) }}" class="btn btn-secondary text-primary py-2">Supprimer la sortie</a>
-          {% endif %}
         </div>
-
-        <div class="col-12 col-md-6 mt-5 mt-md-0">
-          <h3 class="fs-4 mb-4">Commentaires</h3>
-          <div class="d-flex flex-column-reverse">
-            {% for comment in ride.getRideComments%}
-              <p><span class="fw-bold">{% if comment.getAuthor is same as user %} Moi {% else %} {{ comment.getAuthor.getNameNumber }} {% endif %}</span> : {{ comment.getText }} </p>
-            {% endfor %}
-          </div>
-          {{ form_start(form) }}
-          {{ form_end(form) }}
-        </div>
-      </div>
-    </div>
-  </section>
+    </section>
 {% endblock %}
