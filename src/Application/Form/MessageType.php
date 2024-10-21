@@ -3,6 +3,7 @@
 namespace App\Application\Form;
 
 use App\Domain\Message\Message;
+use App\Domain\Message\UseCase\SendMessage\SendMessageInput;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -14,31 +15,26 @@ class MessageType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('title', ChoiceType::class,[
+            ->add('title', ChoiceType::class, [
                 'label' => 'Objet',
                 'required' => true,
                 'attr' => ['class' => 'form-control mb-3 border border-dark'],
                 'choices' => [
                     'Signaler un bug' => 'bug',
                     'Suggestion' => 'suggestion',
-                ]
-                ])
+                ],
+            ])
             ->add('text', TextareaType::class, [
                 'label' => 'Contenu du message',
                 'required' => true,
-                'attr' => ['class' => 'form-control mb-3 border border-dark', 'rows' => 10]
+                'attr' => ['class' => 'form-control mb-3 border border-dark', 'rows' => 10],
             ]);
-            // ->add('author', AuthorType::class, [
-            //     'label' => 'E-mail',
-            //     'required' => true,
-            //     'attr' => ['class' => 'form-control mb-3 border border-dark']
-            // ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Message::class,
+            'data_class' => SendMessageInput::class,
         ]);
     }
 }

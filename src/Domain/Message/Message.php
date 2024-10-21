@@ -37,14 +37,16 @@ class Message
         return $this;
     }
 
-    public function __construct()
+    public function __construct(string $title, string $text)
     {
         $this->createdAt = new \DateTimeImmutable();
         $this->updatedAt = new \DateTimeImmutable();
+        $this->title = $title;
+        $this->text = $text;
     }
 
     public function __toString(): string
     {
-        return $this->title;
+        return $this->getText();
     }
 }
