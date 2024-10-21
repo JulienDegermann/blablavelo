@@ -33,4 +33,9 @@ final class AddParticipantInput
 
         return $this;
     }
+
+    public function __construct(int $rideId, User $participant){
+        $this->rideId = $rideId;
+        $this->participant = $participant;
+    }
 }

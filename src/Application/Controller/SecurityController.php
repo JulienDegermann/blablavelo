@@ -7,7 +7,7 @@ use App\Application\Form\PasswordResetType;
 use App\Domain\User\User;
 use App\Infrastructure\Repository\RideRepository;
 use App\Infrastructure\Repository\UserRepository;
-use App\Infrastructure\Service\MailSendService;
+use App\Infrastructure\Service\JWTTokenGeneratorService\MailSendService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

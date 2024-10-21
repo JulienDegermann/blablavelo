@@ -10,14 +10,11 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class InfoController extends AbstractController
 {
-
-
     #[Route('/comment-ca-marche', name: 'app_info')]
     public function index(
         RideRepository $rideRepository
     ): Response
     {
-        
         /** @var User $user */
         $user = $this->getUser();
 

@@ -5,22 +5,22 @@ namespace App\Application\Controller;
 use App\Application\Form\NewRideType;
 use App\Application\Form\RideCommentType;
 use App\Application\Form\RideFilterType;
+use App\Domain\Ride\Contrat\AddParticipantInterface;
+use App\Domain\Ride\Contrat\AddRideCommentInterface;
 use App\Domain\Ride\Contrat\CreateNewRideInterface;
 use App\Domain\Ride\Contrat\FindMyRidesInterface;
 use App\Domain\Ride\Contrat\FindRidesInterface;
+use App\Domain\Ride\Contrat\RemoveParticipantInterface;
+use App\Domain\Ride\Contrat\RemoveRideInterface;
 use App\Domain\Ride\Contrat\RideDetailsInterface;
-use App\Domain\Ride\Contrat\RideRepositoryInterface;
-use App\Domain\Ride\Ride;
-use App\Domain\Ride\RideComment;
-use App\Domain\Ride\UseCase\AddRideComment\AddRideComment;
+use App\Domain\Ride\UseCase\AddParticipant\AddParticipantInput;
 use App\Domain\Ride\UseCase\AddRideComment\AddRideCommentInput;
 use App\Domain\Ride\UseCase\CreateRide\NewRideInput;
-use App\Domain\Ride\UseCase\FindMyRides\FindMyRides;
 use App\Domain\Ride\UseCase\FindRides\FindRidesInput;
+use App\Domain\Ride\UseCase\RemoveParticipant\RemoveParticipantInput;
+use App\Domain\Ride\UseCase\RemoveRide\RemoveRideInput;
 use App\Domain\User\User;
-use App\Infrastructure\Repository\RideCommentRepository;
 use App\Infrastructure\Repository\RideRepository;
-use App\Infrastructure\Service\MailSendService;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,11 +30,14 @@ use Symfony\Component\Routing\Annotation\Route;
 class RideController extends AbstractController
 {
     public function __construct(
-        private readonly FindRidesInterface      $rides,
-        private readonly CreateNewRideInterface  $createRide,
-        private readonly FindMyRidesInterface    $findMyRides,
-        private readonly RideDetailsInterface    $rideDetails,
-        private readonly AddRideComment  $addRideComment,
+        private readonly FindRidesInterface         $rides,
+        private readonly CreateNewRideInterface     $createRide,
+        private readonly FindMyRidesInterface       $findMyRides,
+        private readonly RideDetailsInterface       $rideDetails,
+        private readonly AddRideCommentInterface    $addRideComment,
+        private readonly RemoveRideInterface        $removeRide,
+        private readonly AddParticipantInterface    $addParticipant,
+        private readonly RemoveParticipantInterface $removeParticipant,
     )
     {
     }
@@ -52,16 +55,14 @@ class RideController extends AbstractController
             return $this->redirectToRoute('app_home');
         }
 
-        $myRides = ($this->findMyRides)($user);
-
         $input = new FindRidesInput($user);
-
         $form = $this->createForm(RideFilterType::class, $input, ['user' => $user]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $input = $form->getData();
         }
 
+        $myRides = ($this->findMyRides)($user);
         $nextRides = ($this->rides)($input, $user);
 
         $pagination = $paginator->paginate(
@@ -82,10 +83,8 @@ class RideController extends AbstractController
 
     #[Route('/sortie/{id}', name: 'app_ride', methods: ['GET', 'POST'])]
     public function showRide(
-        RideRepository        $rideRepository,
-        RideCommentRepository $rideCommentRepository,
-        Request               $request,
-        int                   $id
+        Request $request,
+        int     $id
     ): Response
     {
         if (!$this->getUser() || !($this->getUser() instanceof User)) {
@@ -107,7 +106,6 @@ class RideController extends AbstractController
         $ride = ($this->rideDetails)($id);
         $myRides = ($this->findMyRides)($user);
 
-
         $rideComment = new AddRideCommentInput($ride, $user);
         $form = $this->createForm(RideCommentType::class, $rideComment);
         $form->handleRequest($request);
@@ -118,7 +116,10 @@ class RideController extends AbstractController
 
             $this->addFlash('success', 'Votre commentaire a bien été ajouté.');
 
-            return $this->redirectToRoute('app_ride', ['id' => $ride->getId()]);
+            // clear form and input
+            unset($rideComment, $form);
+            $rideComment = new AddRideCommentInput($ride, $user);
+            $form = $this->createForm(RideCommentType::class, $rideComment);
         }
 
         return $this->render('ride/show_ride.html.twig', [
@@ -133,9 +134,7 @@ class RideController extends AbstractController
 
     #[Route('/sortie/supprimer-la-sortie/{id}', name: 'app_ride_delete', methods: ['GET', 'POST'])]
     public function deleteRide(
-        RideRepository  $rideRepository,
-        Request         $request,
-        MailSendService $mailSendService,
+        int $id
     ): Response
     {
         /** @var User $user */
@@ -146,38 +145,18 @@ class RideController extends AbstractController
 
             return $this->redirectToRoute('app_login');
         }
-        $id = $request->attributes->get('id');
 
-        /** @var Ride $ride */
-        $ride = $rideRepository->findOneBy(['id' => $id]);
+        $input = new RemoveRideInput($id, $user);
+        ($this->removeRide)($input);
 
-        if ($ride->getAuthor() != $user) {
-            $this->addFlash('warning', 'Vous ne pouvez pas supprimer cette sortie.');
-
-            return $this->redirectToRoute('app_rides');
-        }
-
-        if ($user->getIsVerified() == false) {
-            $this->addFlash('warning', 'Veuillez vérifier votre e-mail pour profiter de l\'application. 
-            Pas de mail ? <a class="px-2 text-primary fw-bold" title="demander un nouveau lien de validation" href=" ' . $this->generateUrl("app_new_token") . '">Générer un lien</a>');
-
-            return $this->redirectToRoute('app_home');
-        }
-
-        $participants = $ride->getParticipants();
-        $mail = $mailSendService->deleteRideEmail($participants, $user, $ride);
-
-        $rideRepository->remove($ride);
-
-        $this->addFlash('success', $mail);
+        $this->addFlash('success', "La sortie a bien été supprimée.");
 
         return $this->redirectToRoute('app_home');
     }
 
     #[Route('/sortie/{id}/participer', name: 'app_ride_connect', methods: ['GET', 'POST'])]
     public function addToRide(
-        RideRepository $rideRepository,
-        Request        $request,
+        int $id
     ): Response
     {
         /** @var User $user */
@@ -195,22 +174,17 @@ class RideController extends AbstractController
             return $this->redirectToRoute('app_home');
         }
 
-        $id = $request->attributes->get('id');
-        $rides = $rideRepository->findBy(['id' === $id]);
-        $ride = $rides[0];
-        $user = $this->getUser();
-        $ride->addParticipant($user);
-        $rideRepository->save($ride);
+        $input = new AddParticipantInput($id, $user);
+        ($this->addParticipant)($input);
 
         $this->addFlash('success', 'Vous êtes inscrit à la sortie.');
 
         return $this->redirectToRoute('app_rides');
     }
 
-    #[Route('/sortie/{id}/ne-plus-particioer', name: 'app_ride_remove', methods: ['GET', 'POST'])]
+    #[Route('/sortie/{id}/ne-plus-participer', name: 'app_ride_remove', methods: ['GET', 'POST'])]
     public function removeToRide(
-        RideRepository $rideRepository,
-        Request        $request
+        int $id
     ): Response
     {
         if (!$this->getUser()) {
@@ -229,12 +203,8 @@ class RideController extends AbstractController
             return $this->redirectToRoute('app_home');
         }
 
-        $id = $request->attributes->get('id');
-        $rides = $rideRepository->findBy(['id' === $id]);
-        $ride = $rides[0];
-        $user = $this->getUser();
-        $ride->removeParticipant($user);
-        $rideRepository->save($ride);
+        $input = new RemoveParticipantInput($id, $user);
+        ($this->removeParticipant)($input);
 
         $this->addFlash('success', 'Vous êtes désinscrit de la sortie.');
 
@@ -258,11 +228,6 @@ class RideController extends AbstractController
         $user = $this->getUser();
 
         $myRides = ($this->findMyRides)($user);
-
-        // check with uses => find PAST rides of user to count them (participated and created) => may get all times ?
-        // $myPrevRides = $rideRepository->myPrevRides($user);
-        // $myCreatedRides = $rideRepository->myCreatedRides($user);
-
         if ($user->getDepartment() == null) {
             $this->addFlash('warning', 'Veuillez renseigner votre département pour créer une sortie.');
 
@@ -276,19 +241,12 @@ class RideController extends AbstractController
             return $this->redirectToRoute('app_home');
         }
 
-//        $ride = new Ride();
-//        $ride->setAuthor($this->getUser());
-//        $ride->addParticipant($this->getUser());
-
         $form = $this->createForm(NewRideType::class, new NewRideInput($user), ['user' => $user]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $newRide = $form->getData();
-            $newRide->setCreator($user);
-            $return = ($this->createRide)($newRide);
-
-//            $repo->save($ride);
+            ($this->createRide)($newRide);
 
             $this->addFlash('success', 'Votre sortie a bien été créée.');
 

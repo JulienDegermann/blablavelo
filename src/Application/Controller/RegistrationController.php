@@ -4,9 +4,10 @@ namespace App\Application\Controller;
 
 use App\Application\Form\RegistrationFormType;
 use App\Application\Security\UserAuthAuthenticator;
+use App\Domain\User\Contrat\VerifyEmailTokenInterface;
 use App\Domain\User\User;
 use App\Infrastructure\Repository\UserRepository;
-use App\Infrastructure\Service\MailSendService;
+use App\Infrastructure\Service\JWTTokenGeneratorService\MailSendService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,6 +19,12 @@ use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 
 class RegistrationController extends AbstractController
 {
+    public function __construct(
+        private readonly VerifyEmailTokenInterface $VerifyEmailToken
+    )
+    {
+    }
+
     #[Route('/inscription', name: 'app_register')]
     public function register(
         Request                     $request,
@@ -135,19 +142,14 @@ class RegistrationController extends AbstractController
         UserRepository $repo,
     )
     {
-        $user = $repo->findOneBy(['token' => $token]);
+        // verify if token is valide and re-activate account
+        $isVerified = ($this->VerifyEmailToken)($token);
 
-        if (!$user) {
-            $this->addFlash('danger', 'Oups ! Ce lien n\'est plus valide.');
-
-            return $this->redirectToRoute('app_home');
+        if ($isVerified) {
+            $this->addFlash('success', 'Votre compte a été vérifé.');
+        } else {
+            $this->addFlash('danger', 'Lien invalide.');
         }
-
-        $user->setIsVerified(true)
-            ->setToken(null);
-        $repo->save($user);
-
-        $this->addFlash('success', 'Votre compte a été vérifé.');
 
         return $this->redirectToRoute('app_home');
     }

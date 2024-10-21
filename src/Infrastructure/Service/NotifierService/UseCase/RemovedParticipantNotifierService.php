@@ -6,6 +6,8 @@ use App\Domain\Ride\Contrat\RemovedParticipantNotifierServiceInterface;
 use App\Domain\Ride\Ride;
 use App\Domain\User\User;
 use App\Infrastructure\Service\NotifierService\NotifierConfigInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 
@@ -13,7 +15,8 @@ class RemovedParticipantNotifierService implements RemovedParticipantNotifierSer
 {
     public function __construct(
         private readonly MailerInterface         $mailer,
-        private readonly NotifierConfigInterface $notifierConfig)
+        private readonly NotifierConfigInterface $notifierConfig
+    )
     {
     }
 
@@ -22,14 +25,14 @@ class RemovedParticipantNotifierService implements RemovedParticipantNotifierSer
     {
         $email = new Email();
 
+        $participantUserName = $participant->getNameNumber();
         $creatorEmail = $ride->getCreator()->getEmail();
         $creatorUserName = $ride->getCreator()->getNameNumber();
-        $participantUserName = $participant->getNameNumber();
-        $date = $ride->getStartDate()->format('dd/MM/yyyy');
+        $startDate = $ride->getStartDate()->format('d-m-Y');
         $title = $ride->getTitle();
 
-        $textBody = "Bonjour $creatorUserName, Nous t'informons que $participantUserName s'est désinscrit à ta sortie $title du $date).";
-        $textBody .= "\n" . $this->notifierConfig->getSignature();
+        $textBody = "Bonjour $creatorUserName, $participantUserName s'est désinscrit à ta sortie $title du $startDate).";
+        $textBody .= $this->notifierConfig->getSignature();
 
         $email
             ->from($this->notifierConfig->getFrom())

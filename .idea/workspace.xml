@@ -5,8 +5,38 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6bf2a131-25c4-4dcb-93b9-df8ba4b524ad" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/Domain/User/Contrat/JWTTokenDecodeInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Domain/User/Contrat/JWTTokenGeneratorServiceInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Domain/User/Contrat/TokenServiceConfigInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Domain/User/Contrat/UpdateUserSettingsInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Domain/User/Contrat/UpdateUserSettingsNotifierServiceInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Domain/User/Contrat/UserRepositoryInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Domain/User/Contrat/VerifyEmailTokenInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Domain/User/UseCase/UpdateUserSettings/UpdateUserSettings.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Domain/User/UseCase/UpdateUserSettings/UpdateUserSettingsInput.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Domain/User/UseCase/VerifyEmailToken/VerifyEmailToken.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Infrastructure/Service/JWTTokenGeneratorService/JWTTokenGeneratorService.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Infrastructure/Service/JWTTokenGeneratorService/VerifyEmailToken.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Infrastructure/Service/NotifierService/UseCase/UpdateUserSettingsNotifierService.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Domain/Ride/UseCase/AddRideComment/AddRideComment.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Domain/Ride/UseCase/AddRideComment/AddRideComment.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/services.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/config/services.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Application/Controller/InfoController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Application/Controller/InfoController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Application/Controller/RegistrationController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Application/Controller/RegistrationController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Application/Controller/RideController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Application/Controller/RideController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Application/Controller/SecurityController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Application/Controller/SecurityController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Application/Controller/UserController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Application/Controller/UserController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Application/Form/ProfileType.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Application/Form/ProfileType.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Domain/Ride/UseCase/AddParticipant/AddParticipantInput.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Domain/Ride/UseCase/AddParticipant/AddParticipantInput.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Domain/Ride/UseCase/RemoveParticipant/RemoveParticipantInput.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Domain/Ride/UseCase/RemoveParticipant/RemoveParticipantInput.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Domain/Ride/UseCase/RemoveRide/RemoveRide.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Domain/Ride/UseCase/RemoveRide/RemoveRide.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Domain/Ride/UseCase/RemoveRide/RemoveRideInput.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Domain/Ride/UseCase/RemoveRide/RemoveRideInput.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Infrastructure/Repository/UserRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Infrastructure/Repository/UserRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Infrastructure/Service/MailSendService.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Infrastructure/Service/NotifierService/AddParticipantNotifierService.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Infrastructure/Service/NotifierService/UseCase/AddParticipantNotifierService.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Infrastructure/Service/NotifierService/UseCase/NotifierConfig.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Infrastructure/Service/NotifierService/NotifierConfig.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Infrastructure/Service/NotifierService/UseCase/RemovedParticipantNotifierService.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Infrastructure/Service/NotifierService/UseCase/RemovedParticipantNotifierService.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Infrastructure/Service/NotifierService/UseCase/RemovedRideNotifierService.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Infrastructure/Service/NotifierService/UseCase/RemovedRideNotifierService.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/base.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html.twig" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/ride/show_ride.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/ride/show_ride.html.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -193,6 +223,8 @@
 }</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/Domain/User/Contrat" />
+      <recent name="$PROJECT_DIR$/src/Domain/User/UseCase/UpdateUserSetting" />
       <recent name="$PROJECT_DIR$/src/Domain/Ride/UseCase/RideDetails" />
       <recent name="$PROJECT_DIR$/src/Domain/Ride/UseCase" />
     </key>
