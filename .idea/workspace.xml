@@ -5,13 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6bf2a131-25c4-4dcb-93b9-df8ba4b524ad" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/Domain/Message/Contrat/SendMessageInterface.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Domain/Message/UseCase/SendMessage/SendMessage.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Domain/Message/UseCase/SendMessage/SendMessageInput.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Application/Controller/ContactController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Application/Controller/ContactController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Application/Form/MessageType.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Application/Form/MessageType.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Domain/Message/Message.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Domain/Message/Message.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -183,18 +177,18 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "feature/contact",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;feature/contact&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/Domain/Message/Contrat" />
@@ -237,6 +231,7 @@
       <workItem from="1729154201649" duration="15913000" />
       <workItem from="1729178414861" duration="30110000" />
       <workItem from="1729266427876" duration="12285000" />
+      <workItem from="1729579417271" duration="4000" />
     </task>
     <servers />
   </component>
