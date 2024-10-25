@@ -38,16 +38,13 @@ class RideController extends AbstractController
         private readonly RemoveRideInterface        $removeRide,
         private readonly AddParticipantInterface    $addParticipant,
         private readonly RemoveParticipantInterface $removeParticipant,
-    )
-    {
-    }
+    ) {}
 
     #[Route('/dashboard', name: 'app_rides')]
     public function index(
         Request            $request,
         PaginatorInterface $paginator,
-    ): Response
-    {
+    ): Response {
         /** @var User $user */
         $user = $this->getUser();
 
@@ -85,8 +82,7 @@ class RideController extends AbstractController
     public function showRide(
         Request $request,
         int     $id
-    ): Response
-    {
+    ): Response {
         if (!$this->getUser() || !($this->getUser() instanceof User)) {
             $this->addFlash('warning', 'Vous devez être connecté pour utiliser l\'application.');
 
@@ -135,8 +131,7 @@ class RideController extends AbstractController
     #[Route('/sortie/supprimer-la-sortie/{id}', name: 'app_ride_delete', methods: ['GET', 'POST'])]
     public function deleteRide(
         int $id
-    ): Response
-    {
+    ): Response {
         /** @var User $user */
         $user = $this->getUser();
 
@@ -157,8 +152,7 @@ class RideController extends AbstractController
     #[Route('/sortie/{id}/participer', name: 'app_ride_connect', methods: ['GET', 'POST'])]
     public function addToRide(
         int $id
-    ): Response
-    {
+    ): Response {
         /** @var User $user */
         $user = $this->getUser();
         if (!$user) {
@@ -185,8 +179,7 @@ class RideController extends AbstractController
     #[Route('/sortie/{id}/ne-plus-participer', name: 'app_ride_remove', methods: ['GET', 'POST'])]
     public function removeToRide(
         int $id
-    ): Response
-    {
+    ): Response {
         if (!$this->getUser()) {
             $this->addFlash('warning', 'Vous devez être connecté pour voir les annonces');
 
@@ -216,8 +209,7 @@ class RideController extends AbstractController
         RideRepository $repo,
         Request        $request,
         RideRepository $rideRepository
-    ): Response
-    {
+    ): Response {
         if (!$this->getUser()) {
             $this->addFlash('danger', 'Vous devez être connecté utiliser l\'application.');
 

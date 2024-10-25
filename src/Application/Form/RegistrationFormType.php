@@ -2,7 +2,7 @@
 
 namespace App\Application\Form;
 
-use App\Domain\User\User;
+use App\Domain\User\UseCase\CreateUser\CreateUserInput;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -31,10 +31,10 @@ class RegistrationFormType extends AbstractType
 
             ])
             ->add('RGPDConscents', CheckboxType::class, [
-                'mapped' => false,
                 'attr' => [
                     'class' => 'w-auto mb-3 '
                 ],
+                'required' => false,
                 'label' => 'J\'accepte que ces données soient utilisées sur ce site',
                 'constraints' => [
                     new IsTrue([
@@ -56,7 +56,7 @@ class RegistrationFormType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => User::class,
+            'data_class' => CreateUserInput::class,
         ]);
     }
 }

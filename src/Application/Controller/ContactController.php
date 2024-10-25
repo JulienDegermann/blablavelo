@@ -8,8 +8,6 @@ use App\Domain\Message\Message;
 use App\Domain\Message\UseCase\SendMessage\SendMessageInput;
 use App\Domain\Ride\Contrat\FindMyRidesInterface;
 use App\Domain\User\User;
-use App\Infrastructure\Repository\MessageRepository;
-use App\Infrastructure\Repository\RideRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,9 +24,7 @@ class ContactController extends AbstractController
 
     #[Route('/contact', name: 'app_contact')]
     public function contact(
-        Request           $request,
-        MessageRepository $repo,
-        RideRepository    $rideRepository
+        Request           $request
     ): Response
     {
         /** @var User $user */
