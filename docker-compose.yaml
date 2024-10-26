@@ -1,0 +1,46 @@
+services:
+  db:
+    image: mysql:latest
+    container_name: blablavelo_mysql
+    environment:
+      MYSQL_DATABASE: app
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_PASSWORD: admin
+      MYSQL_USER: admin
+    healthcheck:
+      test: ["CMD-SHELL", "my_isready -U root -d app"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
+    volumes:
+      - mysql_data:/var/lib/mysql:rw
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: blablavelo_phpmyadmin
+    depends_on:
+      - db
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORD: root
+  php:
+    image: blablavelo
+    container_name: blablavelo_php8.3
+    depends_on:
+      db: 
+        condition: service_started
+        restart: true
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    environment:
+      DATABASE_URL: mysql://admin:admin@db:3306/app
+    volumes:
+      - .:/var/www/html
+volumes:
+  mysql_data:
+    driver: local

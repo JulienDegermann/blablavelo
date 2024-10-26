@@ -20,7 +20,7 @@ class Message
     use DatesTrait;
     use TextTrait;
 
-    #[ORM\ManyToOne(inversedBy: 'messages', cascade: ['persist', 'remove'])]
+    #[ORM\ManyToOne(inversedBy: 'messages', cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false, referencedColumnName: 'id')]
     #[Assert\Valid]
     private ?User $author = null;
@@ -37,12 +37,13 @@ class Message
         return $this;
     }
 
-    public function __construct(string $title, string $text)
+    public function __construct(string $title, string $text, User $author)
     {
         $this->createdAt = new \DateTimeImmutable();
         $this->updatedAt = new \DateTimeImmutable();
         $this->title = $title;
         $this->text = $text;
+        $this->author = $author;
     }
 
     public function __toString(): string

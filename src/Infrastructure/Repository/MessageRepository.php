@@ -2,6 +2,7 @@
 
 namespace App\Infrastructure\Repository;
 
+use App\Domain\Message\Contrat\MessageRepositoryInterface;
 use App\Domain\Message\Message;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -14,14 +15,14 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Message[]    findAll()
  * @method Message[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class MessageRepository extends ServiceEntityRepository
+class MessageRepository extends ServiceEntityRepository implements MessageRepositoryInterface
 {
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Message::class);
     }
 
-    public function save(Message $message)
+    public function save(Message $message): void
     {
         $this->_em->persist($message);
         $this->_em->flush();

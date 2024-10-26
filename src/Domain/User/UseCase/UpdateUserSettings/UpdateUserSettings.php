@@ -12,9 +12,7 @@ final class UpdateUserSettings implements UpdateUserSettingsInterface
     public function __construct(
         private readonly UserRepositoryInterface                    $userRepo,
         private readonly UpdateUserSettingsNotifierServiceInterface $notifier
-    )
-    {
-    }
+    ) {}
 
     public function __invoke(UpdateUserSettingsInput $input, User $user): User
     {
@@ -30,7 +28,7 @@ final class UpdateUserSettings implements UpdateUserSettingsInterface
                 ->setEmail($input->getEmail())
                 ->setIsVerified(false);
         }
-
+        
         $this->userRepo->save($user);
 
         if ($prevEmail !== $input->getEmail()) {

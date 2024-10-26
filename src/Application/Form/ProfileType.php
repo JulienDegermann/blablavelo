@@ -35,6 +35,7 @@ class ProfileType extends AbstractType
                 'attr' => [
                     'class' => 'form-control mb-3 border border-dark text-capitalize',
                 ],
+                'data'=> $user->getDepartment(),
                 'class' => Department::class,
                 'query_builder' => function (DepartmentRepository $er) {
                     return $er->createQueryBuilder('d')
@@ -45,6 +46,7 @@ class ProfileType extends AbstractType
                 'label' => 'Objectif',
                 'class' => Mind::class,
                 'required' => false,
+                'data' => $user->getMind(),
                 'attr' => [
                     'class' => 'form-control mb-3 border border-dark',
                 ],
@@ -53,6 +55,7 @@ class ProfileType extends AbstractType
                 'label' => 'Pratique',
                 'class' => Practice::class,
                 'required' => false,
+                'data' => $user->getPractice(),
                 'attr' => [
                     'class' => 'form-control mb-3 border border-dark',
                 ],

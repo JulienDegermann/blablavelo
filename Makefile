@@ -86,7 +86,7 @@ compile:
 
 
 docker_reset:
-	docker-compose down --volumes
+	docker-compose down
 	docker build -t blablavelo .
 	docker-compose up -d
 .PHONY: docker_reset
