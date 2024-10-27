@@ -10,11 +10,11 @@ use App\Domain\User\UseCase\CreateUser\CreateUserInput;
 use App\Domain\User\User;
 use App\Infrastructure\Repository\UserRepository;
 use App\Infrastructure\Service\JWTTokenGeneratorService\MailSendService;
+use App\Infrastructure\Service\NotifierService\UseCase\SendNewValidationToken;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
-use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 
@@ -94,20 +94,21 @@ class RegistrationController extends AbstractController
     // for addFlash if user has not recieved email
     #[Route('/nouveau-code', name: 'app_new_token')]
     public function newCode(
-        MailSendService $mailSendService
+        // MailSendService $mailSendService,
+        SendNewValidationToken $sendNewValidationToken
+
     ) {
         /** @var User $user */
         $user = $this->getUser();
 
-        if (!$user) {
+        if (!$user || !($user instanceof User)) {
             $this->addFlash('danger', 'Vous devez être connecté pour utiliser l\'application.');
 
             return $this->redirectToRoute('app_login');
         }
+        $sendNewValidationToken($user);
 
-        $mail = $mailSendService->emailConfirmation($user);
-
-        $this->addFlash('success', $mail);
+        $this->addFlash('success', 'Un nouveau code a été envoyé à ton adresse mail.');
 
         return $this->redirectToRoute('app_home');
     }
@@ -115,7 +116,6 @@ class RegistrationController extends AbstractController
     #[Route('/verification-email/{token}', name: 'app_email_verify')]
     public function emailVerify(
         string         $token,
-        UserRepository $repo,
     ) {
         // verify if token is valide and re-activate account
         $isVerified = ($this->VerifyEmailToken)($token);

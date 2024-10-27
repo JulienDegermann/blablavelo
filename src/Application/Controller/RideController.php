@@ -206,9 +206,7 @@ class RideController extends AbstractController
 
     #[Route('/nouvelle-sortie', name: 'app_new_ride', methods: ['GET', 'POST'])]
     public function newRide(
-        RideRepository $repo,
         Request        $request,
-        RideRepository $rideRepository
     ): Response {
         if (!$this->getUser()) {
             $this->addFlash('danger', 'Vous devez être connecté utiliser l\'application.');

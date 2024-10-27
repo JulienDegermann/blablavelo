@@ -4,7 +4,6 @@ namespace App\Application\Controller;
 
 use App\Application\Form\MessageType;
 use App\Domain\Message\Contrat\SendMessageInterface;
-use App\Domain\Message\Message;
 use App\Domain\Message\UseCase\SendMessage\SendMessageInput;
 use App\Domain\Ride\Contrat\FindMyRidesInterface;
 use App\Domain\User\User;
@@ -49,6 +48,7 @@ class ContactController extends AbstractController
 
             return $this->redirectToRoute('app_home');
         }
+        
         $myRides = ($this->findMyRides)($user);
 
         return $this->render('contact/index.html.twig', [

@@ -2,19 +2,16 @@
 
 namespace App\Application\Controller;
 
-use App\Application\Form\PasswordForgotType;
 use App\Application\Form\PasswordResetType;
-use App\Domain\User\User;
+use App\Application\Form\ResetPasswordType;
+use App\Domain\User\Contrat\ResetPasswordInterface;
 use App\Infrastructure\Repository\RideRepository;
 use App\Infrastructure\Repository\UserRepository;
-use App\Infrastructure\Service\JWTTokenGeneratorService\MailSendService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
@@ -52,100 +49,54 @@ class SecurityController extends AbstractController
         throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
     }
 
-    #[Route(path: '/mot-de-passe-oublie', name: 'app_pwd_forgot')]
-    public function pwdForgot(
-        UserRepository          $repo,
-        Request                 $request,
-        TokenGeneratorInterface $tokenGenerator,
-        MailerInterface         $mail,
-        MailSendService         $mailSendService
-    ): Response
-    {
-        /** @var User $user */
-        $user = $this->getUser();
+    // #[Route(path: '/reinitialiser-mot-de-passe/{token}', name: 'app_pwd_reset')]
+    // public function pwdReset(
+    //     Request                     $request,
+    //     string                      $token,
+    //     UserRepository              $repo,
+    //     UserPasswordHasherInterface $pwdhash,
+    //     RideRepository              $rideRepository
+    // ): Response {
+        
+    //     $user = ($this->resetPassword)($token);
 
-        if ($user) {
-            $token = $tokenGenerator->generateToken();
-            $user->setToken($token);
-            $repo->save($user);
+    //     // $user = $repo->findOneBy(['token' => $token]);
 
-            return $this->redirectToRoute('app_pwd_reset', ['token' => $token]);
-        }
+    //     $form = $this->createForm(ResetPasswordType::class, $user);
+    //     $form->handleRequest($request);
 
-        $form = $this->createForm(PasswordForgotType::class);
-        $form->handleRequest($request);
+    //     // check with uses => find PAST rides of user to count them (participated and created) => may get all times ?
+    //     $myPrevRides = $rideRepository->myPrevRides($user);
+    //     $myCreatedRides = $rideRepository->myCreatedRides($user);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            // get data from form without link
-            $data = $request->request->all();
-            // $user = $repo->findOneBy(['email' => $form->getData()->getEmail()]);
-            $user = $repo->findOneBy(['email' => $data['password_forgot']['email']]);
+    //     if ($form->isSubmitted()) {
+    //         if ($form->isValid()) {
+    //             $user->setPassword(
+    //                 $pwdhash->hashPassword(
+    //                     $user,
+    //                     $form->get('password')->getData()
+    //                 )
+    //             )
+    //                 ->setToken(null);
+    //             $repo->save($user);
+    //             $this->addFlash('success', 'Mot de passe mis à jour');
+    //         } else {
+    //             $this->addFlash('error', 'Une erreur est survenue.');
 
-            $mail = $mailSendService->forgotPasswordEmail($user);
-            $this->addFlash('success', $mail);
+    //             return $this->render('security/pwd_reset.html.twig', [
+    //                 'form' => $form->createView(),
+    //                 'user' => $user,
+    //                 'my_rides' => $myCreatedRides,
+    //                 'my_prev_rides' => $myPrevRides,
+    //             ]);
+    //         }
+    //     }
 
-            return $this->render('security/pwd_forgot.html.twig', [
-                'form' => $form->createView(),
-            ]);
-        }
-
-        return $this->render('security/pwd_forgot.html.twig', [
-            'form' => $form->createView(),
-        ]);
-    }
-
-    #[Route(path: '/reinitialiser-mot-de-passe/{token}', name: 'app_pwd_reset')]
-    public function pwdReset(
-        Request                     $request,
-        string                      $token,
-        UserRepository              $repo,
-        UserPasswordHasherInterface $pwdhash,
-        RideRepository              $rideRepository
-    ): Response
-    {
-        $user = $repo->findOneBy(['token' => $token]);
-
-        if (!$user) {
-            $this->addFlash('error', 'Oups ! Ce lien n\'est plus valide.');
-
-            return $this->redirectToRoute('app_login');
-        }
-
-        $form = $this->createForm(PasswordResetType::class, $user);
-        $form->handleRequest($request);
-
-        // check with uses => find PAST rides of user to count them (participated and created) => may get all times ?
-        $myPrevRides = $rideRepository->myPrevRides($user);
-        $myCreatedRides = $rideRepository->myCreatedRides($user);
-
-        if ($form->isSubmitted()) {
-            if ($form->isValid()) {
-                $user->setPassword(
-                    $pwdhash->hashPassword(
-                        $user,
-                        $form->get('password')->getData()
-                    )
-                )
-                    ->setToken(null);
-                $repo->save($user);
-                $this->addFlash('success', 'Mot de passe mis à jour');
-            } else {
-                $this->addFlash('error', 'Une erreur est survenue.');
-
-                return $this->render('security/pwd_reset.html.twig', [
-                    'form' => $form->createView(),
-                    'user' => $user,
-                    'my_rides' => $myCreatedRides,
-                    'my_prev_rides' => $myPrevRides,
-                ]);
-            }
-        }
-
-        return $this->render('security/pwd_reset.html.twig', [
-            'form' => $form->createView(),
-            'user' => $user,
-            'my_rides' => $myCreatedRides,
-            'my_prev_rides' => $myPrevRides,
-        ]);
-    }
+    //     return $this->render('security/pwd_reset.html.twig', [
+    //         'form' => $form->createView(),
+    //         'user' => $user,
+    //         'my_rides' => $myCreatedRides,
+    //         'my_prev_rides' => $myPrevRides,
+    //     ]);
+    // }
 }
