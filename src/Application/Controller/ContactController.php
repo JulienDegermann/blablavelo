@@ -2,15 +2,23 @@
 
 namespace App\Application\Controller;
 
-use App\Application\Form\MessageType;
-use App\Domain\Message\Contrat\SendMessageInterface;
-use App\Domain\Message\UseCase\SendMessage\SendMessageInput;
-use App\Domain\Ride\Contrat\FindMyRidesInterface;
-use App\Domain\User\User;
+// dependencies
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+
+// entities
+use App\Domain\User\User;
+use App\Application\Form\MessageType;
+
+// interfaces
+use App\Domain\Message\Contrat\SendMessageInterface;
+use App\Domain\Ride\Contrat\FindMyRidesInterface;
+
+// inputs
+use App\Domain\Message\UseCase\SendMessage\SendMessageInput;
+
 
 class ContactController extends AbstractController
 {

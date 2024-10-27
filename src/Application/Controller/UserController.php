@@ -2,17 +2,25 @@
 
 namespace App\Application\Controller;
 
-use App\Application\Form\ProfileType;
-use App\Domain\Ride\Contrat\FindMyRidesInterface;
-use App\Domain\User\Contrat\UpdateUserSettingsInterface;
-use App\Domain\User\UseCase\UpdateUserSettings\UpdateUserSettingsInput;
-use App\Domain\User\User;
-use App\Infrastructure\Repository\UserRepository;
-use App\Infrastructure\Service\JWTTokenGeneratorService\MailSendService;
+// dependencies
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+
+// entities
+use App\Domain\User\User;
+
+// forms
+use App\Application\Form\ProfileType;
+
+// interfaces
+use App\Domain\Ride\Contrat\FindMyRidesInterface;
+use App\Domain\User\Contrat\UpdateUserSettingsInterface;
+
+// inputs
+use App\Domain\User\UseCase\UpdateUserSettings\UpdateUserSettingsInput;
+
 
 class UserController extends AbstractController
 {

@@ -26,14 +26,14 @@ final class SendNewValidationToken implements SendNewValidationTokenInterface
         $userName = $user->getNameNumber();
 
         $url = $this->urlGenerator->generate('app_email_verify', ['token' => ($this->JWTGenerator)(['user_id' => $user->getId()])], UrlGeneratorInterface::ABSOLUTE_URL);
-        $text = "Bonjour $userName, \n\nVous avez demandé à réinitialiser votre mot de passe. Pour cela, veuillez cliquer sur le lien ci-dessous (valide 1 heure) : ";
+        $text = "Bonjour $userName, \n\n tu as demandé un nouveau lien d'activation. Clique sur le lien ci-dessous (valide 1 heure) : ";
         $text .= "\n $url";
         $text .= $this->config->getSignature();
 
         $email = (new Email())
             ->from($this->config->getFrom())
             ->to($user->getEmail())
-            ->subject('Réinitialisation de votre mot de passe.')
+            ->subject('Validation addresse e-mail.')
             ->text($text);
 
         $this->mailer->send($email);

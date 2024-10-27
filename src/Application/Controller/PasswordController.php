@@ -2,20 +2,31 @@
 
 namespace App\Application\Controller;
 
-use App\Application\Form\ResetPasswordType;
-use App\Application\Form\SendRecoveryUrlType;
-use App\Domain\Ride\Contrat\FindMyRidesInterface;
-use App\Domain\User\Contrat\GetUserFromTokenInterface;
-use App\Domain\User\Contrat\ResetPasswordInterface;
+// dependencies
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use App\Domain\User\Contrat\SendRecoveryUrlInterface;
-use App\Domain\User\UseCase\ResetPassword\ResetPasswordInput;
-use App\Domain\User\UseCase\SendRecoveryUrl\SendRecoveryUrlInput;
-use App\Domain\User\User;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
+
+// forms
+use App\Application\Form\ResetPasswordType;
+use App\Application\Form\SendRecoveryUrlType;
+
+// entities
+use App\Domain\User\User;
+
+// interfaces
+use App\Domain\Ride\Contrat\FindMyRidesInterface;
+use App\Domain\User\Contrat\GetUserFromTokenInterface;
+use App\Domain\User\Contrat\ResetPasswordInterface;
+use App\Domain\User\Contrat\SendRecoveryUrlInterface;
+
+
+// inputs
+use App\Domain\User\UseCase\ResetPassword\ResetPasswordInput;
+use App\Domain\User\UseCase\SendRecoveryUrl\SendRecoveryUrlInput;
+
 
 final class PasswordController extends AbstractController
 {

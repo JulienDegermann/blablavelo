@@ -31,7 +31,7 @@ final class UpdateUserSettingsNotifierService implements UpdateUserSettingsNotif
         $url = $this->urlGenerator->generate('app_email_verify', ['token' => ($this->JWTTokenGenerator)($datas)], UrlGeneratorInterface::ABSOLUTE_URL);
 
         $userName = $user->getNameNumber();
-        $text = "Bonjour $userName, l'email de ton compte a été modifié. \n Merci de valider cette nouvelle adresse via le lien ci-dessous pour réactiver ton compte : \n ";
+        $text = "Bonjour $userName, l'email de ton compte a été modifié. \n Merci de valider cette nouvelle adresse via le lien ci-dessous (valide 1 heure) pour réactiver ton compte : \n ";
         $text .= $url;
         $text .= $this->notifierConfig->getSignature();
 

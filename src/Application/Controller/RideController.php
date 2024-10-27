@@ -2,9 +2,21 @@
 
 namespace App\Application\Controller;
 
+// depndencies
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+
+// entities
+use App\Domain\User\User;
+
+// forms
 use App\Application\Form\NewRideType;
 use App\Application\Form\RideCommentType;
 use App\Application\Form\RideFilterType;
+
+// interfaces
 use App\Domain\Ride\Contrat\AddParticipantInterface;
 use App\Domain\Ride\Contrat\AddRideCommentInterface;
 use App\Domain\Ride\Contrat\CreateNewRideInterface;
@@ -13,19 +25,16 @@ use App\Domain\Ride\Contrat\FindRidesInterface;
 use App\Domain\Ride\Contrat\RemoveParticipantInterface;
 use App\Domain\Ride\Contrat\RemoveRideInterface;
 use App\Domain\Ride\Contrat\RideDetailsInterface;
+use Knp\Component\Pager\PaginatorInterface;
+
+// inputs
 use App\Domain\Ride\UseCase\AddParticipant\AddParticipantInput;
 use App\Domain\Ride\UseCase\AddRideComment\AddRideCommentInput;
 use App\Domain\Ride\UseCase\CreateRide\NewRideInput;
 use App\Domain\Ride\UseCase\FindRides\FindRidesInput;
 use App\Domain\Ride\UseCase\RemoveParticipant\RemoveParticipantInput;
 use App\Domain\Ride\UseCase\RemoveRide\RemoveRideInput;
-use App\Domain\User\User;
-use App\Infrastructure\Repository\RideRepository;
-use Knp\Component\Pager\PaginatorInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+
 
 class RideController extends AbstractController
 {

@@ -2,10 +2,13 @@
 
 namespace App\Application\Controller;
 
-use App\Domain\User\User;
+// dependencies
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+
+// entities
+use App\Domain\User\User;
 
 class InfoController extends AbstractController
 {
