@@ -20,7 +20,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
   {
     $users = [
       [
-        'first_name' => 'John&',
+        'first_name' => 'John',
         'last_name' => 'Doe',
         'user_name' => 'johndoe',
         'email' => 'john@example.com',
@@ -126,7 +126,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
     $manager->flush();
   }
 
-  public function getDependencies()
+  public function getDependencies(): array
   {
     return [
       MindFixtures::class,

@@ -29,7 +29,7 @@ final class AddParticipantNotifierService implements AddParticipantNotifierServi
         $title = $ride->getTitle();
         $startDate = $ride->getStartDate()->format('d-m-Y');
 
-        $textBody = "Bonjour $creatorUserName, $participantUserName s'est inscrit à ta sortie $title du $startDate.";
+        $textBody = "Bonjour $creatorUserName, \n\n $participantUserName s'est inscrit à ta sortie \"$title\" du $startDate.";
         $textBody .= $this->notifierConfig->getSignature();
 
         $email

@@ -1,26 +1,51 @@
 {% extends 'base.html.twig' %}
 
 {% block mainTitle %}
-  Mon profil
+	Mon profil
 {% endblock %}
 
-{% block main %}  
-  <section class="my-3 my-md-5">
-    <div class="container">
-      <div class="row">
-        {{ form_start(form) }}
-        <div class="row">
-          <fieldset>{{ form_row(form.email) }}
-            {{ form_row(form.department) }}
-            {{ form_row(form.mind) }}
-            {{ form_row(form.practice) }}</fieldset>
-        </div>
+{% block main %}
+	<section class="my-3 my-md-5">
+		<div class="container">
+			<div class="row">
+				{{ form_start(form) }}
+				<div class="row col-md-6 mx-auto">
+					<fieldset>
+						<div>
 
-        <input type="submit" class="btn btn-primary text-white px-3 py-2 m-2" value="Enregistrer les modifications" />
-        <a href="{{ path('app_pwd_forgot') }}" class="btn btn-secondary text-primary border border-primary m-2 py-2 px-3">Modifier le mot de passe</a> <br />
-        <a href="{{ path('app_delete') }}" class="text-primary m-2 px-3 fs-6">Supprimer mon compte</a>
-        {{ form_end(form) }}
-      </div>
-    </div>
-  </section>
+							{{ form_label(form.email) }}
+							<div class="text-danger">{{ form_errors(form.email) }}</div>
+							{{ form_widget(form.email) }}
+						</div>
+						<div>
+							{{ form_label(form.department) }}
+							<div class="text-danger">{{ form_errors(form.department) }}</div>
+							{{ form_widget(form.department) }}
+
+						</div>
+						<div>
+							{{ form_label(form.mind) }}
+							<div class="text-danger">{{ form_errors(form.mind) }}</div>
+							{{ form_widget(form.mind) }}
+
+						</div>
+						<div>
+							{{ form_label(form.practice) }}
+							<div class="text-danger">{{ form_errors(form.practice) }}</div>
+							{{ form_widget(form.practice) }}
+
+
+						</div>
+
+					</fieldset>
+					<input type="submit" class="btn btn-primary text-white px-3 py-2 m-2 w-auto" value="Enregistrer les modifications"/>
+					<a href="{{ path('app_pwd_reset') }}" class="btn btn-secondary text-primary border border-primary m-2 py-2 px-3 w-auto">Modifier le mot de passe</a>
+					<br/>
+					<a href="{{ path('app_delete') }}" class="text-primary m-2 px-3 fs-6 w-auto">Supprimer mon compte</a>
+					{{ form_end(form) }}
+				</div>
+
+			</div>
+		</div>
+	</section>
 {% endblock %}

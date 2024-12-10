@@ -6,6 +6,7 @@ use App\Domain\User\Contrat\UpdateUserSettingsInterface;
 use App\Domain\User\Contrat\UpdateUserSettingsNotifierServiceInterface;
 use App\Domain\User\Contrat\UserRepositoryInterface;
 use App\Domain\User\User;
+use Exception;
 
 final class UpdateUserSettings implements UpdateUserSettingsInterface
 {
@@ -14,7 +15,7 @@ final class UpdateUserSettings implements UpdateUserSettingsInterface
         private readonly UpdateUserSettingsNotifierServiceInterface $notifier
     ) {}
 
-    public function __invoke(UpdateUserSettingsInput $input, User $user): User
+    public function __invoke(UpdateUserSettingsInput $input, User $user): string
     {
         $prevEmail = $user->getEmail();
 
@@ -23,18 +24,20 @@ final class UpdateUserSettings implements UpdateUserSettingsInterface
             ->setMind($input->getMind())
             ->setPractice($input->getPractice());
 
+
+
         if ($prevEmail !== $input->getEmail()) {
             $user
                 ->setEmail($input->getEmail())
                 ->setIsVerified(false);
         }
-        
+
         $this->userRepo->save($user);
 
         if ($prevEmail !== $input->getEmail()) {
             $this->notifier->notify($user);
         }
 
-        return $user;
+        return "Ton profil a été mis à jour avec succès. 👍";
     }
 }

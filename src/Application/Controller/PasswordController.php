@@ -42,7 +42,11 @@ final class PasswordController extends AbstractController
         Request $request
     ): Response {
 
-        $user = $this->getUser();
+        // redirect if user is already logged in
+        if ($this->getUser() && $this->getUser() instanceof User) {
+            $this->redirectToRoute('app_rides');
+        }
+
         $form = $this->createForm(SendRecoveryUrlType::class, new SendRecoveryUrlInput());
         $form->handleRequest($request);
 
@@ -58,22 +62,16 @@ final class PasswordController extends AbstractController
             ]);
         }
 
-        $myRides = ($this->findMyRides)($user);
-
         return $this->render('security/pwd_forgot.html.twig', [
             'form' => $form->createView(),
-            'user' => $user,
-            'my_next_rides' => $myRides['myNextRides'],
-            'my_created_rides' => $myRides['myCreatedRides'],
-            'my_prev_rides' => $myRides['allMyRides']
         ]);
     }
 
 
-    #[Route(path: '/reinitialiser-mot-de-passe/{token}', name: 'app_pwd_reset')]
+    #[Route(path: '/reinitialiser-mot-de-passe/{token?}', name: 'app_pwd_reset')]
     public function resetPassword(
         Request $request,
-        string  $token,
+        ?string  $token,
     ): Response {
 
         if ($this->getUser() && $this->getUser() instanceof User) {

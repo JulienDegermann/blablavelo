@@ -25,7 +25,6 @@ use App\Domain\User\Contrat\DeleteAccountInterface;
 use App\Domain\User\Contrat\SendNewValidationTokenInterface;
 use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 use App\Domain\User\Contrat\VerifyEmailTokenInterface;
-use App\Domain\User\Contrat\UserRepositoryInterface;
 use Exception;
 
 class RegistrationController extends AbstractController

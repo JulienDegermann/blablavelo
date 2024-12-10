@@ -6,8 +6,6 @@ use App\Domain\Ride\Contrat\RemovedParticipantNotifierServiceInterface;
 use App\Domain\Ride\Ride;
 use App\Domain\User\User;
 use App\Infrastructure\Service\NotifierService\NotifierConfigInterface;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 
@@ -16,9 +14,7 @@ class RemovedParticipantNotifierService implements RemovedParticipantNotifierSer
     public function __construct(
         private readonly MailerInterface         $mailer,
         private readonly NotifierConfigInterface $notifierConfig
-    )
-    {
-    }
+    ) {}
 
     public
     function __invoke(Ride $ride, User $participant): Email
@@ -31,7 +27,7 @@ class RemovedParticipantNotifierService implements RemovedParticipantNotifierSer
         $startDate = $ride->getStartDate()->format('d-m-Y');
         $title = $ride->getTitle();
 
-        $textBody = "Bonjour $creatorUserName, $participantUserName s'est désinscrit à ta sortie $title du $startDate).";
+        $textBody = "Bonjour $creatorUserName, \n \n $participantUserName s'est désinscrit de ta sortie \"$title\" du $startDate.";
         $textBody .= $this->notifierConfig->getSignature();
 
         $email

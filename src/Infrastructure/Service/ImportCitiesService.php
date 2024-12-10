@@ -10,7 +10,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use League\Csv\Reader;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-class ImportCitiesService
+final class ImportCitiesService
 {
 	public function __construct(
 		private CityRepository $cityRepo,

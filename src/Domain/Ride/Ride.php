@@ -26,104 +26,18 @@ class Ride
     use TitleTrait;
 
     #[ORM\Column]
-    #[Assert\Sequentially([
-        new Assert\NotBlank(
-            message: 'Ce champ est obligatoire.'
-        ),
-        new Assert\Type(
-            type: 'integer',
-            message: 'Ce champ doit être un nombre entier.'
-        ),
-        new Assert\Positive(
-            message: 'La distance doit être supérieure à 0 kms.'
-        ),
-        new Assert\LessThanOrEqual(
-            value: 100,
-            message: 'La distance doit être supérieure à {{ compared_value }} kms.'
-        ),
-    ])]
     private ?int $distance;
 
     #[ORM\Column]
-    #[Assert\Sequentially([
-        new Assert\NotBlank(
-            message: 'Ce champ est obligatoire.'
-        ),
-        new Assert\Type(
-            type: 'integer',
-            message: 'Ce champ doit être un nombre entier.'
-        ),
-        new Assert\PositiveOrZero(
-            message: 'Le dénivelé positif doit être un nombre supérieur ou égal à 0 m.'
-        ),
-        new Assert\GreaterThanOrEqual(
-            value: 0,
-            message: 'Le dénivelé positif doit être supérieur ou égal à {{ compared_value }} m.'
-        ),
-        new Assert\LessThanOrEqual(
-            value: 2000,
-            message: 'Le dénivelé positif doit être indérieur ou égal à {{ compared_value }} m.'
-        ),
-    ])]
     private ?int $ascent;
 
     #[ORM\Column]
-    #[Assert\Sequentially([
-        new Assert\NotBlank(
-            message: 'Ce champ est obligatoire.'
-        ),
-        new Assert\Type(
-            type: 'integer',
-            message: 'Ce champ doit être un nombre entier.'
-        ),
-        new Assert\Positive(
-            message: 'Le nombre de participants doit être supérieur à 0.'
-        ),
-        new Assert\Range(
-            notInRangeMessage: 'Le nombre de participants doit être compris entre {{ min }} et {{ max }}.',
-            min: 1,
-            max: 10
-        ),
-    ])]
     private ?int $maxParticipants;
 
     #[ORM\Column]
-    #[Assert\Sequentially([
-        new Assert\NotBlank(
-            message: 'Ce champ est obligatoire.'
-        ),
-        new Assert\Type(
-            type: 'integer',
-            message: 'Ce champ doit être un nombre entier.'
-        ),
-        new Assert\Positive(
-            message: 'La vitesse moyenne doit être supérieure à 0 km/h.'
-        ),
-        new Assert\GreaterThanOrEqual(
-            value: 0,
-            message: 'La vitesse moyenne doit être supérieure à {{ compared_value }} km/h.'
-        ),
-        new Assert\LessThanOrEqual(
-            value: 40,
-            message: 'La vitesse moyenne doit être inférieure à {{ compared_value }} km/h.'
-        ),
-    ])]
     private ?int $averageSpeed = null;
 
     #[ORM\Column]
-    #[Assert\Sequentially([
-        new Assert\NotBlank(
-            message: 'Ce champ est obligatoire.'
-        ),
-        new Assert\Type(
-            type: 'datetimeimmutable',
-            message: 'Ce champ doit être une date.'
-        ),
-        new Assert\GreaterThan(
-            value: 'now',
-            message: 'La date doit être postérieure à la date du jour.'
-        ),
-    ])]
     private ?DateTimeImmutable $startDate;
 
     #[ORM\ManyToOne(inversedBy: 'rides')]
@@ -147,23 +61,6 @@ class Ride
     private Collection $participants;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Assert\Sequentially([
-        new Assert\NotBlank(
-            message: 'Ce champ est obligatoire.'
-        ),
-        new Assert\Type(
-            type: 'string',
-            message: 'Ce champ doit être une chaine de caractères.'
-        ),
-        new Assert\Length(
-            min: 2,
-            minMessage: 'Ce champ doit contenir au moins {{ limit }} caractères.'
-        ),
-        new Assert\Regex(
-            pattern: '/^[a-zA-Z0-9\s()\-\'?:.,!\/\"\p{L}]{2,255}$/u',
-            message: 'Les caractères autorisés : lettres (minuscules et majuscules, accentuées ou non), chiffres, espaces, parenthèses, tirets et caractères de ponctuation'
-        ),
-    ])]
     private ?string $description;
 
     #[ORM\ManyToOne(inversedBy: 'users')]
@@ -180,7 +77,7 @@ class Ride
     public function __construct(
         User              $creator,
         string            $title,
-        string            $description,
+        ?string           $description = null,
         DateTimeImmutable $startDate,
         int               $maxParticipants,
         int               $ascent,

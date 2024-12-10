@@ -18,22 +18,19 @@ use App\Domain\Ride\Contrat\FindMyRidesInterface;
 
 // inputs
 use App\Domain\Message\UseCase\SendMessage\SendMessageInput;
-
+use Exception;
 
 class ContactController extends AbstractController
 {
     public function __construct(
         private readonly SendMessageInterface $sendMessage,
         private readonly FindMyRidesInterface $findMyRides,
-    )
-    {
-    }
+    ) {}
 
     #[Route('/contact', name: 'app_contact')]
     public function contact(
         Request           $request
-    ): Response
-    {
+    ): Response {
         /** @var User $user */
         $user = $this->getUser();
 
@@ -42,21 +39,25 @@ class ContactController extends AbstractController
 
             return $this->redirectToRoute('app_home');
         }
+        try {
+            $input = new SendMessageInput($user);
+            $form = $this->createForm(MessageType::class, $input, ['attr' => ['class' => 'form-signin, row']]);
+            $form->handleRequest($request);
 
-        $input = new SendMessageInput($user);
-        $form = $this->createForm(MessageType::class, $input, ['attr' => ['class' => 'form-signin, row']]);
-        $form->handleRequest($request);
+            if ($form->isSubmitted() && $form->isValid()) {
+                $input = $form->getData();
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $input = $form->getData();
+                $return = ($this->sendMessage)($input);
 
-            ($this->sendMessage)($input);
+                $this->addFlash('success', $return);
 
-            $this->addFlash('success', 'Votre message a bien été envoyé');
-
-            return $this->redirectToRoute('app_home');
+                return $this->redirectToRoute('app_home');
+            }
+        } catch (Exception $e) {
+            $this->addFlash('danger', $e->getMessage());
         }
-        
+
+
         $myRides = ($this->findMyRides)($user);
 
         return $this->render('contact/index.html.twig', [

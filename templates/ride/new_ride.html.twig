@@ -9,7 +9,7 @@
       <div class="row">
         {{ form_start(form) }}
         <div class="row">
-          <fieldset class="col-md-6">
+          <fieldset class="col-md-5">
             <legend>Informations générales</legend>
             {{ form_label(form.title) }}
             {{ form_widget(form.title) }}
@@ -18,28 +18,28 @@
             {{ form_widget(form.description) }}
             <div class="text-danger">{{ form_errors(form.description) }}</div>
           </fieldset>
-          <fieldset class="col-md-6">
+          <fieldset class="col-md-7">
             <div class="row">
-              <legend>Informations sportives</legend>
+              <legend>Détails de la sortie</legend>
               <div class="col-md-6">
                 {{ form_label(form.startCity) }}
-                {{ form_widget(form.startCity) }}
                 <div class="text-danger">{{ form_errors(form.startCity) }}</div>
+                {{ form_widget(form.startCity) }}
               </div>
               <div class="col-md-6">
                 {{ form_label(form.startDate) }}
-                {{ form_widget(form.startDate) }}
                 <div class="text-danger">{{ form_errors(form.startDate) }}</div>
+                {{ form_widget(form.startDate) }}
               </div>
               <div class="col-md-6">
                 {{ form_label(form.practice) }}
-                {{ form_widget(form.practice) }}
                 <div class="text-danger">{{ form_errors(form.practice) }}</div>
+                {{ form_widget(form.practice) }}
               </div>
               <div class="col-md-6">
                 {{ form_label(form.mind) }}
-                {{ form_widget(form.mind) }}
                 <div class="text-danger">{{ form_errors(form.mind) }}</div>
+                {{ form_widget(form.mind) }}
               </div>
               <div class="col-md-6">
                 {{ form_label(form.ascent) }}

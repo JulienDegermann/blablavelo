@@ -7,6 +7,7 @@ use App\Domain\PracticeDetail\Mind;
 use App\Domain\PracticeDetail\Practice;
 use App\Domain\Ride\UseCase\FindRides\FindRidesInput;
 use App\Domain\User\User;
+use App\Infrastructure\Repository\DepartmentRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
@@ -24,6 +25,8 @@ class RideFilterType extends AbstractType
         $builder
             ->add('practice', EntityType::class, [
                 'class' => Practice::class,
+                'required' => false,
+                'placeholder' => 'Choisissez une pratique',
                 'attr' => [
                     'class' => 'form-control mb-3 border border-dark',
                 ],
@@ -32,6 +35,8 @@ class RideFilterType extends AbstractType
             ])
             ->add('mind', EntityType::class, [
                 'class' => Mind::class,
+                'required' => false,
+                'placeholder' => 'Choisissez un objectif',
                 'attr' => [
                     'class' => 'form-control mb-3 border border-dark',
                 ],
@@ -40,6 +45,12 @@ class RideFilterType extends AbstractType
             ])
             ->add('department', EntityType::class, [
                 'class' => Department::class,
+                'required' => false,
+                'placeholder' => 'Choisissez un département',
+                'query_builder' => static function (DepartmentRepository $repository) {
+                    return $repository->createQueryBuilder('d')
+                        ->orderBy('d.code', 'ASC');
+                },
                 'attr' => [
                     'class' => 'form-control mb-3 border border-dark',
                 ],

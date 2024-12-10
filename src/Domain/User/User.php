@@ -341,7 +341,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if (!$this->ridesCreated->contains($rideCreated)) {
             $this->ridesCreated->add($rideCreated);
-            $rideCreated->setAuthor($this);
+            $rideCreated->setCreator($this);
         }
 
         return $this;
@@ -349,12 +349,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function removeRidesCreated(Ride $rideCreated): static
     {
-        if ($this->ridesCreated->removeElement($rideCreated)) {
-            // set the owning side to null (unless already changed)
-            if ($rideCreated->getAuthor() === $this) {
-                $rideCreated->setAuthor(null);
-            }
-        }
+        $this->ridesCreated->removeElement($rideCreated);
 
         return $this;
     }

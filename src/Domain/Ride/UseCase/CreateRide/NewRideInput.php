@@ -2,12 +2,13 @@
 
 namespace App\Domain\Ride\UseCase\CreateRide;
 
+use DateTimeImmutable;
+use App\Domain\User\User;
 use App\Domain\Location\City;
 use App\Domain\PracticeDetail\Mind;
 use App\Domain\PracticeDetail\Practice;
-use App\Domain\Ride\UseCase\Collection;
-use App\Domain\User\User;
-use DateTimeImmutable;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 final class NewRideInput
 {
@@ -169,8 +170,8 @@ final class NewRideInput
 
     public function __construct(
         User $creator,
-    )
-    {
+    ) {
         $this->creator = $creator;
+        $this->participants = new ArrayCollection();
     }
 }

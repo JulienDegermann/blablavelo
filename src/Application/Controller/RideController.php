@@ -34,7 +34,8 @@ use App\Domain\Ride\UseCase\CreateRide\NewRideInput;
 use App\Domain\Ride\UseCase\FindRides\FindRidesInput;
 use App\Domain\Ride\UseCase\RemoveParticipant\RemoveParticipantInput;
 use App\Domain\Ride\UseCase\RemoveRide\RemoveRideInput;
-
+use App\Domain\User\Contrat\CheckUserIsVerifiedInterface;
+use Exception;
 
 class RideController extends AbstractController
 {
@@ -47,6 +48,7 @@ class RideController extends AbstractController
         private readonly RemoveRideInterface        $removeRide,
         private readonly AddParticipantInterface    $addParticipant,
         private readonly RemoveParticipantInterface $removeParticipant,
+        private readonly CheckUserIsVerifiedInterface $checkUserIsVerified,
     ) {}
 
     #[Route('/dashboard', name: 'app_rides')]
@@ -62,6 +64,7 @@ class RideController extends AbstractController
         }
 
         $input = new FindRidesInput($user);
+
         $form = $this->createForm(RideFilterType::class, $input, ['user' => $user]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -92,18 +95,14 @@ class RideController extends AbstractController
         Request $request,
         int     $id
     ): Response {
-        if (!$this->getUser() || !($this->getUser() instanceof User)) {
-            $this->addFlash('warning', 'Vous devez être connecté pour utiliser l\'application.');
-
-            return $this->redirectToRoute('app_login');
-        }
-
         /** @var User $user */
         $user = $this->getUser();
 
-        if ($user->getIsVerified() === false) {
-            $this->addFlash('warning', 'Veuillez vérifier votre e-mail pour profiter de l\'application. 
-            Pas de mail ? <a class="px-2 text-primary fw-bold" title="demander un nouveau lien de validation" href=" ' . $this->generateUrl("app_new_token") . '">Générer un lien</a>');
+        $userIsVerified = ($this->checkUserIsVerified)($user);
+
+        if ($userIsVerified !== true) {
+
+            $this->addFlash('warning', $userIsVerified);
 
             return $this->redirectToRoute('app_rides');
         }
@@ -170,11 +169,13 @@ class RideController extends AbstractController
             return $this->redirectToRoute('app_home');
         }
 
-        if ($user->getIsVerified() == false) {
-            $this->addFlash('warning', 'Veuillez vérifier votre e-mail pour profiter de l\'application. 
-            Pas de mail ? <a class="px-2 text-primary fw-bold" title="demander un nouveau lien de validation" href=" ' . $this->generateUrl("app_new_token") . '">Générer un lien</a>');
+        $userIsVerified = ($this->checkUserIsVerified)($user);
 
-            return $this->redirectToRoute('app_home');
+        if ($userIsVerified !== true) {
+
+            $this->addFlash('warning', $userIsVerified);
+
+            return $this->redirectToRoute('app_rides');
         }
 
         $input = new AddParticipantInput($id, $user);
@@ -189,6 +190,7 @@ class RideController extends AbstractController
     public function removeToRide(
         int $id
     ): Response {
+        
         if (!$this->getUser()) {
             $this->addFlash('warning', 'Vous devez être connecté pour voir les annonces');
 
@@ -204,6 +206,10 @@ class RideController extends AbstractController
 
             return $this->redirectToRoute('app_home');
         }
+
+
+
+
 
         $input = new RemoveParticipantInput($id, $user);
         ($this->removeParticipant)($input);
@@ -240,17 +246,23 @@ class RideController extends AbstractController
             return $this->redirectToRoute('app_home');
         }
 
-        $form = $this->createForm(NewRideType::class, new NewRideInput($user), ['user' => $user]);
-        $form->handleRequest($request);
+        try {
+            $form = $this->createForm(NewRideType::class, new NewRideInput($user), ['user' => $user]);
+            $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $newRide = $form->getData();
-            ($this->createRide)($newRide);
+            if ($form->isSubmitted() && $form->isValid()) {
+                $newRide = $form->getData();
+                ($this->createRide)($newRide);
 
-            $this->addFlash('success', 'Votre sortie a bien été créée.');
+                $this->addFlash('success', 'Votre sortie a bien été créée.');
 
-            return $this->redirectToRoute('app_rides');
+                return $this->redirectToRoute('app_rides');
+            }
+        } catch (Exception $e) {
+            dd($e);
+            $this->addFlash('danger', $e->getMessage());
         }
+
 
         return $this->render('ride/new_ride.html.twig', [
             'user' => $user,

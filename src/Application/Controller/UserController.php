@@ -20,22 +20,19 @@ use App\Domain\User\Contrat\UpdateUserSettingsInterface;
 
 // inputs
 use App\Domain\User\UseCase\UpdateUserSettings\UpdateUserSettingsInput;
-
+use Exception;
 
 class UserController extends AbstractController
 {
     public function __construct(
         private readonly FindMyRidesInterface        $findMyRides,
         private readonly UpdateUserSettingsInterface $updateUserSettings,
-    )
-    {
-    }
+    ) {}
 
     #[Route('/profil', name: 'app_profile')]
     public function index(
         Request $request,
-    ): Response
-    {
+    ): Response {
         /** @var User $user */
         $user = $this->getUser();
 
@@ -47,19 +44,24 @@ class UserController extends AbstractController
 
         $myRides = ($this->findMyRides)($user);
 
-        $input = new UpdateUserSettingsInput();
-        $form = $this->createForm(ProfileType::class, $input, ['user' => $user]);
-        $form->handleRequest($request);
+        try {
+            $input = new UpdateUserSettingsInput();
+            $form = $this->createForm(ProfileType::class, $input, ['user' => $user]);
+            $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            // email confirmation if new email
-            $input = $form->getData();
+            if ($form->isSubmitted() && $form->isValid()) {
+                // email confirmation if new email
 
-            ($this->updateUserSettings)($input, $user);
+                $input = $form->getData();
 
-            $this->addFlash('success', 'Ton profil a été mis à jour.');
+                $return = ($this->updateUserSettings)($input, $user);
 
-            return $this->redirectToRoute('app_home');
+                $this->addFlash('success', $return);
+
+                return $this->redirectToRoute('app_home');
+            }
+        } catch (Exception $e) {
+            $this->addFlash('danger', $e->getMessage());
         }
 
         return $this->render('user/index.html.twig', [

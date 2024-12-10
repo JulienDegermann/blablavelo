@@ -7,5 +7,5 @@ use App\Domain\Message\UseCase\SendMessage\SendMessageInput;
 
 interface SendMessageInterface
 {
-    public function __invoke(SendMessageInput $input): Message;
+    public function __invoke(SendMessageInput $input): string;
 }
