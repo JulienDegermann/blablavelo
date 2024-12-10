@@ -1,9 +1,9 @@
 <svg 
 class="
   trophy 
-{% if my_rides|length >= 20 %}gold
-{% elseif my_rides|length >=10 %}silver
-{% elseif my_rides|length >= 3 %}bronze
+{% if my_prev_rides|length >= 20 %}gold
+{% elseif my_prev_rides|length >=10 %}silver
+{% elseif my_prev_rides|length >= 3 %}bronze
 {% else %}d-none
   {% endif %}
 "

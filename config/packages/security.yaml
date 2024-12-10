@@ -7,7 +7,7 @@ security:
         # used to reload user from session & other features (e.g. switch_user)
         app_user_provider:
             entity:
-                class: App\Entity\User
+                class: App\Domain\User\User
                 property: nameNumber
         # used to reload user from session & other features (e.g. switch_user)
         # used to reload user from session & other features (e.g. switch_user)
@@ -19,7 +19,7 @@ security:
         main:
             lazy: true
             provider: app_user_provider
-            custom_authenticator: App\Security\UserAuthAuthenticator
+            custom_authenticator: App\Application\Security\UserAuthAuthenticator
             logout:
                 path: app_logout
                 # where to redirect after logout

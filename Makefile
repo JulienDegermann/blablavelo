@@ -31,14 +31,13 @@ load_fixtures:
 db_start:
 	make db_delete
 	make db_create
-	make new_migration
 	make db_migrate
 .PHONY: db_start
 
 start:
 	make cache
 	symfony server:start -d
-.PHONY: db_start_datas
+.PHONY: db_start
 
 stop:
 	symfony server:stop
@@ -60,7 +59,7 @@ datas:
 .PHONY: datas
 
 db_start_datas:
-	make_db_start
+	make db_start
 	make datas
 .PHONY: db_start_datas
 
@@ -86,8 +85,35 @@ compile:
 .PHONY: compile_dev
 
 
+docker_reset:
+	docker-compose down
+	docker build -t blablavelo .
+	docker-compose up -d
+.PHONY: docker_reset
+
+docker_start:
+	docker-compose up -d
+.PHONY: docker_start
+
+docker_stop:
+	docker-compose down
+.PHONY: docker_stop
+
+docker_restart:
+	docker-compose down
+	docker-compose up -d
+.PHONY: docker_restart
+
+docker_bash:
+	docker exec -it blablavelo_php8.3 bash
+.PHONY: docker_bash
+
+
+
 # FOR PROD ENV
 build:
 	npm run build
 	make cache
 .PHONY: build
+
+

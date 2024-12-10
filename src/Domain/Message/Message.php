@@ -1,0 +1,53 @@
+<?php
+
+namespace App\Domain\Message;
+
+use App\Application\Traits\Entity\DatesTrait;
+use App\Application\Traits\Entity\IdTrait;
+use App\Application\Traits\Entity\TextTrait;
+use App\Application\Traits\Entity\TitleTrait;
+use App\Domain\User\User;
+use App\Infrastructure\Repository\MessageRepository;
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
+#[ORM\Entity(repositoryClass: MessageRepository::class)]
+class Message
+{
+    // Traits calls
+    use IdTrait;
+    use TitleTrait;
+    use DatesTrait;
+    use TextTrait;
+
+    #[ORM\ManyToOne(inversedBy: 'messages', cascade: ['persist'])]
+    #[ORM\JoinColumn(nullable: false, referencedColumnName: 'id')]
+    #[Assert\Valid]
+    private ?User $author = null;
+
+    public function getAuthor(): ?User
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(?User $author): static
+    {
+        $this->author = $author;
+
+        return $this;
+    }
+
+    public function __construct(string $title, string $text, User $author)
+    {
+        $this->createdAt = new \DateTimeImmutable();
+        $this->updatedAt = new \DateTimeImmutable();
+        $this->title = $title;
+        $this->text = $text;
+        $this->author = $author;
+    }
+
+    public function __toString(): string
+    {
+        return $this->getText();
+    }
+}

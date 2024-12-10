@@ -20,10 +20,10 @@
       <div class="mx-3 w-auto">
         <h3 class="text-primary fs-5 m-0">{{ ride.getTitle }}</h3>
         <p class="p-0 m-0">
-          📆 : {{ ride.getDate|format_datetime('full', 'short', locale='fr') }} <br>
+          📆 : {{ ride.getStartDate|format_datetime('full', 'short', locale='fr') }} <br>
 
           {# 📆 : {{ ride.getDate|localizeddate('none', 'none', null, null, 'EEEE')}}<br /> #}
-          📍 : {{ ride.getCity|capitalize }} <br />
+          📍 : {{ ride.getStartCity|capitalize }} <br />
           🚲 : {{ ride.getPractice }} ({{ ride.getDistance }} kms, {{ ride.getAscent }} m de D+)
         </p>
       </div>

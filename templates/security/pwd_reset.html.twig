@@ -1,18 +1,24 @@
 {% extends 'base.html.twig' %}
 
 {% block mainTitle %}
-  Réinitialiser le mot de passe
+	Réinitialiser le mot de passe
 {% endblock %}
 {% block main %}
-  <section class="my-3 my-md-5">
-    <div class="container">
-      <div class="row m-auto">
-        {{ form_start(form, {'attr': {'class': 'col-md-8 col-10 mx-auto'} } ) }}
-        {{ form_row(form.password) }}
-        <input class="btn btn-primary text-white px-4 py-2 m-2" type="submit" name="pwd_recover" value="Réinitialiser le mot de passe" />
-        {{ form_errors(form.password) }}
-        {{ form_end(form) }}
-      </div>
-    </div>
-  </section>
+	<section class="my-3 my-md-5">
+		<div class="container">
+			<div class="row m-auto">
+				{{ form_start(form, {'attr': {'class': 'col-md-8 col-10 mx-auto'} } ) }}
+				{{ form_label(form.password) }}
+				{{ form_widget(form.password) }}
+				<div class="text-danger">
+					{{ form_errors(form.password) }}
+				</div>
+
+				<input
+				class="btn btn-primary text-white px-4 py-2 m-2" type="submit" name="pwd_recover" value="Réinitialiser le mot de passe"/>
+				{# {{ form_errors(form.password) }} #}
+				{{ form_end(form) }}
+			</div>
+		</div>
+	</section>
 {% endblock %}
