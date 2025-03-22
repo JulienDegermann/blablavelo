@@ -9,6 +9,7 @@ RUN apt-get update && apt-get install -y \
     && a2enmod ssl\
     && docker-php-ext-configure intl \
     && docker-php-ext-install intl \
+    && php8.3-gd \
     && rm -rf /var/lib/apt/lists/*
 
 # Installer l'extension zip
@@ -24,6 +25,12 @@ RUN apt-get update && apt-get install -y \
     npm \
     curl \
     && rm -rf /var/lib/apt/lists/*
+
+
+
+RUN apt-get update && apt-get install -y libpng-dev \
+    && docker-php-ext-install gd
+
 
 # Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer

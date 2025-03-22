@@ -259,7 +259,6 @@ class RideController extends AbstractController
                 return $this->redirectToRoute('app_rides');
             }
         } catch (Exception $e) {
-            dd($e);
             $this->addFlash('danger', $e->getMessage());
         }
 
