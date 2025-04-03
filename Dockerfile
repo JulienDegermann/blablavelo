@@ -9,7 +9,6 @@ RUN apt-get update && apt-get install -y \
     && a2enmod ssl\
     && docker-php-ext-configure intl \
     && docker-php-ext-install intl \
-    && php8.3-gd \
     && rm -rf /var/lib/apt/lists/*
 
 # Installer l'extension zip
