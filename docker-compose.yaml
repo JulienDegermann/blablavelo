@@ -16,6 +16,8 @@ services:
       timeout: 10s
     volumes:
       - mysql_data:/var/lib/mysql:rw
+    networks:
+      - blablavelo
   phpmyadmin:
     image: phpmyadmin:latest
     container_name: blablavelo_phpmyadmin
@@ -27,10 +29,19 @@ services:
     environment:
       PMA_HOST: db
       MYSQL_ROOT_PASSWORD: root
+    networks:
+      - blablavelo
   php:
     image: blablavelo
     container_name: blablavelo_php8.3
     restart: always
+    labels:
+      - "traefik.enable=true" # Active Traefik pour ce conteneur
+      - "traefik.http.routers.blablavelo.rule=Host('blablavelo.ju2breizh.fr')"
+      - "traefik.http.services.blablavelo.loadbalancer.server.port=80" 
+    networks:
+      - blablavelo
+      - traefik      
     depends_on:
       db: 
         condition: service_started
@@ -48,3 +59,9 @@ services:
 volumes:
   mysql_data:
     driver: local
+networks:
+  blablavelo:
+    driver: bridge
+  traefik:
+    external: true
+    name: traefik
