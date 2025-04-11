@@ -37,7 +37,7 @@ services:
     restart: always
     labels:
       - "traefik.enable=true" # Active Traefik pour ce conteneur
-      - "traefik.http.routers.blablavelo.rule=Host('blablavelo.ju2breizh.fr')"
+      - "traefik.http.routers.blablavelo.rule=Host(`blablavelo.ju2breizh.fr`)"
       - "traefik.http.services.blablavelo.loadbalancer.server.port=80" 
     networks:
       - blablavelo
