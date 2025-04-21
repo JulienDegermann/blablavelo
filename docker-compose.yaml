@@ -1,66 +1,59 @@
 services:
-  db:
-    image: mysql:latest
-    container_name: blablavelo_mysql
-    restart: always
-    environment:
-      MYSQL_DATABASE: app
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_PASSWORD: admin
-      MYSQL_USER: admin
-    healthcheck:
-      test: ["CMD-SHELL", "my_isready -U root -d app"]
-      interval: 10s
-      retries: 5
-      start_period: 30s
-      timeout: 10s
-    volumes:
-      - mysql_data:/var/lib/mysql:rw
-    networks:
-      - blablavelo
-  phpmyadmin:
-    image: phpmyadmin:latest
-    container_name: blablavelo_phpmyadmin
-    restart: always
-    depends_on:
-      - db
-    ports:
-      - "8081:80"
-    environment:
-      PMA_HOST: db
-      MYSQL_ROOT_PASSWORD: root
-    networks:
-      - blablavelo
-  php:
-    image: blablavelo
-    container_name: blablavelo_php8.3
-    restart: always
-    labels:
-      - "traefik.enable=true" # Active Traefik pour ce conteneur
-      - "traefik.http.routers.blablavelo.rule=Host(`blablavelo.ju2breizh.fr`)"
-      - "traefik.http.services.blablavelo.loadbalancer.server.port=80" 
-    networks:
-      - blablavelo
-      - webgateway      
-    depends_on:
-      db: 
-        condition: service_started
-        restart: true
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      # - "443:443"
-      - "8080:80"
-    environment:
-      DATABASE_URL: mysql://admin:admin@db:3306/app
-    volumes:
-      - .:/var/www/html
+    db:
+        image: mysql:latest
+        container_name: blablavelo_mysql
+        restart: always
+        environment:
+            MYSQL_DATABASE: app
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_PASSWORD: admin
+            MYSQL_USER: admin
+        healthcheck:
+            test: ["CMD-SHELL", "mysql -u root -proot -e 'SELECT 1'"]
+            interval: 10s
+            retries: 5
+            start_period: 30s
+            timeout: 10s
+        volumes:
+            - mysql_blablavelo_data:/var/lib/mysql:rw
+        networks:
+            - blablavelo
+    # phpmyadmin:
+    #     image: phpmyadmin:latest
+    #     container_name: blablavelo_phpmyadmin
+    #     restart: always
+    #     depends_on:
+    #         - db
+    #     # ports:
+    #     #     - "8081:80"
+    #     environment:
+    #         PMA_HOST: db
+    #         MYSQL_ROOT_PASSWORD: root
+    #     networks:
+    #         - blablavelo
+    php:
+        image: blablavelo
+        container_name: blablavelo_php8.3
+        restart: always
+        labels:
+            - traefik.enable=true
+            - traefik.http.routers.blablavelo.rule=Host(`blablavelo.ju2breizh.fr`)
+        networks:
+            - blablavelo
+            - webgateway
+        depends_on:
+            db:
+                condition: service_healthy
+                restart: true
+        build:
+            context: .
+            dockerfile: Dockerfile
 volumes:
-  mysql_data:
-    driver: local
+    mysql_blablavelo_data:
+        driver: local
+
 networks:
-  blablavelo:
-    driver: bridge
-  webgateway:
-    external: true
+    blablavelo:
+        driver: bridge
+    webgateway:
+        external: true

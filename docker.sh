@@ -4,7 +4,9 @@ composer update
 npm install --force && npm run build
 npm run build
 php bin/console doctrine:migrations:migrate
-composer require doctrine/doctrine-fixtures-bundle
+chown -R www-data:www-data /var/www/html
+chmod -R 755 /var/www/html
+# composer require doctrine/doctrine-fixtures-bundle
 
 # php bin/console app:import-cities
 # php bin/console doctrine:fixtures:load --purge-exclusions=city --purge-exclusions=department --no-interaction
