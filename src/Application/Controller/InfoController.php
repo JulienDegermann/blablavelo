@@ -24,6 +24,8 @@ class InfoController extends AbstractController
         /** @var User $user */
         $user = $this->getUser();
 
+        $myRides = ($this->findMyRides)($user);
+
         return $this->render('info/index.html.twig', [
             'user' => $user,
             'my_next_rides' => $myRides['myNextRides'],
