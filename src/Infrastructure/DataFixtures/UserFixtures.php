@@ -115,8 +115,8 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
 
       // $current->setBirthDate(new DateTimeImmutable());
       // $current->setBike($this->getReference('model-' . rand(0, 20)));
-      $current->setPractice($this->getReference('practice-' . rand(0, 3)));
-      $current->setMind($this->getReference('mind-' . rand(0, 2)));
+      // $current->setPractice($this->getReference('practice-' . rand(0, 3)));
+      // $current->setMind($this->getReference('mind-' . rand(0, 2)));
       // $current->setDepartment($this->getReference('department-' . rand(0, 90)));
       $this->addReference('user' . $key, $current);
 
