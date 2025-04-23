@@ -130,8 +130,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
   {
     return [
       MindFixtures::class,
-      PracticeFixtures::class,
-      ModelFixtures::class,
+      PracticeFixtures::class
     ];
   }
 }
