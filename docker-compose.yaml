@@ -37,7 +37,7 @@ services:
         restart: always
         labels:
             - traefik.enable=true
-            - traefik.http.routers.blablavelo-php.rule=Host(`blablavelo.localhost`)
+            - traefik.http.routers.blablavelo-php.rule=Host(`blablavelo.ju2breizh.fr`)
         networks:
             - webgateway
             - blablavelo
