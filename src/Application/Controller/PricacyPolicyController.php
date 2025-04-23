@@ -24,8 +24,9 @@ class PricacyPolicyController extends AbstractController
     {
         /** @var User $user */
         $user = $this->getUser();
-
-        $myRides = ($this->findMyRides)($user);
+        if ($user instanceof User) {
+            $myRides = ($this->findMyRides)($user);
+        }
 
 
         return $this->render('pricacy_policy/index.html.twig', [
