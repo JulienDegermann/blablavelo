@@ -12,7 +12,7 @@ services:
             test: ["CMD-SHELL", "mysql -u root -proot -e 'SELECT 1'"]
             interval: 10s
             retries: 5
-            start_period: 30s
+            start_period: 120s
             timeout: 10s
         volumes:
             - mysql_blablavelo_data:/var/lib/mysql:rw
@@ -37,10 +37,10 @@ services:
         restart: always
         labels:
             - traefik.enable=true
-            - traefik.http.routers.blablavelo.rule=Host(`blablavelo.ju2breizh.fr`)
+            - traefik.http.routers.blablavelo-php.rule=Host(`blablavelo.localhost`)
         networks:
-            - blablavelo
             - webgateway
+            - blablavelo
         depends_on:
             db:
                 condition: service_healthy
