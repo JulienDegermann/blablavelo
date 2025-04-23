@@ -94,7 +94,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
 
     $admin = (new User())
       ->setNameNumber('Admin')
-      ->setEmail('admin@admin.com')
+      ->setEmail('degermann.julien@gmail.com')
       ->setFirstName('Admin')
       ->setLastName('Admin')
       ->setRoles(['ROLE_ADMIN', 'ROLE_USER']);
