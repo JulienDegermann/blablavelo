@@ -54,11 +54,12 @@ final class PasswordController extends AbstractController
                 $input = $form->getData();
 
                 ($this->sendRecoveryUrl)($input);
+                $this->addFlash('success', "Un email vous a été envoyé pour réinitialiser ton mot de passe.");
             }
         } catch (Exception $e) {
+            $this->addFlash('success', "Un email vous a été envoyé pour réinitialiser ton mot de passe.");
         }
 
-        $this->addFlash('success', "Un email vous a été envoyé pour réinitialiser ton mot de passe.");
 
         return $this->render('security/pwd_forgot.html.twig', [
             'form' => $form->createView(),
