@@ -412,7 +412,7 @@ form ul {
   position: relative;
 }
 
-.alert::before {
+#flash-container .alert::before {
   content: "";
   position: absolute;
   // top: calc(100% + 3px);
@@ -424,15 +424,15 @@ form ul {
   animation: hide 3s forwards linear;
 }
 
-.alert.alert-danger::before {
+#flash-container .alert.alert-danger::before {
   background: $danger;
 }
 
-.alert.alert-success::before {
+#flash-container .alert.alert-success::before {
   background: $success;
 }
 
-.alert.alert-warning::before {
+#flash-container .alert.alert-warning::before {
   background: $warning;
 }
 

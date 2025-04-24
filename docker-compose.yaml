@@ -18,6 +18,8 @@ services:
             - mysql_blablavelo_data:/var/lib/mysql:rw
         networks:
             - blablavelo
+        ports:
+            - "9000:3306"
     # phpmyadmin:
     #     image: phpmyadmin:latest
     #     container_name: blablavelo_phpmyadmin

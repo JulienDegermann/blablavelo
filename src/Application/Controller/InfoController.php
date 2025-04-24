@@ -18,19 +18,23 @@ class InfoController extends AbstractController
     ) {}
 
     #[Route('/comment-ca-marche', name: 'app_info')]
-    public function index(
-    ): Response
+    public function index(): Response
     {
+        $myRides = null;
         /** @var User $user */
-        $user = $this->getUser();
-
-        $myRides = ($this->findMyRides)($user);
+        if ($this->getUser() instanceof User) {
+            $user = $this->getUser();
+            $myRides = ($this->findMyRides)($user);
+        } else {
+            $user = null;
+            $myRides = null;
+        }
 
         return $this->render('info/index.html.twig', [
             'user' => $user,
-            'my_next_rides' => $myRides['myNextRides'],
-            'my_created_rides' => $myRides['myCreatedRides'],
-            'my_prev_rides' => $myRides['allMyRides'],
+            'my_next_rides' => $myRides ? $myRides['myNextRides'] : null,
+            'my_created_rides' => $myRides ? $myRides['myCreatedRides'] : null,
+            'my_prev_rides' => $myRides ? $myRides['allMyRides'] : null
         ]);
     }
 }

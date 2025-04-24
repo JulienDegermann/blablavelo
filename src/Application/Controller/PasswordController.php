@@ -46,21 +46,19 @@ final class PasswordController extends AbstractController
         if ($this->getUser() && $this->getUser() instanceof User) {
             $this->redirectToRoute('app_rides');
         }
+        try {
+            $form = $this->createForm(SendRecoveryUrlType::class, new SendRecoveryUrlInput());
+            $form->handleRequest($request);
 
-        $form = $this->createForm(SendRecoveryUrlType::class, new SendRecoveryUrlInput());
-        $form->handleRequest($request);
+            if ($form->isSubmitted() && $form->isValid()) {
+                $input = $form->getData();
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $input = $form->getData();
-
-            ($this->sendRecoveryUrl)($input);
-
-            $this->addFlash('success', "Un email vous a été envoyé pour réinitialiser ton mot de passe.");
-
-            return $this->render('security/pwd_forgot.html.twig', [
-                'form' => $form->createView(),
-            ]);
+                ($this->sendRecoveryUrl)($input);
+            }
+        } catch (Exception $e) {
         }
+
+        $this->addFlash('success', "Un email vous a été envoyé pour réinitialiser ton mot de passe.");
 
         return $this->render('security/pwd_forgot.html.twig', [
             'form' => $form->createView(),
