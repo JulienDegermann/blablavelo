@@ -18,19 +18,19 @@ services:
             - mysql_blablavelo_data:/var/lib/mysql:rw
         networks:
             - blablavelo
-    mailhog: # for dev only
-        image: mailhog/mailhog
-        container_name: hr-mailhog
-        ports:
-            - "1025:1025"
-            - "8025:8025"
-        environment:
-            MH_STORAGE: memory
-        networks:
-            - blablavelo
+    # mailhog: # for dev only
+    #     image: mailhog/mailhog
+    #     container_name: hr-mailhog
+    #     ports:
+    #         - "1025:1025"
+    #         - "8025:8025"
+    #     environment:
+    #         MH_STORAGE: memory
+    #     networks:
+    #         - blablavelo
     rabbit-mq:
-        # image: rabbitmq:latest # for prod env
-        image: rabbitmq:3-management # for dev env
+        image: rabbitmq:latest # for prod env
+        # image: rabbitmq:3-management # for dev env
         container_name: rabbit-mq
         ports:
             - 5672:5672
@@ -56,8 +56,8 @@ services:
         build:
             context: .
             dockerfile: Dockerfile
-        volumes:
-            - ./:/var/www/html
+        # volumes: # for dev env only
+        #     - ./:/var/www/html
 volumes:
     mysql_blablavelo_data:
         driver: local
