@@ -5,7 +5,7 @@ namespace App\Domain\User\Contrat;
 use App\Domain\User\User;
 use Symfony\Component\Mime\Email;
 
-interface CreateUserNotifierServiceInterface
+interface EmailVerificationNotifierServiceInterface
 {
-    public function notify(User $user): Email;
+    public function __invoke(User $user): Email;
 }

@@ -2,13 +2,13 @@
 
 namespace App\Domain\User\UseCase\CreateUser;
 
-use App\Domain\User\Contrat\CreateUserInterface;
-use App\Domain\User\Contrat\CreateUserNotifierServiceInterface;
-use App\Domain\User\Contrat\UserRepositoryInterface;
 use App\Domain\User\User;
 use InvalidArgumentException;
+use App\Domain\User\Contrat\CreateUserInterface;
+use App\Domain\User\Contrat\UserRepositoryInterface;
+use App\Domain\User\UseCase\CreateUser\CreateUserInput;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-
+use App\Infrastructure\Service\Messages\EmailMessages\EmailVerificationEmailMessage\EmailVerificationPublisherInterface;
 
 /**
  * Class CreateUser - create a new user, save it and notify the user for e-mail validation
@@ -20,7 +20,7 @@ final class CreateUser implements CreateUserInterface
     public function __construct(
         private readonly UserRepositoryInterface $userRepo,
         private readonly UserPasswordHasherInterface $hasher,
-        private readonly  CreateUserNotifierServiceInterface $notifier
+        private readonly  EmailVerificationPublisherInterface $notifier
     ) {}
 
 
@@ -90,9 +90,7 @@ final class CreateUser implements CreateUserInterface
 
         $this->userRepo->save($user);
 
-
-        $this->notifier->notify($user);
-
+        ($this->notifier)($user->getId());
 
         return $user;
     }

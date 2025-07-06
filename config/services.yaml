@@ -22,6 +22,11 @@ services:
       - '../src/Entity/'
       - '../src/Kernel.php'
 
+  App\Infrastructure\:
+    resource: '../src/Infrastructure/'
+    exclude:
+      - '../src/Infrastructure/**/Tests/'
+
   App\Infrastructure\Service\JWTTokenGeneratorService\JWTTokenGeneratorService:
     arguments:
       $secret: '%env(APP_SECRET)%'

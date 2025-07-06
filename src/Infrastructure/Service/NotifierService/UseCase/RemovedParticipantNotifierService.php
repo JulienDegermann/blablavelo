@@ -16,8 +16,13 @@ class RemovedParticipantNotifierService implements RemovedParticipantNotifierSer
         private readonly NotifierConfigInterface $notifierConfig
     ) {}
 
-    public
-    function __invoke(Ride $ride, User $participant): Email
+
+    /**
+     * Send email to ride's creator when a participant canceled
+     * @param Ride $ride - the Ride the participant has canceled
+     * @return Email - the mail that will be sent
+     */
+    public function __invoke(Ride $ride, User $participant): Email
     {
         $email = new Email();
 

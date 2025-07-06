@@ -2,20 +2,21 @@
 
 namespace App\Domain\User\UseCase\SendRecoveryUrl;
 
-use App\Domain\User\Contrat\PasswordRecoveryNotifierServiceInterface;
-use App\Domain\User\Contrat\SendRecoveryUrlInterface;
 use App\Domain\User\User;
-use App\Infrastructure\Repository\UserRepository;
 use InvalidArgumentException;
+use App\Infrastructure\Repository\UserRepository;
+use App\Domain\User\Contrat\SendRecoveryUrlInterface;
+use App\Infrastructure\Service\Messages\EmailMessages\ResetPasswordEmailMessage\ResetPasswordPublisherInterface;
 
 final class SendRecoveryUrl implements SendRecoveryUrlInterface
 {
 
     public function __construct(
         private readonly UserRepository $userRepo,
-        private readonly PasswordRecoveryNotifierServiceInterface $notifier,
+        private readonly ResetPasswordPublisherInterface $notifier,
 
     ) {}
+    
     public function __invoke(SendRecoveryUrlInput $input): User
     {
         $user = $this->userRepo->findOneBy(['email' => $input->getEmail()]);
@@ -25,7 +26,7 @@ final class SendRecoveryUrl implements SendRecoveryUrlInterface
         }
 
         if ($user instanceof User) {
-            $this->notifier->notify($user);
+            ($this->notifier)($user->getId());
             return $user;
         } else {
             $user = new User();

@@ -8,6 +8,7 @@ use App\Domain\User\User;
 use Symfony\Component\Mime\Email;
 use App\Domain\User\Contrat\SendNewValidationTokenInterface;
 use App\Infrastructure\Service\NotifierService\NotifierConfig;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -17,11 +18,13 @@ final class PasswordRecoveryNotifierService implements PasswordRecoveryNotifierS
         private readonly MailerInterface $mailer,
         private readonly UrlGeneratorInterface $urlGenerator,
         private readonly JWTTokenGeneratorServiceInterface $JWTGenerator,
-        private readonly NotifierConfig $config
+        private readonly NotifierConfig $config,
+        private LoggerInterface $logger
     ) {}
 
-    public function notify(User $user): Email
+    public function __invoke(User $user): void
     {
+        $this->logger->error('CALLED HERE');
         $userName = $user->getNameNumber();
 
         $url = $this->urlGenerator->generate('app_pwd_reset', ['token' => ($this->JWTGenerator)(['user_id' => $user->getId()])], UrlGeneratorInterface::ABSOLUTE_URL);
@@ -36,7 +39,5 @@ final class PasswordRecoveryNotifierService implements PasswordRecoveryNotifierS
             ->text($text);
 
         $this->mailer->send($email);
-
-        return $email;
     }
 }

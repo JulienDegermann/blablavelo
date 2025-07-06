@@ -2,22 +2,20 @@
 
 namespace App\Domain\Ride\UseCase\RemoveParticipant;
 
-use App\Domain\Ride\Contrat\RemovedParticipantNotifierServiceInterface;
-use App\Domain\Ride\Contrat\RemoveParticipantInterface;
 use App\Domain\Ride\Ride;
 use App\Domain\User\User;
+use InvalidArgumentException;
 use App\Infrastructure\Repository\RideRepository;
-use http\Exception\InvalidArgumentException;
+use App\Domain\Ride\Contrat\RemoveParticipantInterface;
 use Liip\ImagineBundle\Exception\Config\Filter\NotFoundException;
+use App\Infrastructure\Service\Messages\EmailMessages\RemoveParticipantEmailMessage\RemoveParticipantPublisherInterface;
 
 final class RemoveParticipant implements RemoveParticipantInterface
 {
     public function __construct(
         private readonly RideRepository                             $rideRepo,
-        private readonly RemovedParticipantNotifierServiceInterface $notifier
-    )
-    {
-    }
+        private readonly RemoveParticipantPublisherInterface $notifier
+    ) {}
 
     public function __invoke(RemoveParticipantInput $input): Ride
     {
@@ -35,12 +33,14 @@ final class RemoveParticipant implements RemoveParticipantInterface
             throw new InvalidArgumentException("Oups! L'utilisateur n'est pas trouvé.");
         }
 
+        // notify ride's creator
+        ($this->notifier)($ride->getId(), ['participant_id' => $input->getParticipant()->getId()]);
+
+
         // update ride
         $ride->removeParticipant($input->getParticipant());
         $this->rideRepo->save($ride);
 
-        // notify ride's creator
-        ($this->notifier)($ride, $input->getParticipant());
 
         return $ride;
     }

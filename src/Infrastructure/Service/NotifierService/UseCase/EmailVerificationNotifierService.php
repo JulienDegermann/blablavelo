@@ -2,15 +2,16 @@
 
 namespace App\Infrastructure\Service\NotifierService\UseCase;
 
-use App\Domain\User\Contrat\CreateUserNotifierServiceInterface;
-use App\Domain\User\Contrat\JWTTokenGeneratorServiceInterface;
 use App\Domain\User\User;
-use App\Infrastructure\Service\NotifierService\NotifierConfigInterface;
-use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
+use Symfony\Component\Mailer\MailerInterface;
+use App\Domain\User\Contrat\JWTTokenGeneratorServiceInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use App\Domain\User\Contrat\CreateUserNotifierServiceInterface;
+use App\Domain\User\Contrat\EmailVerificationNotifierServiceInterface;
+use App\Infrastructure\Service\NotifierService\NotifierConfigInterface;
 
-final class CreateUserNotifierService implements CreateUserNotifierServiceInterface
+final class EmailVerificationNotifierService implements EmailVerificationNotifierServiceInterface
 {
     public function __construct(
         private readonly MailerInterface                   $mailer,
@@ -19,7 +20,7 @@ final class CreateUserNotifierService implements CreateUserNotifierServiceInterf
         private readonly JWTTokenGeneratorServiceInterface $JWTTokenGenerator
     ) {}
 
-    public function notify(User $user): Email
+    public function __invoke(User $user): Email
     {
         $email = new Email();
 

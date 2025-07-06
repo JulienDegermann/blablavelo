@@ -25,6 +25,7 @@ use App\Domain\User\Contrat\DeleteAccountInterface;
 use App\Domain\User\Contrat\SendNewValidationTokenInterface;
 use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 use App\Domain\User\Contrat\VerifyEmailTokenInterface;
+use App\Infrastructure\Service\Messages\EmailMessages\EmailVerificationEmailMessage\EmailVerificationPublisherInterface;
 use Exception;
 
 class RegistrationController extends AbstractController
@@ -103,7 +104,7 @@ class RegistrationController extends AbstractController
 
     #[Route('/nouveau-code', name: 'app_new_token')]
     public function newCode(
-        SendNewValidationTokenInterface $sendNewValidationToken
+        EmailVerificationPublisherInterface $verify_email
     ) {
         /** @var User $user */
         $user = $this->getUser();
@@ -113,7 +114,7 @@ class RegistrationController extends AbstractController
 
             return $this->redirectToRoute('app_login');
         }
-        $sendNewValidationToken($user);
+        $verify_email($user->getId());
 
         $this->addFlash('success', 'Un nouveau code a été envoyé à ton adresse mail.');
 

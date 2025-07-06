@@ -5,7 +5,6 @@ namespace App\Infrastructure\Service\NotifierService\UseCase;
 use App\Domain\User\Contrat\DeleteAccountNotifierServiceInterface;
 use App\Domain\User\User;
 use App\Infrastructure\Service\NotifierService\NotifierConfigInterface;
-use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 
@@ -26,7 +25,7 @@ final class DeleteAccountNotifierService implements DeleteAccountNotifierService
         $email = (new Email())
             ->from($this->config->getFrom())
             ->to($userEmail)
-            ->subject('Suppression de compte')
+            ->subject('Confirmation de suppression de compte')
             ->text($text);
 
         $this->mailer->send($email);

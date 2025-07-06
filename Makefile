@@ -117,3 +117,6 @@ build:
 .PHONY: build
 
 
+rabbit_consumer:
+	$(SYMFONY) app:email_mesasge_consumer &
+.PHONY: rabbit_consumers

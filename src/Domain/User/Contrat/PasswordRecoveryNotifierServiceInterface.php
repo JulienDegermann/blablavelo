@@ -7,5 +7,5 @@ use Symfony\Component\Mime\Email;
 
 interface PasswordRecoveryNotifierServiceInterface
 {
-    public function notify(User $user): Email;
+    public function __invoke(User $user): void;
 }
