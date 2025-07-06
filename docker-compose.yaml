@@ -18,19 +18,6 @@ services:
             - mysql_blablavelo_data:/var/lib/mysql:rw
         networks:
             - blablavelo
-    # phpmyadmin:
-    #     image: phpmyadmin:latest
-    #     container_name: blablavelo_phpmyadmin
-    #     restart: always
-    #     depends_on:
-    #         - db
-    #     # ports:
-    #     #     - "8081:80"
-    #     environment:
-    #         PMA_HOST: db
-    #         MYSQL_ROOT_PASSWORD: root
-    #     networks:
-    #         - blablavelo
     mailhog: # for dev only
         image: mailhog/mailhog
         container_name: hr-mailhog
@@ -42,8 +29,8 @@ services:
         networks:
             - blablavelo
     rabbit-mq:
-        image: rabbitmq:latest # for prod env
-        # image: rabbitmq:3-management # for dev env
+        # image: rabbitmq:latest # for prod env
+        image: rabbitmq:3-management # for dev env
         container_name: rabbit-mq
         ports:
             - 5672:5672
