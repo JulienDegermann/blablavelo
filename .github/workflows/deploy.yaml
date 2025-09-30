@@ -1,0 +1,26 @@
+name: deploy
+
+on:
+    push:
+        branches:
+            - master
+jobs:
+    deploy:
+        name: Deploy to RPI
+        runs-on: ubuntu-latest
+        environment: production
+        steps:
+            - name: connect to server
+              uses: appleboy/ssh-action@v1.2.0
+              timeout-minutes: 30
+              with:
+                  host: ${{ secrets.SERVER_IP }}
+                  username: ${{ secrets.USER }}
+                  key: ${{ secrets.SSH_KEY }}
+                  command_timeout: 60m
+                  script: |
+                      cd blablavelo
+                      git pull origin master
+                      docker-compose build --no-cache
+                      docker-compose up -d php --no-deps --force-recreate
+                      docker builder prune -f

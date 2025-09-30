@@ -40,7 +40,15 @@ RUN curl -sS https://get.symfony.com/cli/installer | bash \
 
 RUN a2enmod rewrite
 
+COPY composer.json /var/www/html/composer.lock
+RUN composer install --no-dev --optimize-autoloader
+
+COPY package.json /var/www/html/package-lock.json
+RUN npm install --force && npm run build
+
+
 COPY . /var/www/html
+
 
 COPY ./docker.sh /var/opt/docker.sh
 

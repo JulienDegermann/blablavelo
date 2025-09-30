@@ -29,12 +29,10 @@ services:
     #     networks:
     #         - blablavelo
     rabbit-mq:
-        image: rabbitmq:latest # for prod env
-        # image: rabbitmq:3-management # for dev env
+        image: rabbitmq:latest
         container_name: rabbit-mq
         ports:
             - 5672:5672
-            - 15672:15672
         networks:
             - blablavelo
     php:
